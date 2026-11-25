@@ -38,6 +38,19 @@ body {
 
 .wrap { max-width: 940px; margin: 0 auto; }
 
+.back {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: var(--f-ui);
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 4px 2px;
+  border-radius: 6px;
+}
+
+.back:hover { color: var(--navy); background: var(--navy-soft); padding-left: 6px; padding-right: 6px; }
+
 /* ---------- 头部 ---------- */
 header.top { padding: 44px 0 24px; }
 
@@ -209,6 +222,18 @@ h2 small {
   color: var(--muted);
   margin: 10px 0 18px;
 }
+
+/* ---------- 原文（整段通读） ---------- */
+.plaintext { margin: 14px 0 4px; }
+
+.plaintext p {
+  margin: 0 0 16px;
+  font-size: 20px;
+  line-height: 1.8;
+  color: #10151b;
+}
+
+.plaintext p:last-child { margin-bottom: 0; }
 
 /* ---------- 逐句对照 ---------- */
 .para { margin: 0 0 34px; }

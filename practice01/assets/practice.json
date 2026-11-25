@@ -1,0 +1,174 @@
+{
+ "no": 1,
+ "titleEn": "A Letter of Thanks on Labor Thanksgiving Day",
+ "titleZh": "劳动感谢日的一封感谢信",
+ "lead": "本文讲日本 11 月 23 日的“劳动感谢日”：孩子如何看待身边的劳动者，以及怎样用一封手绘感谢信表达谢意。全文 225 词，共 4 段，句子结构简单，适合先听读、再逐段精读。",
+ "chips": [
+  "原文 225 词",
+  "4 段 · 20 句",
+  "30 个生词",
+  "17 个短语",
+  "5 道题"
+ ],
+ "stats": {
+  "words": 225,
+  "paragraphs": 4,
+  "sentences": 20,
+  "vocab": 30,
+  "phrases": 17,
+  "questions": 5
+ },
+ "paragraphs": [
+  "Every year on November 23, Japan celebrates a special holiday called Labor Thanksgiving Day. The name of this holiday includes the word \"labor.\" The Japanese government explains that people should value production and show gratitude to one another. It is a day to respect every worker in society.",
+  "Who is a worker? A worker can be anyone who helps our daily life. Doctors, teachers, farmers, and cleaners are all important workers. In many Japanese primary schools, students learn about these hard-working people during a small ceremony.",
+  "This year, a class decided to write thank-you letters as a form of recognition. The teacher asked the children to think of one person who helped them recently. One boy chose the school cleaner because she always keeps the hallway safe and tidy. He drew a colorful picture of her sweeping the floor and wrote a short message next to it. He described exactly how her work made his school day better.",
+  "We must appreciate the people around us. To appreciate someone does not mean buying an expensive gift. Real gratitude comes from the heart. A simple letter with specific details shows true recognition of their effort. When the cleaner received the hand-drawn letter, she smiled brightly. This ceremony of writing letters teaches children a valuable lesson. On this holiday, everyone can find a way to say thank you."
+ ],
+ "questions": [
+  {
+   "q": "When do people in Japan celebrate Labor Thanksgiving Day?",
+   "qZh": "日本人在什么时候庆祝劳动感谢日？",
+   "options": [
+    {
+     "k": "A",
+     "t": "November 23",
+     "tZh": "11 月 23 日"
+    },
+    {
+     "k": "B",
+     "t": "October 23",
+     "tZh": "10 月 23 日"
+    },
+    {
+     "k": "C",
+     "t": "November 13",
+     "tZh": "11 月 13 日"
+    },
+    {
+     "k": "D",
+     "t": "December 23",
+     "tZh": "12 月 23 日"
+    }
+   ],
+   "answer": "A",
+   "evidence": "Every year on November 23, Japan celebrates a special holiday called Labor Thanksgiving Day.",
+   "evidenceZh": "“每年 11 月 23 日……”——文章第一句直接给出时间，属细节题。"
+  },
+  {
+   "q": "What does the word \"appreciate\" mean in the text?",
+   "qZh": "在文中“appreciate”是什么意思？",
+   "options": [
+    {
+     "k": "A",
+     "t": "To forget someone",
+     "tZh": "忘记某人"
+    },
+    {
+     "k": "B",
+     "t": "To say thank you to someone",
+     "tZh": "向某人道谢"
+    },
+    {
+     "k": "C",
+     "t": "To be angry at someone",
+     "tZh": "生某人的气"
+    },
+    {
+     "k": "D",
+     "t": "To give money to someone",
+     "tZh": "给某人钱"
+    }
+   ],
+   "answer": "B",
+   "evidence": "We must appreciate the people around us. … On this holiday, everyone can find a way to say thank you.",
+   "evidenceZh": "“appreciate”与全文反复出现的“show gratitude / say thank you”同义，猜词题要回到上下文找近义线索。"
+  },
+  {
+   "q": "Why did the boy choose to write a letter to the school cleaner?",
+   "qZh": "那个男孩为什么选择给学校清洁工写信？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Because she was his teacher",
+     "tZh": "因为她是他的老师"
+    },
+    {
+     "k": "B",
+     "t": "Because she asked him to write it",
+     "tZh": "因为她让他写的"
+    },
+    {
+     "k": "C",
+     "t": "Because she helped him by keeping the school clean",
+     "tZh": "因为她保持学校清洁，帮助了他"
+    },
+    {
+     "k": "D",
+     "t": "Because she gave him an expensive gift",
+     "tZh": "因为她送了他一份昂贵的礼物"
+    }
+   ],
+   "answer": "C",
+   "evidence": "One boy chose the school cleaner because she always keeps the hallway safe and tidy.",
+   "evidenceZh": "because 后面就是原因；第 3 段“her work made his school day better”进一步印证。"
+  },
+  {
+   "q": "What is the main idea of this text?",
+   "qZh": "本文的主旨是什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Students like drawing pictures in class",
+     "tZh": "学生喜欢在课堂上画画"
+    },
+    {
+     "k": "B",
+     "t": "We should buy expensive gifts for holidays",
+     "tZh": "节日里我们应该买昂贵的礼物"
+    },
+    {
+     "k": "C",
+     "t": "Cleaners are the only important workers",
+     "tZh": "清洁工是唯一重要的劳动者"
+    },
+    {
+     "k": "D",
+     "t": "We should show thanks to the workers who help us",
+     "tZh": "我们应该向帮助我们的劳动者表达感谢"
+    }
+   ],
+   "answer": "D",
+   "evidence": "It is a day to respect every worker in society. / We must appreciate the people around us. / everyone can find a way to say thank you.",
+   "evidenceZh": "主旨题看首尾段与反复出现的关键词：respect every worker、appreciate、say thank you。B、C 与原文相反或过于绝对。"
+  },
+  {
+   "q": "How did the children show their thanks to workers in the story?",
+   "qZh": "故事里的孩子们是怎样向劳动者表达感谢的？",
+   "options": [
+    {
+     "k": "A",
+     "t": "By singing songs together",
+     "tZh": "一起唱歌"
+    },
+    {
+     "k": "B",
+     "t": "By buying expensive gifts",
+     "tZh": "买昂贵的礼物"
+    },
+    {
+     "k": "C",
+     "t": "By cleaning the hallways",
+     "tZh": "打扫走廊"
+    },
+    {
+     "k": "D",
+     "t": "By writing letters with pictures",
+     "tZh": "写信并配上图画"
+    }
+   ],
+   "answer": "D",
+   "evidence": "He drew a colorful picture of her sweeping the floor and wrote a short message next to it. … When the cleaner received the hand-drawn letter …",
+   "evidenceZh": "第 3 段写“写感谢信 + 画面旁边写文字”，最后一段的 hand-drawn letter 再次呼应。"
+  }
+ ]
+}

@@ -1,0 +1,173 @@
+{
+ "no": 3,
+ "titleEn": "Safe Steps to School: The Last Walk",
+ "titleZh": "让上学最后一程更安全",
+ "lead": "讲城市规划者怎么把“公交站到校门”这最后一段路做得更安全：宽人行道、连续坡道、斑马线、更好的红绿灯，以及“地图上的直线不等于现实里的好走”。全文 21 句、3 段，按 first / next / finally 推进，适合练“抓顺序 + 找依据”。答案按原文推断给出。",
+ "chips": [
+  "原文 220 词",
+  "3 段 · 21 句",
+  "27 个生词",
+  "17 个短语",
+  "5 道题"
+ ],
+ "stats": {
+  "words": 220,
+  "paragraphs": 3,
+  "sentences": 21,
+  "vocab": 27,
+  "phrases": 17,
+  "questions": 5
+ },
+ "paragraphs": [
+  "Every morning, students start their commute to school. They often use public transport like buses or trains. But the trip does not end at the bus stop. The last part usually still needs walking. A good connection between the bus stop and the school gate is very important. Let us look at a new project in a big city this year.",
+  "City planners are making the walk safer for every pedestrian. First, they build a wide sidewalk from the bus stop to the street corner. Continuous paths and ramps matter for all travelers. Next, students must cross a busy road safely. A long wait time at the crossing can make the trip hard. So, the city adds clear crosswalks and better traffic lights. This removes a dangerous barrier on the way.",
+  "Finally, students reach the school gate through a gentle ramp. A map might show a short straight line from the stop to the school. However, a short line on a map is not always easy in real life. For example, a person in a wheelchair cannot easily finish this walk without help. Steps and high edges are a big problem for them. That is why smooth ramps and flat paths are necessary. These changes help everyone move freely and safely. Good design makes green travel possible for all students."
+ ],
+ "questions": [
+  {
+   "q": "What does the city add to help students cross a busy road safely?",
+   "qZh": "为了让孩子们安全穿过繁忙的马路，城市增加了什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "A wider bus stop",
+     "tZh": "更宽的公交站"
+    },
+    {
+     "k": "B",
+     "t": "Steps at the school gate",
+     "tZh": "校门口的台阶"
+    },
+    {
+     "k": "C",
+     "t": "Clear crosswalks and better traffic lights",
+     "tZh": "清晰的斑马线和更好的红绿灯"
+    },
+    {
+     "k": "D",
+     "t": "New buses for students",
+     "tZh": "给学生的新公交车"
+    }
+   ],
+   "answer": "C",
+   "evidence": "So, the city adds clear crosswalks and better traffic lights.",
+   "evidenceZh": "细节题：第二段紧接“过马路难、等待久”给出措施，So 引出答案句；A、B、D 原文都没提。"
+  },
+  {
+   "q": "Why are steps a big problem for some people on this walk?",
+   "qZh": "为什么台阶对某些人来说是这段路的大问题？",
+   "options": [
+    {
+     "k": "A",
+     "t": "They make people walk too fast",
+     "tZh": "它们让人走得太快"
+    },
+    {
+     "k": "B",
+     "t": "They make it hard for wheelchair users to pass",
+     "tZh": "它们让坐轮椅的人很难通过"
+    },
+    {
+     "k": "C",
+     "t": "They make the road shorter",
+     "tZh": "它们让路变短"
+    },
+    {
+     "k": "D",
+     "t": "They make the buses late",
+     "tZh": "它们让公交车晚点"
+    }
+   ],
+   "answer": "B",
+   "evidence": "For example, a person in a wheelchair cannot easily finish this walk without help. Steps and high edges are a big problem for them.",
+   "evidenceZh": "因果题：上一句举例“坐轮椅的人没帮助走不完”，紧接着说台阶和高边缘“对他们”是大问题，them 指 wheelchair users。"
+  },
+  {
+   "q": "How do city planners make the walk from the bus stop to the school safer?",
+   "qZh": "城市规划者怎样让“公交站到学校”这段路更安全？",
+   "options": [
+    {
+     "k": "A",
+     "t": "By making students take more buses",
+     "tZh": "让学生多坐公交"
+    },
+    {
+     "k": "B",
+     "t": "By building new bus stops near the school",
+     "tZh": "在学校附近新建公交站"
+    },
+    {
+     "k": "C",
+     "t": "By building wide sidewalks, adding crosswalks and using smooth ramps",
+     "tZh": "修宽人行道、增设斑马线、使用平缓坡道"
+    },
+    {
+     "k": "D",
+     "t": "By closing the busy road every morning",
+     "tZh": "每天早上封路"
+    }
+   ],
+   "answer": "C",
+   "evidence": "First, they build a wide sidewalk … the city adds clear crosswalks and better traffic lights. … That is why smooth ramps and flat paths are necessary.",
+   "evidenceZh": "细节题：第二、三段用 First / Next / Finally 串起三项措施，C 正好把三条并在一起；A、B、D 原文均无。"
+  },
+  {
+   "q": "What is the main idea of the text?",
+   "qZh": "这篇文章的主旨是什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Buses are the best way to go to school",
+     "tZh": "公交是上学最好的方式"
+    },
+    {
+     "k": "B",
+     "t": "City planners are making the walk to school safer and easier for everyone",
+     "tZh": "城市规划者正让上学步行更安全、更方便"
+    },
+    {
+     "k": "C",
+     "t": "Students should not use public transport",
+     "tZh": "学生不该乘坐公共交通"
+    },
+    {
+     "k": "D",
+     "t": "Reading a map is very hard for students",
+     "tZh": "看地图对学生很难"
+    }
+   ],
+   "answer": "B",
+   "evidence": "City planners are making the walk safer for every pedestrian. … These changes help everyone move freely and safely.",
+   "evidenceZh": "主旨题：首段提出“公交站到校门这段路很重要”，第二、三段全在讲规划者的改进，末句 help everyone move freely and safely 收束全文。"
+  },
+  {
+   "q": "What does the writer mean by saying 'a short line on a map is not always easy in real life'?",
+   "qZh": "作者说“地图上的短线在现实中并不总是好走”，是什么意思？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Maps are usually drawn wrong by people",
+     "tZh": "地图常常被人画错"
+    },
+    {
+     "k": "B",
+     "t": "People do not like walking to school at all",
+     "tZh": "人们根本不喜欢走路去上学"
+    },
+    {
+     "k": "C",
+     "t": "The short distance on a map may still have barriers like steps",
+     "tZh": "地图上很近的距离，现实中仍可能有台阶这类障碍"
+    },
+    {
+     "k": "D",
+     "t": "Buses can never reach the school gate directly",
+     "tZh": "公交永远不能直接到校门"
+    }
+   ],
+   "answer": "C",
+   "evidence": "A map might show a short straight line from the stop to the school. However, a short line on a map is not always easy in real life. For example, a person in a wheelchair …",
+   "evidenceZh": "句意理解题：However 后面立刻用 for example 举例（轮椅、台阶），C 是唯一讲到“距离近但有障碍”的选项。"
+  }
+ ]
+}
