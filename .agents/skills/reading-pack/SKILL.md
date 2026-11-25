@@ -42,7 +42,7 @@ whenToUse: 用户给出英语阅读短文/练习卷，要求翻译成中文、�
 <站点根>/practiceNN/  # 每篇一个输出目录
 ```
 
-本项目中：工具目录是 `<站点根>/tools/`，技能本体是 `<站点根>/skills/reading-pack/`，工作区的 `.dsh/skills/reading-pack` 只是指向它的目录联接。
+本项目中：工具目录是 `<站点根>/tools/`，技能本体是 `<站点根>/.agents/skills/reading-pack/`（DSH 在项目根下会扫 `.dsh/skills/` 与 `.agents/skills/`）。
 
 ## 步骤 0 · 准备工具（每台机器一次）
 

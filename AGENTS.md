@@ -20,13 +20,14 @@ Practices/                     # 仓库根 + 站点根
     assets/    style.css、app.js（模板，build-html 复制进每篇）
     data/      passageN.cjs（每篇的唯一源数据，含原文/译文/生词/短语/题目）
     node_modules/              # 本地依赖，.gitignore 排除，不进仓库
-  skills/reading-pack/         # 生成技能本体（SKILL.md + scripts + assets + references）
+  skills/                      # （已迁走，见下）
+  .agents/skills/reading-pack/ # 生成技能本体（SKILL.md + scripts + assets + references）
   AGENTS.md                    # 本文件
   .gitignore
 ```
 
 - 新篇目一律 `Practices\practiceNN`（两位 ASCII 序号），**不要套 `网页版\`**，不要中文目录名，不要空格。
-- `tools/` 和 `skills/` 会被静态发布成 `/tools/…`、`/skills/…`。这是**有意为之**（开源仓库，没什么可藏的），不要去“隐藏”它们。
+- `tools/` 会被静态发布成 `/tools/…`。这是**有意为之**（开源仓库，没什么可藏的）。`.agents/` 以点开头，通常不会被发布。
 - `tools/node_modules`、`tools/shots`、`*.bak`、`_test_*.html` 不进仓库，也不会被发布。
 
 ## 2. 首页与单篇的结构
@@ -74,7 +75,7 @@ node build-catalog.cjs      ".."
 node check-links.cjs        ".."
 ```
 
-收尾必须：`缺失 0` + 链接 `缺失 0` + 首页出现新卡片 + 篇目顶部能返回 + 冒泡回归（`node ..\skills\reading-pack\scripts\test-bubble.cjs ..\practiceNN`）通过。
+收尾必须：`缺失 0` + 链接 `缺失 0` + 首页出现新卡片 + 篇目顶部能返回 + 冒泡回归（`node ..\.agents\skills\reading-pack\scripts\test-bubble.cjs ..\practiceNN`）通过。
 然后 `git add -A && git commit && git push`，等 Cloudflare 自动部署。
 
 ## 5. 内容约定
@@ -96,11 +97,13 @@ node check-links.cjs        ".."
 
 ## 7. 技能位置与分工
 
-- 技能本体：`Practices\skills\reading-pack\`（仓库内，随 git 备份）。
-- 工作区入口：`D:\_文文安琪\文文\.dsh\skills\reading-pack` 是指向它的**目录联接**，DSH 靠这个路径发现技能；改内容改哪边都行，因为是同一个目录。
-- 新机器 clone 仓库后，在本工作区建同样的联接即可：
-  `New-Item -ItemType Junction -Path .dsh\skills\reading-pack -Target <仓库>\skills\reading-pack`
-- 改**通用流程**（取词、切句、音频参数、卡片结构、版式值）→ 改 `skills/reading-pack`，并同步 `tools/assets` 里的模板；改完核对两边哈希一致。
+- 技能本体：`Practices\.agents\skills\reading-pack\`（仓库内，随 git 备份）。
+- DSH 在**项目根**下扫 `.dsh/skills/` 与 `.agents/skills/`：
+  - 直接在 `Practices` 里开会话 → 项目根是 Practices → 直接命中 `.agents/skills/reading-pack`，**不需要任何链接**；
+  - 在 `文文` 里开会话 → 项目根是 文文 → 走 `文文\.dsh\skills\reading-pack` 这个目录联接，指向仓库那份。
+- 新机器 clone 后：`cd Practices` 直接开会话即可用。只有在 `文文` 里开会话时才需要补一次联接：
+  `New-Item -ItemType Junction -Path .dsh\skills\reading-pack -Target Practices\.agents\skills\reading-pack`
+- 改**通用流程**（取词、切句、音频参数、卡片结构、版式值）→ 改 `.agents\skills\reading-pack`，并同步 `tools/assets` 里的模板；改完核对两边哈希一致。
 - 改**本站点约定**（目录、首页、部署、仓库卫生）→ 只改本文件。
 
 ## 8. 维护提醒
