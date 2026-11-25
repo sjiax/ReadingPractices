@@ -20,7 +20,6 @@ Practices/                     # 仓库根 + 站点根
     assets/    style.css、app.js（模板，build-html 复制进每篇）
     data/      passageN.cjs（每篇的唯一源数据，含原文/译文/生词/短语/题目）
     node_modules/              # 本地依赖，.gitignore 排除，不进仓库
-  skills/                      # （已迁走，见下）
   .agents/skills/reading-pack/ # 生成技能本体（SKILL.md + scripts + assets + references）
   AGENTS.md                    # 本文件
   .gitignore
