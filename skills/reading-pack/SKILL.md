@@ -38,17 +38,17 @@ whenToUse: 用户给出英语阅读短文/练习卷，要求翻译成中文、�
 ## 目录约定
 
 ```
-<工作区>/
-  _工具/            # 脚本 + node_modules + data/（一次性建立）
-  <站点根>/practiceNN/   # 每篇一个输出目录（本项目见 AGENTS.md）
+<工具目录>/           # 脚本 + assets + data + node_modules（位置由 AGENTS.md 规定）
+<站点根>/practiceNN/  # 每篇一个输出目录
 ```
+
+本项目中：工具目录是 `<站点根>/tools/`，技能本体是 `<站点根>/skills/reading-pack/`，工作区的 `.dsh/skills/reading-pack` 只是指向它的目录联接。
 
 ## 步骤 0 · 准备工具（每台机器一次）
 
 ```powershell
-$tool = "<工作区>\_工具"
+$tool = "<工具目录>"     # 本项目：<站点根>\tools
 New-Item -ItemType Directory -Force -Path "$tool\assets","$tool\data" | Out-Null
-'{ "name": "reading-pack-tools", "private": true, "version": "1.0.0" }' | Set-Content "$tool\package.json" -Encoding UTF8
 Copy-Item "<技能目录>\scripts\*.cjs" $tool -Force
 Copy-Item "<技能目录>\assets\*" "$tool\assets" -Force
 Set-Location $tool; npm install msedge-tts --no-audit --no-fund
@@ -62,7 +62,7 @@ Set-Location $tool; npm install msedge-tts --no-audit --no-fund
 - `.pdf`：`office_render` 看页面，**逐字核对**（纯文本抽取会漏标点、错大小写）。
 - 顺手修原文笔误（`japan` → `Japan`），并在解析里说明。
 
-## 步骤 2 · 写数据文件 `_工具/data/passageN.cjs`
+## 步骤 2 · 写数据文件 `<工具目录>/data/passageN.cjs`
 
 唯一真相来源，页面和音频都从它生成。字段与规则见 `references/data-schema.md`。
 
@@ -78,7 +78,7 @@ Set-Location $tool; npm install msedge-tts --no-audit --no-fund
 ## 步骤 3 · 出成品
 
 ```powershell
-Set-Location "<工作区>\_工具"
+Set-Location "<工具目录>"
 $data = ".\data\passageN.cjs"
 $web  = "<站点根>\practiceNN"     # 站点根下的一层目录
 node build-tts.cjs          $data "$web\assets\audio" en-US-AndrewMultilingualNeural "-6%"
@@ -90,7 +90,7 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 
 1. `build-tts` 出 `full.mp3` / `words.mp3`；
 2. `build-audio-assets` 出 `s/`、`w/`、`p/` 三组小音频（已存在则跳过，失败自动重试，可反复重跑续传）；
-3. `build-html` 生成 `index.html`，并把 `assets/style.css`、`assets/app.js` 从模板（`_工具/assets/`）复制过去，最后校验所有资源引用；
+3. `build-html` 生成 `index.html`，并把 `assets/style.css`、`assets/app.js` 从模板（`<工具目录>/assets/`）复制过去，最后校验所有资源引用；
 4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
