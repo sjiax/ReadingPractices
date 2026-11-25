@@ -102,3 +102,15 @@ node check-links.cjs        ".."
   `New-Item -ItemType Junction -Path .dsh\skills\reading-pack -Target <仓库>\skills\reading-pack`
 - 改**通用流程**（取词、切句、音频参数、卡片结构、版式值）→ 改 `skills/reading-pack`，并同步 `tools/assets` 里的模板；改完核对两边哈希一致。
 - 改**本站点约定**（目录、首页、部署、仓库卫生）→ 只改本文件。
+
+## 8. 维护提醒
+
+- 本文件是**硬链接**（仓库根 `Practices/AGENTS.md` ↔ 工作区根 `文文/AGENTS.md`），两边是同一个文件。**用文本编辑器/write 工具保存会断开硬链接**，保存后执行一次修复：
+
+  ```powershell
+  Remove-Item 'D:\_文文安琪\文文\AGENTS.md' -Force
+  New-Item -ItemType HardLink -Path 'D:\_文文安琪\文文\AGENTS.md' -Target 'D:\_文文安琪\文文\Practices\AGENTS.md'
+  ```
+
+  校验：`(Get-Item 'D:\_文文安琪\文文\AGENTS.md').LinkType` 应输出 `HardLink`。
+- 硬链接断开也不会丢内容，只是两份会漂移；发现两边不一样时，以仓库里这份为准，重新链接即可。
