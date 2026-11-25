@@ -15,6 +15,7 @@ Practices/                     # 仓库根 + 站点根
   practiceNN/                  # 每篇一个目录，名字就是 URL
     index.html
     assets/  style.css · app.js · practice.json · audio/{full,words,s,w,p}
+  source/                      # 原始 PDF 素材（存档用；公开仓库，等于公开可下载）
   tools/                       # 生成脚本 + 模板 + 源数据（公开，但不会被页面引用）
     build-*.cjs  check-links.cjs  test-bubble.cjs  list-voices.cjs  sample-voices.cjs
     assets/    style.css、app.js（模板，build-html 复制进每篇）
