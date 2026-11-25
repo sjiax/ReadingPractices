@@ -166,7 +166,7 @@ ${items.length ? cards : '<p class="empty">还没有篇目：把生成的 practi
 
   <footer>
     <span>共 ${items.length} 篇</span>
-    <span>朗读：en-US-AndrewMultilingualNeural</span>
+    <span>朗读：句子 AndrewMultilingual · 单词 AndrewNeural</span>
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>

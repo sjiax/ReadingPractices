@@ -247,7 +247,7 @@ H.push('</section>');
 H.push('<footer>');
 H.push(`<span>原文来源：${esc(d.source)}</span>`);
 H.push('<span>词汇标准：初中水平</span>');
-H.push('<span>朗读：en-US-AndrewMultilingualNeural</span>');
+H.push('<span>朗读：句子 AndrewMultilingual · 单词 AndrewNeural</span>');
 H.push('<span>本页可直接打印 / 存为 PDF</span>');
 H.push('</footer>');
 

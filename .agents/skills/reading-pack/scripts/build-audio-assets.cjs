@@ -1,14 +1,23 @@
-// 生成 HTML 版所需的分句、分词音频（每个请求独立连接 + 重试 + 断点续跑）
-// 用法: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate]
+// 生成逐句、逐词、逐短语音频（每个请求独立连接 + 重试 + 断点续跑）
+// 用法: node build-audio-assets.cjs <data.cjs> <webDir> [句语音色] [句语速]
+//
+// 音色分工（A/B 试听定稿）：
+//   句子/全文：en-US-AndrewMultilingualNeural  —— 语气自然，整句没问题
+//   单词      ：en-US-AndrewNeural             —— 纯美式，孤立单词不会读错
+// 短语按"逗号分隔、逐词断开"合成，避免连读听不清（⑧ 方案）。
 const path = require('path');
 const fs = require('fs');
 const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
 
 const dataPath = process.argv[2];
 const webDir = process.argv[3];
-const VOICE = process.argv[4] || 'en-US-AndrewMultilingualNeural';
+const SENT_VOICE = process.argv[4] || 'en-US-AndrewMultilingualNeural';
 const SENT_RATE = process.argv[5] || '-6%';
-const WORD_RATE = '-18%';
+
+const WORD_VOICE = 'en-US-AndrewNeural';   // 孤立单词用纯美式
+const WORD_RATE = '-8%';
+const PHRASE_VOICE = 'en-US-AndrewMultilingualNeural';
+const PHRASE_RATE = '-8%';
 
 if (!dataPath || !webDir) {
   console.error('usage: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate]');
@@ -18,16 +27,31 @@ const d = require(path.resolve(dataPath));
 const A = path.join(webDir, 'assets', 'audio');
 const S = path.join(A, 's');
 const W = path.join(A, 'w');
-[S, W].forEach((p) => fs.mkdirSync(p, { recursive: true }));
+const P = path.join(A, 'p');
+[S, W, P].forEach((p) => fs.mkdirSync(p, { recursive: true }));
 
 const FMT = OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3;
 const clean = (s) => String(s).replace(/[\u201c\u201d"]/g, '').replace(/\s+/g, ' ').trim();
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function synthOnce(text, file, rate) {
+// 短语朗读文本：占位符口语化，符号读成词，再逐词用逗号断开
+function phraseSpeech(p) {
+  const s = clean(p)
+    .replace(/\u2026/g, ' ')          // … 省略号
+    .replace(/\bsb\b/gi, 'somebody')
+    .replace(/\bsth\b/gi, 'something')
+    .replace(/\badj\.?/gi, 'adjective')
+    .replace(/\bn\./g, 'noun')
+    .replace(/\+/g, ' plus ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return s.split(' ').filter(Boolean).join(', ');
+}
+
+async function synthOnce(voice, text, file, rate) {
   const tts = new MsEdgeTTS({ connectionTimeoutMs: 30000, synthesisTimeoutMs: 90000 });
-  await tts.setMetadata(VOICE, FMT);
+  await tts.setMetadata(voice, FMT);
   const { audioStream } = await tts.toStream(text, { rate });
   const ws = fs.createWriteStream(file);
   audioStream.pipe(ws);
@@ -42,12 +66,12 @@ async function synthOnce(text, file, rate) {
   return size;
 }
 
-async function synth(text, file, rate) {
+async function synth(voice, text, file, rate) {
   if (fs.existsSync(file) && fs.statSync(file).size > 2000) return 0; // 续跑
   let lastErr;
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
-      return await synthOnce(text, file, rate);
+      return await synthOnce(voice, text, file, rate);
     } catch (e) {
       lastErr = e;
       try { fs.unlinkSync(file); } catch (e2) { /* ignore */ }
@@ -59,12 +83,12 @@ async function synth(text, file, rate) {
 
 (async () => {
   let total = 0;
+
   let done = 0;
   for (let i = 0; i < d.lines.length; i++) {
     const n = String(i + 1).padStart(2, '0');
-    const file = path.join(S, `${n}.mp3`);
     try {
-      total += await synth(clean(d.lines[i].en), file, SENT_RATE);
+      total += await synth(SENT_VOICE, clean(d.lines[i].en), path.join(S, `${n}.mp3`), SENT_RATE);
       done += 1;
       process.stdout.write(`s${n} `);
     } catch (e) {
@@ -79,7 +103,7 @@ async function synth(text, file, rate) {
     const n = String(i + 1).padStart(2, '0');
     const file = path.join(W, `${n}-${slug(v.w)}.mp3`);
     try {
-      total += await synth(clean(v.w).replace(/-/g, ' '), file, WORD_RATE);
+      total += await synth(WORD_VOICE, clean(v.w).replace(/-/g, ' '), file, WORD_RATE);
       wdone += 1;
       process.stdout.write(`w${n} `);
     } catch (e) {
@@ -88,20 +112,13 @@ async function synth(text, file, rate) {
   }
   console.log(`\n生词音频 ${wdone}/${d.vocab.length}`);
 
-  const P = path.join(A, 'p');
-  fs.mkdirSync(P, { recursive: true });
   let pdone = 0;
   for (let i = 0; i < d.phrases.length; i++) {
     const ph = d.phrases[i];
     const n = String(i + 1).padStart(2, '0');
     const file = path.join(P, `${n}-${slug(ph.p)}.mp3`);
-    const speech = clean(ph.p)
-      .replace(/\u2026/g, '')
-      .replace(/\bsb\b/g, 'somebody')
-      .replace(/\bsth\b/g, 'something')
-      .trim();
     try {
-      total += await synth(speech, file, '-8%');
+      total += await synth(PHRASE_VOICE, phraseSpeech(ph.p), file, PHRASE_RATE);
       pdone += 1;
       process.stdout.write(`p${n} `);
     } catch (e) {

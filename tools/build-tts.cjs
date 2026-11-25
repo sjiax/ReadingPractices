@@ -9,6 +9,8 @@ const dataPath = process.argv[2];
 const outDir = process.argv[3];
 const VOICE = process.argv[4] || 'en-US-AndrewMultilingualNeural';
 const RATE = process.argv[5] || '-6%';
+// 生词连读用纯美式音色（与逐词音频一致；Multilingual 读孤立单词会走音）
+const WORD_VOICE = 'en-US-AndrewNeural';
 if (!dataPath || !outDir) {
   console.error('usage: node build-tts.cjs <data.cjs> <audioDir> [voice] [rate]');
   process.exit(1);
@@ -26,9 +28,9 @@ function clean(s) {
     .trim();
 }
 
-async function speak(text, file, rate) {
+async function speak(text, file, rate, voice) {
   const tts = new MsEdgeTTS({ connectionTimeoutMs: 20000, synthesisTimeoutMs: 120000 });
-  await tts.setMetadata(VOICE, FMT);
+  await tts.setMetadata(voice || VOICE, FMT);
   const { audioStream } = await tts.toStream(text, { rate });
   const ws = fs.createWriteStream(file);
   audioStream.pipe(ws);
@@ -63,12 +65,12 @@ function duration(file) {
 
   const jobs = [
     { file: path.join(outDir, 'full.mp3'), text: full, rate: RATE },
-    { file: path.join(outDir, 'words.mp3'), text: words, rate: '-18%' }
+    { file: path.join(outDir, 'words.mp3'), text: words, rate: '-8%', voice: WORD_VOICE }
   ];
 
   for (const j of jobs) {
-    const size = await speak(j.text, j.file, j.rate);
-    console.log(`OK ${path.basename(j.file)} ${size} bytes ~${duration(j.file)}s [${VOICE} ${j.rate}]`);
+    const size = await speak(j.text, j.file, j.rate, j.voice);
+    console.log(`OK ${path.basename(j.file)} ${size} bytes ~${duration(j.file)}s [${j.voice || VOICE} ${j.rate}]`);
   }
 })().catch((e) => {
   console.error('FAIL', e && e.message ? e.message : e);

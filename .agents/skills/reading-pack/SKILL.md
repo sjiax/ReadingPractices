@@ -94,7 +94,16 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
-**语音参数**（已定稿）：全文与逐句 `-6%`，生词 `-18%`（读两遍），短语 `-8%`。宁可慢，学生基础弱。
+**语音参数**（已定稿，经 A/B 试听后确定）：
+
+| 用途 | 音色 | 语速 | 说明 |
+|---|---|---|---|
+| 全文、逐句 | `en-US-AndrewMultilingualNeural` | `-6%` | 整句语气自然，句子层面没发现问题 |
+| 单个单词、生词连读 | `en-US-AndrewNeural`（纯美式） | `-8%` | **Multilingual 读孤立单词会走音**（实例：navigation 读错），纯美式正常 |
+| 短语 | `en-US-AndrewMultilingualNeural` | `-8%` | 文本**逐词用逗号断开**（`step, by, step`），避免连读听不清 |
+
+- 短语断词在 `build-audio-assets.cjs` 的 `phraseSpeech()` 里做：先把 `sb/sth/adj./…/+` 转成 somebody/something/adjective/空格/plus，再按空格切分、用 `, ` 连接。
+- 试听对比过的结论：`-18%` 与 `0%` 对错读没有影响（是模型问题不是语速问题）；逐词拼接（每词单独合成再拼）虽清楚但太机械，不要用。
 
 ## 步骤 4 · 自检
 
