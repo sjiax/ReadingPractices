@@ -12,6 +12,7 @@
 Practices/                     # 仓库根 + 站点根
   index.html                   # 目录首页（脚本生成，勿手改）
   404.html
+  README.md                    # 仓库说明（公开，页面不引用）
   practiceNN/                  # 每篇一个目录，名字就是 URL
     index.html
     assets/  style.css · app.js · practice.json · audio/{full,words,s,w,p}
