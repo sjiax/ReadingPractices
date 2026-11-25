@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --ink: #15191f;
   --ink-2: #26303b;
   --muted: #4f5b68;
@@ -550,7 +550,7 @@ details[open] summary::before { content: "▾ "; }
   border-left: 4px solid var(--gold);
   border-radius: 12px;
   box-shadow: var(--shadow);
-  padding: 16px 18px 14px;
+  padding: 16px 46px 14px 18px;
   opacity: 0;
   transform: translateY(6px) scale(.98);
   pointer-events: none;
@@ -561,6 +561,28 @@ details[open] summary::before { content: "▾ "; }
 #card.ph-card { border-left-color: var(--green); }
 
 #card .cw { font-size: 27px; font-weight: 700; color: var(--navy); letter-spacing: -.01em; }
+
+/* 右上角关闭按钮 */
+#card .cclose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: #eef2f7;
+  color: #4f5b68;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+#card .cclose:hover { background: #dde5ef; color: var(--navy); }
+#card .cclose:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
 #card .cw.sayable {
   cursor: pointer;
   border-bottom: 2px dotted rgba(18, 60, 96, .35);

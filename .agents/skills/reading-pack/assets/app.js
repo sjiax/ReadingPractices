@@ -128,12 +128,21 @@
     }
 
     card.innerHTML =
+      '<button class="cclose" type="button" aria-label="关闭" title="关闭">✕</button>' +
       '<div>' + head + '</div>' +
       '<div class="czh">' + esc(it.zh) + '</div>' +
       extra +
       '<div class="cex">' + esc(it.ex) + '<div class="cexz">' + esc(it.exZh) + '</div></div>' +
       '<div class="cfoot"><span class="tip">点单词听发音 · 点空白处关闭</span></div>';
     card.classList.toggle('ph-card', !isWord);
+
+    var closeBtn = card.querySelector('.cclose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        hideCard();
+      });
+    }
 
     // 点气泡里的词本身即发音（不再放底部按钮）
     var wordEl = card.querySelector('.cw');
