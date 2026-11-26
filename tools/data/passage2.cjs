@@ -25,7 +25,7 @@ module.exports = {
 
     { p: 2, en: 'When you enter a busy interchange station, look at the colors first.', zh: '走进一座繁忙的换乘站时，先看颜色。' },
     { p: 2, en: 'Each subway line has its own special color on the walls and maps.', zh: '每条地铁线路在墙面和地图上都有自己专属的颜色。' },
-    { p: 2, en: 'This clear signage helps you tell different lines apart quickly.', zh: '这种清晰的标识能帮你迅速区分不同的线路。' },
+    { p: 2, en: 'This clear signage helps you tell different lines apart quickly.', zh: '这种清晰的标识能帮你迅速分辨出不同的线路。' },
     { p: 2, en: 'Following the right color saves you time before you even walk far.', zh: '只要跟着正确的颜色走，还没走远就已经省下了时间。' },
 
     { p: 3, en: 'Next, you need to find the correct platform for your train.', zh: '接下来，你要找到自己那趟车所在的站台。' },
@@ -93,6 +93,7 @@ module.exports = {
     'change lines': ['changing lines'],
     'be confusing for sb': ['confusing for'],
     "find one's way": ['find their way'],
+    'tell sth apart': ['tell different lines apart'],
     'go in opposite directions': ['go in opposite directions'],
     'step by step': ['step by step'],
     'without wrong turns': ['without wrong turns'],
@@ -109,7 +110,9 @@ module.exports = {
     { p: 'change lines', at: 1, zh: '换乘线路', ex: 'You need to change lines at the next station.', exZh: '你需要在下一站换乘。' },
     { p: 'be confusing for sb', at: 1, zh: '让某人感到困惑', ex: 'The map is confusing for new riders.', exZh: '这张地图让新乘客很困惑。' },
     { p: "find one's way", at: 2, zh: '找到路，认得路', ex: 'She could not find her way in the big station.', exZh: '她在这个大车站里找不到路。' },
-    { p: 'tell A apart', at: 5, zh: '把……区分开', ex: 'Can you tell the two lines apart?', exZh: '你能分清这两条线路吗？' },
+    { p: 'tell sth apart', at: 5, zh: '把看着差不多的两样（或几样）东西分辨开、分清',
+      note: '是“看出差别、辨别”，不是“告诉”，也不是把东西搬开。代词只能放中间：tell them apart；否定最常用 can\'t tell them apart；也能说 tell A from B。',
+      ex: 'These two lines look the same, but I can tell them apart.', exZh: '这两条线路看起来一样，但我能分辨出来。' },
     { p: 'save sb time', at: 6, zh: '为某人省下时间', ex: 'Taking the right exit saves you time.', exZh: '走对出口能为你省时间。' },
     { p: 'go in opposite directions', at: 10, zh: '朝相反的方向行驶', ex: 'The two trains go in opposite directions.', exZh: '这两列车朝相反的方向行驶。' },
     { p: 'point sb to', at: 12, zh: '把某人引向，给某人指路', ex: 'The sign points you to the exit.', exZh: '这个标志把你引向出口。' },

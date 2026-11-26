@@ -71,7 +71,7 @@ Set-Location $tool; npm install msedge-tts --no-audit --no-fund
 - **逐句切开**：每段按句号/问号切，`lines[].en` 必须能拼回 `paragraphs[]`（`build-html.cjs` 会校验，不一致直接退出）。
 - **生词 20–30 个**：以初中 1600 词表以外的为主；学生基础弱时，`important`、`during`、`includes` 这类基础词也收进来，`note` 里写清搭配与派生。`core: true` 打 ★ 的必须会拼写。
 - **音标美式 IPA**，词性用 `v. / n. / adj. / adv.` 短写。
-- **短语 15–17 条**：必须给每条填 `at`（出现在第几句，`lines` 的 0 基下标）；带 `sb/sth/…` 的抽象短语也要填，它们同样会挂到句子上。`phraseSurfaces` 只决定原文里是否涂绿底色，不影响注解出现。
+- **短语 15–17 条**：必须给每条填 `at`（出现在第几句，`lines` 的 0 基下标）；带 `sb/sth/…` 的抽象短语也要填，它们同样会挂到句子上。`phraseSurfaces` 只决定原文里是否涂绿底色，不影响注解出现。释义含糊或容易用错的短语（如 `tell sth apart`）补一个可选 `note`，写用法/易错点，页面在注解里多一行「用法：…」。
 - **题目**：题干与四选项都给中文；`answer` 给字母；`evidence` 必须是原文原句；`evidenceZh` 点明题型（细节题/猜词题/主旨题）。
 - `titleZh` 8–12 字；`leadZh` 一句话说清"谁、做了什么、为什么"。
 

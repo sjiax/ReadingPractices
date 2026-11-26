@@ -49,7 +49,9 @@ module.exports = {
   ],
 
   phrases: [
-    { p: 'show gratitude to sb', at: 2, zh: '向某人表示感激', ex: 'We should show gratitude to our parents.', exZh: '我们应该感激父母。' }
+    { p: 'show gratitude to sb', at: 2, zh: '向某人表示感激',
+      note: 'gratitude 不可数；也可说 show sb gratitude',   // 可选：用法补充
+      ex: 'We should show gratitude to our parents.', exZh: '我们应该感激父母。' }
   ],
 
   questions: [
@@ -78,6 +80,7 @@ module.exports = {
 | `vocab` / `forms` | 生词表、逐词音频、行内高亮 | 是 |
 | `vocab[].form` / `vocab[].note` | 生词表里的构词拆解、弹窗里的"构词 + 记" | 是 |
 | `phrases` / `at` / `phraseSurfaces` | 句子下方的短语注解、短语音频、行内绿底 | 是 |
+| `phrases[].note` | 注解里的第二行「用法：…」（可选，只写用法/易错点） | 否 |
 | `questions` | 题目区 | 是 |
 | `level` | 仅供人看，页面不显示 | 否 |
 | `translation` | 作者自检 | 否 |
@@ -86,7 +89,7 @@ module.exports = {
 
 1. **`lines` 必须能拼回 `paragraphs`**：同一 `p` 的 `en` 用空格连接、压缩空白后，要与该段原文完全一致。`build-html.cjs` 会校验，不一致会打印两段文本并以退出码 2 结束。
 2. **`forms` 只放原文里真实出现的词形**：`celebrates`、`swept`、`details`、`schools`。写错不会报错，但也不会高亮。
-3. **`phraseSurfaces` 只收字面能匹配的短语**，它只决定原文里要不要涂绿底；注解是否出现只看 `at`。带 `sb / sth / …` 的短语照常写进 `phrases` 并填 `at`。
+3. **`phraseSurfaces` 只收字面能匹配的短语**，它只决定原文里要不要涂绿底；注解是否出现只看 `at`。带 `sb / sth / …` 的短语照常写进 `phrases` 并填 `at`。`phrases[].note` 可选，写用法、易错点、同义结构（15–60 字），页面在注解里单独起一行「用法：…」；别拿它写释义。
 4. **`at` 必须指向真实存在的句子**（`0 ≤ at < lines.length`）。可以多对一：一句话里有两条短语就写两个相同 `at`，页面会把它们摞在同一块注解里；没有短语的句子不显示注解块。
 5. **匹配优先级**：按字符串长度从长到短替换（`in society` 先于 `society`），重叠时短语获胜，这是预期行为。
 6. **`vocab[].core`**：`true` 会在表格里打 ★。20–30 个生词里一般 16–20 个带 ★。

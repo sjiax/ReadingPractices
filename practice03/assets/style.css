@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --ink: #15191f;
   --ink-2: #26303b;
   --muted: #4f5b68;
@@ -325,6 +325,7 @@ h2 small {
 .pnote .psep { color: #9bb3a7; margin: 0 6px; }
 .pnote .px { color: #26323c; }
 .pnote .pz2 { font-family: var(--f-zh); color: #55636f; margin-left: 4px; }
+.pnote .puse { display: block; margin-top: 2px; font-family: var(--f-zh); font-size: 16px; line-height: 1.65; color: #41544a; }
 
 .pmini {
   width: 24px;

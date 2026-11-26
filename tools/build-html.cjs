@@ -191,6 +191,7 @@ d.paragraphs.forEach((p, pi) => {
         H.push('<span class="psep">·</span>');
         H.push(`<span class="px">${esc(ph.ex)}</span>`);
         H.push(`<span class="pz2">（${esc(ph.exZh)}）</span>`);
+        if (ph.note) H.push(`<span class="puse">用法：${esc(ph.note)}</span>`);
         H.push('</div>');
       });
       H.push('</div>');
@@ -258,7 +259,7 @@ const DOC = {
     form: v.form || null, note: v.note || '', audio: wordAudio(i)
   })),
   phrases: d.phrases.map((v, i) => ({
-    p: v.p, zh: v.zh, ex: v.ex, exZh: v.exZh, audio: phraseAudio(i)
+    p: v.p, zh: v.zh, ex: v.ex, exZh: v.exZh, ...(v.note ? { note: v.note } : {}), audio: phraseAudio(i)
   }))
 };
 H.push('<script>window.DOC = ' + JSON.stringify(DOC).replace(/</g, '\\u003c') + ';</script>');
