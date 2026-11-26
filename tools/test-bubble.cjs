@@ -1,4 +1,4 @@
-// 冒泡回归测试：点注解 / 点短语▶ / 点句子 / 点绿底里的生词 / 点绿底其余处
+// 冒泡回归测试：点句子朗读 / 点句下注解播短语 / 点句子里的生词弹卡
 // 用法: node test-bubble.cjs <篇目目录>
 // 生成 _test_bubble.html，用无头浏览器打开读标题即可看到结果
 const fs = require('fs');
@@ -33,8 +33,7 @@ const probe = `
     ['点句子英文', function () { return document.querySelector('.s .en'); }],
     ['点注解文字', function () { return document.querySelector('.pnote'); }],
     ['点短语▶', function () { return document.querySelector('.pnote .pmini'); }],
-    ['点绿底里的生词', function () { return document.querySelector('.ph .w'); }],
-    ['点绿底其余处', function () { return document.querySelector('.ph'); }]
+    ['点句子里的生词', function () { return document.querySelector('.s .w'); }]
   ];
   var i = 0;
   function next() {
@@ -56,4 +55,4 @@ const probe = `
 
 fs.writeFileSync(out, fs.readFileSync(src, 'utf8').replace('</body>', probe + '</body>'), 'utf8');
 console.log(out);
-console.log('期望：句子 -> s/xx；注解文字、短语▶、绿底其余处 -> p/xx；绿底里的生词 -> card=on、主播放器不动');
+console.log('期望：句子 -> s/xx；注解文字、短语▶ -> p/xx；句子里的生词 -> card=on（主播放器不动）');

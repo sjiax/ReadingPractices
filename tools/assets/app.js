@@ -65,19 +65,11 @@
     });
   });
 
-  /* ---------- 点击：生词弹卡，绿底短语只发音，句子读整句 ---------- */
+  /* ---------- 点击：句子里的生词弹卡，句子其余地方读整句 ---------- */
   document.addEventListener('click', function (e) {
-    // 绿底里嵌套的生词优先：closest 从最内层往上找，先命中 .w
     var word = e.target.closest ? e.target.closest('.w') : null;
     if (word) {
       toggleCard(word);
-      return;
-    }
-    // 绿底短语本身：不弹卡（释义在句子下面的注解里），只读这条短语
-    var ph = e.target.closest ? e.target.closest('.ph') : null;
-    if (ph) {
-      hideCard();
-      play(ph.getAttribute('data-audio'), null);
       return;
     }
     // 短语注解：点这块只播"这一条短语"，绝不冒泡成整句
@@ -231,14 +223,13 @@
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hideCard(); });
 
-  /* 键盘：Tab 到生词/短语上按 Enter 或空格，与鼠标点击一致 */
+  /* 键盘：Tab 到生词上按 Enter 或空格，与鼠标点击一致 */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    var el = e.target.closest ? e.target.closest('.w, .ph') : null;
+    var el = e.target.closest ? e.target.closest('.w') : null;
     if (!el) return;
     e.preventDefault();
-    if (el.classList.contains('w')) toggleCard(el);
-    else play(el.getAttribute('data-audio'), null);
+    toggleCard(el);
   });
 
   /* ---------- 溢出诊断（?debug=overflow） ---------- */

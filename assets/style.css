@@ -34,7 +34,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.s, .w, .ph, .btn, .play, .mini, .pmini, summary { touch-action: manipulation; }
+.s, .w, .btn, .play, .mini, .pmini, summary { touch-action: manipulation; }
 
 .wrap { max-width: 940px; margin: 0 auto; }
 
@@ -348,30 +348,17 @@ body.hide-notes .pnotes { display: none; }
 
 .legend .switch { margin-left: auto; }
 
-/* 行内标注 */
-.w, .ph {
+/* 行内标注：句子里只标生词（短语不涂色，朗读走句下注解的 ▶） */
+.w {
   border-radius: 3px;
   padding: 0 1px;
   cursor: pointer;
   transition: background .12s;
-}
-
-.w {
   background: #fdf0c2;
   border-bottom: 2px dotted #9c6a10;
 }
 
-.ph {
-  background: #d7efe2;
-  border-bottom: 2px dotted #1f6b4e;
-}
-
 .w:hover, .w:focus, .w.on { background: #fbdf85; outline: none; }
-.ph:hover, .ph:focus, .ph.on { background: #b3e4cb; outline: none; }
-
-/* 绿底里嵌着的生词：仍按生词识别（黄色虚线），但不铺第二层黄底 */
-.ph .w { background: transparent; }
-.ph .w:hover, .ph .w:focus, .ph .w.on { background: #fbdf85; }
 
 .legend {
   display: flex;
@@ -387,7 +374,6 @@ body.hide-notes .pnotes { display: none; }
 .legend span { display: flex; align-items: center; gap: 7px; }
 .legend i { width: 24px; height: 14px; border-radius: 3px; display: inline-block; }
 .legend .k-w i { background: #fdf0c2; border-bottom: 2px dotted #9c6a10; }
-.legend .k-p i { background: #d7efe2; border-bottom: 2px dotted #1f6b4e; }
 
 /* ---------- 表格 ---------- */
 .tablewrap {
