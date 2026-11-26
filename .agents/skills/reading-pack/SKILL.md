@@ -104,6 +104,14 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 
 - 短语断词在 `build-audio-assets.cjs` 的 `phraseSpeech()` 里做：先把 `sb/sth/adj./…/+` 转成 somebody/something/adjective/空格/plus，再按空格切分、用 `, ` 连接。
 - 试听对比过的结论：`-18%` 与 `0%` 对错读没有影响（是模型问题不是语速问题）；逐词拼接（每词单独合成再拼）虽清楚但太机械，不要用。
+- **整篇换音色**（学生偏好别的音色时，如练习2 选 `en-GB-RyanNeural`）：把同一个音色名再传给单词、短语两个参数，别让一篇里美音英音打架；语速仍按上表（句子 `-6%`，单词/短语 `-8%`），只换人声：
+
+  ```powershell
+  node build-tts.cjs          $data $audio $voice "-6%" $voice
+  node build-audio-assets.cjs $data $web   $voice "-6%" $voice $voice
+  ```
+
+  换完重跑 `build-html`：播放条上的时长是按 mp3 文件大小算的，会跟着变。
 
 ## 步骤 4 · 自检
 

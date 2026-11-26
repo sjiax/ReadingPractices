@@ -20,12 +20,9 @@ const sentAudio = (i) => `assets/audio/s/${pad2(i + 1)}.mp3`;
 
 function dur(file) {
   if (!fs.existsSync(file)) return 0;
-  const b = fs.readFileSync(file);
-  let n = 0;
-  for (let i = 0; i + 1 < b.length; i++) {
-    if (b[i] === 0xff && (b[i + 1] & 0xe0) === 0xe0) { n++; i += 287; }
-  }
-  return Math.round(n * 0.024);
+  // 固定 24kHz / 48kbps 单声道 MP3：1 秒 = 6000 字节。
+  // （别按帧长度算：这个格式每帧 144 字节 / 24ms，按 288 字节会算成一半）
+  return Math.round((fs.statSync(file).size * 8) / 48000);
 }
 
 // ---------- 一致性校验：逐句拼接应还原段落 ----------

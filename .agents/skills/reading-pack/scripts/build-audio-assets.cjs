@@ -1,10 +1,11 @@
 // 生成逐句、逐词、逐短语音频（每个请求独立连接 + 重试 + 断点续跑）
-// 用法: node build-audio-assets.cjs <data.cjs> <webDir> [句语音色] [句语速]
+// 用法: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate] [wordVoice] [phraseVoice]
 //
 // 音色分工（A/B 试听定稿）：
 //   句子/全文：en-US-AndrewMultilingualNeural  —— 语气自然，整句没问题
 //   单词      ：en-US-AndrewNeural             —— 纯美式，孤立单词不会读错
 // 短语按"逗号分隔、逐词断开"合成，避免连读听不清（⑧ 方案）。
+// 整篇换音色（如练习2 用英式 Ryan）时，把同一个音色名再当第 6、7 个参数传进来。
 const path = require('path');
 const fs = require('fs');
 const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
@@ -14,13 +15,13 @@ const webDir = process.argv[3];
 const SENT_VOICE = process.argv[4] || 'en-US-AndrewMultilingualNeural';
 const SENT_RATE = process.argv[5] || '-6%';
 
-const WORD_VOICE = 'en-US-AndrewNeural';   // 孤立单词用纯美式
+const WORD_VOICE = process.argv[6] || 'en-US-AndrewNeural';       // 孤立单词默认用纯美式
+const PHRASE_VOICE = process.argv[7] || 'en-US-AndrewMultilingualNeural';
 const WORD_RATE = '-8%';
-const PHRASE_VOICE = 'en-US-AndrewMultilingualNeural';
 const PHRASE_RATE = '-8%';
 
 if (!dataPath || !webDir) {
-  console.error('usage: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate]');
+  console.error('usage: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate] [wordVoice] [phraseVoice]');
   process.exit(1);
 }
 const d = require(path.resolve(dataPath));

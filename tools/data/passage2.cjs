@@ -1,4 +1,5 @@
 // 阅读练习2 学习包内容数据（data-schema 见技能 references/data-schema.md）
+// 音色：en-GB-RyanNeural（试听 ⑩，用户选定；全文/逐句 -6%，单词/短语 -8%，四个参数都传它）
 module.exports = {
   no: 2,
   titleEn: 'The Secret of a Shorter Subway Transfer',
