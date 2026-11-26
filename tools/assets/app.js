@@ -116,6 +116,9 @@
       }).join('<span class="cplus">+</span>');
       extra += '</span></div>';
     }
+    if (it.infl) {
+      extra += '<div class="cinfl"><span class="clabel">变形</span><span class="cnotetext">' + esc(it.infl) + '</span></div>';
+    }
     if (it.note) {
       extra += '<div class="cnote"><span class="clabel">记</span><span class="cnotetext">' + esc(it.note) + '</span></div>';
     }

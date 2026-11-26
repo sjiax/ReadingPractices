@@ -421,6 +421,8 @@ td.zh .tform { margin-top: 6px; font-family: var(--f-ui); font-size: 13px; line-
 td.zh .tform b { font-family: "Segoe UI", var(--f-ui); color: var(--navy); font-weight: 700; white-space: nowrap; }
 td.zh .tform i { font-style: normal; margin-left: 3px; }
 td.zh .tform .tplus { color: #a7b1bc; margin: 0 5px; }
+td.zh .tinf { margin-top: 3px; font-family: var(--f-ui); font-size: 13px; line-height: 1.65; color: #2f5c49; }
+td.zh .tinf b { font-weight: 700; color: #1f6b4e; margin-right: 4px; }
 td.ex .en { color: #1a2029; }
 td.ex .zh { display: block; margin-top: 4px; font-family: var(--f-zh); color: #4f5b68; font-size: 16.5px; }
 
@@ -607,6 +609,18 @@ details[open] summary::before { content: "▾ "; }
   font-size: 15px;
   line-height: 1.6;
   color: #4a5663;
+}
+
+#card .cinfl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px;
+  margin: 0 0 10px;
+  font-family: "Segoe UI", var(--f-ui);
+  font-size: 15px;
+  line-height: 1.6;
+  color: #2f5c49;
 }
 
 #card .clabel {

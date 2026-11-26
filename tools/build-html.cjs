@@ -214,7 +214,8 @@ d.vocab.forEach((v, i) => {
   const formLine = (v.form && v.form.length)
     ? '<div class="tform">' + v.form.map((f) => `<b>${esc(f[0])}</b><i>${esc(f[1])}</i>`).join('<span class="tplus">+</span>') + '</div>'
     : '';
-  H.push(`<td class="zh">${esc(v.zh)}${formLine}</td>`);
+  const inflLine = v.infl ? `<div class="tinf"><b>变形</b> ${esc(v.infl)}</div>` : '';
+  H.push(`<td class="zh">${esc(v.zh)}${formLine}${inflLine}</td>`);
   H.push(`<td class="ex"><span class="en">${esc(v.ex)}</span><span class="zh">${esc(v.exZh)}</span></td>`);
   H.push('</tr>');
 });
@@ -239,7 +240,7 @@ H.push('</section>');
 
 H.push('<footer>');
 H.push(`<span>原文来源：${esc(d.source)}</span>`);
-H.push('<span>词汇标准：初中水平</span>');
+H.push('<span>词汇标准：初中一年级</span>');
 H.push('<span>朗读：句子 AndrewMultilingual · 单词 AndrewNeural</span>');
 H.push('<span>本页可直接打印 / 存为 PDF</span>');
 H.push('</footer>');
@@ -251,7 +252,7 @@ H.push('<div id="card" role="tooltip"></div>');
 const DOC = {
   words: d.vocab.map((v, i) => ({
     w: v.w, ipa: v.ipa, pos: v.pos, zh: v.zh, ex: v.ex, exZh: v.exZh,
-    form: v.form || null, note: v.note || '', audio: wordAudio(i)
+    form: v.form || null, infl: v.infl || '', note: v.note || '', audio: wordAudio(i)
   }))
 };
 H.push('<script>window.DOC = ' + JSON.stringify(DOC).replace(/</g, '\\u003c') + ';</script>');

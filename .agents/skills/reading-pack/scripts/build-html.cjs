@@ -41,26 +41,20 @@ const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function buildSurfaces() {
   const words = [];
-  const phrases = [];
   d.vocab.forEach((v, i) => {
     const forms = (d.forms && d.forms[v.w]) || [v.w];
     forms.forEach((f) => words.push({ surface: f, i }));
   });
-  d.phrases.forEach((p, i) => {
-    const forms = (d.phraseSurfaces && d.phraseSurfaces[p.p]) || [];
-    forms.forEach((f) => phrases.push({ surface: f, i }));
-  });
-  const byLen = (a, b) => b.surface.length - a.surface.length;
-  return { words: words.sort(byLen), phrases: phrases.sort(byLen) };
+  return words.sort((a, b) => b.surface.length - a.surface.length);
 }
 
-const SURFACES = buildSurfaces();
+const WORD_SURFACES = buildSurfaces();
 
-// 铺绿底时顺手把绿底里的生词再切一层：点生词弹生词卡，点绿底其余部分只播短语
-function wrapSurfaces(text, list, wordMode) {
-  let out = text;
+// 逐句里只标生词（长词优先，同一形态多次出现都标）；短语不涂色、不发音，朗读走句下注解的 ▶
+function annotate(raw) {
+  let out = esc(raw);
   const toks = [];
-  list.forEach((s) => {
+  WORD_SURFACES.forEach((s) => {
     const re = new RegExp('\\b' + escRe(esc(s.surface)) + '\\b', 'gi');
     out = out.replace(re, (m) => {
       const id = toks.length;
@@ -70,16 +64,8 @@ function wrapSurfaces(text, list, wordMode) {
   });
   return out.replace(/\uE000(\d+)\uE001/g, (_, i) => {
     const t = toks[Number(i)];
-    if (wordMode) {
-      return `<span class="w" data-w="${t.s.i}" data-audio="${wordAudio(t.s.i)}" tabindex="0">${t.m}</span>`;
-    }
-    const inner = wrapSurfaces(t.m, SURFACES.words, true);
-    return `<span class="ph" data-p="${t.s.i}" data-audio="${phraseAudio(t.s.i)}" tabindex="0">${inner}</span>`;
+    return `<span class="w" data-w="${t.s.i}" data-audio="${wordAudio(t.s.i)}" tabindex="0">${t.m}</span>`;
   });
-}
-
-function annotate(raw) {
-  return wrapSurfaces(esc(raw), SURFACES.phrases);
 }
 
 // ---------- 组装 ----------
@@ -177,7 +163,6 @@ H.push('<section id="read">');
 H.push('<h2><span class="no">三</span>逐句对照<small>点句子朗读，点生词看释义</small></h2>');
 H.push('<div class="legend">');
 H.push('<span class="k-w"><i></i>生词 · 点一下看音标与例句</span>');
-H.push('<span class="k-p"><i></i>重点短语 · 释义与例句就在句子下面</span>');
 H.push('<label class="switch inline"><input type="checkbox" id="showNotes" checked> 显示短语注解</label>');
 H.push('</div>');
 
@@ -229,7 +214,8 @@ d.vocab.forEach((v, i) => {
   const formLine = (v.form && v.form.length)
     ? '<div class="tform">' + v.form.map((f) => `<b>${esc(f[0])}</b><i>${esc(f[1])}</i>`).join('<span class="tplus">+</span>') + '</div>'
     : '';
-  H.push(`<td class="zh">${esc(v.zh)}${formLine}</td>`);
+  const inflLine = v.infl ? `<div class="tinf"><b>变形</b> ${esc(v.infl)}</div>` : '';
+  H.push(`<td class="zh">${esc(v.zh)}${formLine}${inflLine}</td>`);
   H.push(`<td class="ex"><span class="en">${esc(v.ex)}</span><span class="zh">${esc(v.exZh)}</span></td>`);
   H.push('</tr>');
 });
@@ -254,7 +240,7 @@ H.push('</section>');
 
 H.push('<footer>');
 H.push(`<span>原文来源：${esc(d.source)}</span>`);
-H.push('<span>词汇标准：初中水平</span>');
+H.push('<span>词汇标准：初中一年级</span>');
 H.push('<span>朗读：句子 AndrewMultilingual · 单词 AndrewNeural</span>');
 H.push('<span>本页可直接打印 / 存为 PDF</span>');
 H.push('</footer>');
@@ -266,7 +252,7 @@ H.push('<div id="card" role="tooltip"></div>');
 const DOC = {
   words: d.vocab.map((v, i) => ({
     w: v.w, ipa: v.ipa, pos: v.pos, zh: v.zh, ex: v.ex, exZh: v.exZh,
-    form: v.form || null, note: v.note || '', audio: wordAudio(i)
+    form: v.form || null, infl: v.infl || '', note: v.note || '', audio: wordAudio(i)
   }))
 };
 H.push('<script>window.DOC = ' + JSON.stringify(DOC).replace(/</g, '\\u003c') + ';</script>');
