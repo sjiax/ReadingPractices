@@ -238,10 +238,15 @@ H.push('<ol class="steps">');
 H.push('</ol>');
 H.push('</section>');
 
+// 页脚音色说明：数据里写了 voices 就按篇目显示，没写就按默认音色
+const voiceLine = d.voices
+  ? `全文/逐句 ${d.voices.sent} · 单词 ${d.voices.word} · 短语 ${d.voices.phrase}`
+  : '句子 AndrewMultilingual · 单词 AndrewNeural';
+
 H.push('<footer>');
 H.push(`<span>原文来源：${esc(d.source)}</span>`);
 H.push('<span>词汇标准：初中一年级</span>');
-H.push('<span>朗读：句子 AndrewMultilingual · 单词 AndrewNeural</span>');
+H.push(`<span>朗读：${voiceLine}</span>`);
 H.push('<span>本页可直接打印 / 存为 PDF</span>');
 H.push('</footer>');
 
