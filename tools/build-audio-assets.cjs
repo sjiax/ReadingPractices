@@ -1,22 +1,22 @@
-// 生成逐句、逐词、逐短语音频（每个请求独立连接 + 重试 + 断点续跑）
+﻿// 生成逐句、逐词、逐短语音频（每个请求独立连接 + 重试 + 断点续跑）
 // 用法: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate] [wordVoice] [phraseVoice]
 //
-// 音色分工（A/B 试听定稿）：
-//   句子/全文：en-US-AndrewMultilingualNeural  —— 语气自然，整句没问题
-//   单词      ：en-US-AndrewNeural             —— 纯美式，孤立单词不会读错
-// 短语按"逗号分隔、逐词断开"合成，避免连读听不清（⑧ 方案）。
-// 整篇换音色（如练习2 用英式 Ryan）时，把同一个音色名再当第 6、7 个参数传进来。
+// 音色分工（按篇目用参数指定，默认值如下）：
+//   全文/逐句：en-US-AvaMultilingualNeural（-6%，女声，整句语气自然）
+//   单词     ：en-US-AndrewNeural（-8%，纯美式，孤立单词不会走音）
+//   短语     ：en-US-AvaMultilingualNeural（-8%，与全文同音色）
+// 短语按“整条连读”合成：只把 sb/sth 等占位符口语化，不再逐词插逗号（2026-11 用户选定）。
 const path = require('path');
 const fs = require('fs');
 const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
 
 const dataPath = process.argv[2];
 const webDir = process.argv[3];
-const SENT_VOICE = process.argv[4] || 'en-US-AndrewMultilingualNeural';
+const SENT_VOICE = process.argv[4] || 'en-US-AvaMultilingualNeural';
 const SENT_RATE = process.argv[5] || '-6%';
 
 const WORD_VOICE = process.argv[6] || 'en-US-AndrewNeural';       // 孤立单词默认用纯美式
-const PHRASE_VOICE = process.argv[7] || 'en-US-AndrewMultilingualNeural';
+const PHRASE_VOICE = process.argv[7] || 'en-US-AvaMultilingualNeural';
 const WORD_RATE = '-8%';
 const PHRASE_RATE = '-8%';
 
@@ -36,18 +36,17 @@ const clean = (s) => String(s).replace(/[\u201c\u201d"]/g, '').replace(/\s+/g, '
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// 短语朗读文本：占位符口语化，符号读成词，再逐词用逗号断开
+// 短语朗读文本：占位符口语化，符号读成词，整条连读（不再逐词用逗号断开）
 function phraseSpeech(p) {
-  const s = clean(p)
+  return clean(p)
     .replace(/\u2026/g, ' ')          // … 省略号
     .replace(/\bsb\b/gi, 'somebody')
     .replace(/\bsth\b/gi, 'something')
     .replace(/\badj\.?/gi, 'adjective')
     .replace(/\bn\./g, 'noun')
-    .replace(/\+/g, ' plus ')
+    .replace(/\+/g, ' ')             // 句式记号 +（如 make sth + adj.）不读出来
     .replace(/\s+/g, ' ')
     .trim();
-  return s.split(' ').filter(Boolean).join(', ');
 }
 
 async function synthOnce(voice, text, file, rate) {
@@ -132,3 +131,4 @@ async function synth(voice, text, file, rate) {
   console.error('FAIL', e && e.message ? e.message : e);
   process.exit(1);
 });
+

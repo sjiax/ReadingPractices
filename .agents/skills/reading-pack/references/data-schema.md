@@ -9,8 +9,9 @@ module.exports = {
   no: 1,                                  // 第几篇，用于标题与页脚
   titleEn: 'A Letter of Thanks on Labor Thanksgiving Day',
   titleZh: '劳动感谢日的一封感谢信',        // 8–12 字，别硬译
-  level: '中职三年级 · 词汇难度按初中水平筛选',
+  level: '中职三年级 · 词汇难度按初中一年级筛选',
   source: '阅读练习1(答案ABCDD)',           // 原文件名
+  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' }, // 可选：页脚音色文案
   leadZh: '导读一句话：谁、做了什么、为什么；再补字数、段数、适用读法。',
 
   paragraphs: [                           // 原文，按段落，保持原标点
@@ -95,6 +96,7 @@ module.exports = {
 | `phrases[].note` | 注解里的第二行「用法：…」（可选，只写用法/易错点） | 否 |
 | `questions` | 题目区 | 是 |
 | `level` | 仅供人看，页面不显示 | 否 |
+| `voices` | 页脚「朗读：…」的音色说明，`{ sent, word, phrase }`（只影响文案，音频靠命令行参数） | 否 |
 | `translation` | 作者自检 | 否 |
 
 ## 硬性规则

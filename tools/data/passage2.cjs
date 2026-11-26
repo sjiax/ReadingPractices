@@ -6,7 +6,7 @@ module.exports = {
   titleZh: '地铁换乘怎么少走路',
   level: '中职三年级 · 词汇难度按初中一年级筛选',
   source: '阅读练习2（答案暂无）',
-  voices: { sent: 'Ava Multilingual', word: 'Ryan', phrase: 'Ryan' },
+  voices: { sent: 'Ava Multilingual', word: 'Ryan', phrase: 'Ava Multilingual' },
 
   leadZh:
     '讲大城市地铁换乘靠颜色、标识、箭头和电梯的“智能设计”让人少走冤枉路、坐对方向。全文 23 句、5 段，实用说明文，句间逻辑靠 first / next / during / before 串起来，适合练“按顺序找信息”。原卷未给答案，本页答案为依据原文推断，仅供参考。',

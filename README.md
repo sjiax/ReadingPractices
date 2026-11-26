@@ -54,7 +54,7 @@ git add -A; git commit -m "feat: practiceNN"; git push
 ## 实现说明
 
 - **纯静态**：没有框架、没有构建步骤，Cloudflare Pages 直接发布仓库根目录（构建命令留空，输出目录 `/`）。
-- **音频**：Edge 朗读接口（`msedge-tts`），音色 `en-US-AndrewMultilingualNeural`；全文与逐句语速 −6%，生词 −18%（每个读两遍），短语 −8%。全部是本地 mp3，断网也能听。
+- **音频**：Edge 朗读接口（`msedge-tts`）。全文、逐句、短语用女声 `en-US-AvaMultilingualNeural`（−6% / −8%），短语整条连读；单词与生词连读用纯美式 `en-US-AndrewNeural`（−8%，每个词读两遍）。全部是本地 mp3，断网也能听。
 - **页面**：每篇一个 `index.html`，样式与交互全站共用站点根 `assets/style.css`、`assets/app.js`（页面用 `../assets/…` 引用），无 CDN、无外部字体，中文用苹方、英文用 Georgia。
 - **交互**：句子正文里只标生词（黄底），点一下弹卡片（音标/构词/变形/例句，卡片里的词本身可点读）；短语不涂色、不发音，释义、例句、用法和朗读都在句子下面的浅绿注解里（点注解文字或 ▶）。
 - **词汇**：按初中一年级水平筛选，一般 35–45 个；形容词给比较级/最高级、动词给时态变化，页面显示成「变形」一行。

@@ -7,7 +7,7 @@ const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
 
 const dataPath = process.argv[2];
 const outDir = process.argv[3];
-const VOICE = process.argv[4] || 'en-US-AndrewMultilingualNeural';
+const VOICE = process.argv[4] || 'en-US-AvaMultilingualNeural';
 const RATE = process.argv[5] || '-6%';
 // 生词连读默认用纯美式音色（与逐词音频一致；Multilingual 读孤立单词会走音）；
 // 整篇换音色（如练习2 用英式 Ryan）时把同一个音色名作为第 6 个参数传进来。

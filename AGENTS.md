@@ -72,8 +72,8 @@ Practices/                     # 仓库根 + 站点根
 Set-Location "D:\_文文安琪\文文\Practices\tools"
 $data = ".\data\passageN.cjs"
 $web  = "..\practiceNN"
-node build-tts.cjs          $data "$web\assets\audio" en-US-AndrewMultilingualNeural "-6%"
-node build-audio-assets.cjs $data $web                en-US-AndrewMultilingualNeural "-6%"
+node build-tts.cjs          $data "$web\assets\audio"      # 默认：全文/逐句 Ava（女声），生词 AndrewNeural
+node build-audio-assets.cjs $data $web                      # 默认：句子/短语 Ava，单词 AndrewNeural
 node build-html.cjs         $data $web
 node build-catalog.cjs      ".."
 node check-links.cjs        ".."
@@ -81,6 +81,8 @@ node check-links.cjs        ".."
 
 收尾必须：`缺失 0` + 链接 `缺失 0` + 首页出现新卡片 + 篇目顶部能返回 + 冒泡回归（`node ..\.agents\skills\reading-pack\scripts\test-bubble.cjs ..\practiceNN`）通过。
 然后 `git add -A && git commit && git push`，等 Cloudflare 自动部署。
+
+音频约定：**全文/逐句/短语用女声 Ava Multilingual，单词用纯美式 AndrewNeural**；短语整条连读，不逐词断开。某篇要换音色就按 skill 的参数传，并在数据里写 `voices: { sent, word, phrase }`（页脚会显示）。
 
 ## 5. 内容约定
 

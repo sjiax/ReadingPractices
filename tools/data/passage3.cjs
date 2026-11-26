@@ -1,9 +1,10 @@
-﻿// 阅读练习3 学习包内容数据
+// 阅读练习3 学习包内容数据
 module.exports = {
   no: 3,
   titleEn: 'Safe Steps to School: The Last Walk',
   titleZh: '让上学最后一程更安全',
   level: '中职三年级 · 词汇难度按初中一年级筛选',
+  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
   source: '阅读练习3',
 
   leadZh:

@@ -88,8 +88,8 @@ Set-Location $tool; npm install msedge-tts --no-audit --no-fund
 Set-Location "<工具目录>"
 $data = ".\data\passageN.cjs"
 $web  = "<站点根>\practiceNN"     # 站点根下的一层目录
-node build-tts.cjs          $data "$web\assets\audio" en-US-AndrewMultilingualNeural "-6%"
-node build-audio-assets.cjs $data $web                en-US-AndrewMultilingualNeural "-6%"
+node build-tts.cjs          $data "$web\assets\audio"      # 默认全文/逐句 Ava，生词 AndrewNeural
+node build-audio-assets.cjs $data $web                      # 默认 句子/短语 Ava，单词 AndrewNeural
 node build-html.cjs         $data $web
 node build-catalog.cjs      "<站点根>"      # 重新生成目录首页
 node check-links.cjs        "<站点根>"      # 链接完整性
@@ -101,21 +101,25 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
-**语音参数**（已定稿，经 A/B 试听后确定）：
+**语音参数**（2026-11 定稿：长句/短语用女声 Ava，单词仍用纯美式 Andrew）：
 
 | 用途 | 音色 | 语速 | 说明 |
 |---|---|---|---|
-| 全文、逐句 | `en-US-AndrewMultilingualNeural` | `-6%` | 整句语气自然，句子层面没发现问题 |
+| 全文、逐句 | `en-US-AvaMultilingualNeural`（Ava，女声） | `-6%` | 整句语气自然；默认音色，脚本默认值也是它 |
 | 单个单词、生词连读 | `en-US-AndrewNeural`（纯美式） | `-8%` | **Multilingual 读孤立单词会走音**（实例：navigation 读错），纯美式正常 |
-| 短语 | `en-US-AndrewMultilingualNeural` | `-8%` | 文本**逐词用逗号断开**（`step, by, step`），避免连读听不清 |
+| 短语 | `en-US-AvaMultilingualNeural` | `-8%` | **整条连读**，不逐词断开（旧方案「逗号分隔」已废弃） |
 
-- 短语断词在 `build-audio-assets.cjs` 的 `phraseSpeech()` 里做：先把 `sb/sth/adj./…/+` 转成 somebody/something/adjective/空格/plus，再按空格切分、用 `, ` 连接。
+- 短语文本在 `build-audio-assets.cjs` 的 `phraseSpeech()` 里处理：只把 `sb/sth/adj./n./…` 换成 somebody/something/adjective/noun，`+` 直接去掉不读；**整条从左到右连读**，不要插逗号（插逗号会把短语读成机器人逐词念，学生听不出语调）。
 - 试听对比过的结论：`-18%` 与 `0%` 对错读没有影响（是模型问题不是语速问题）；逐词拼接（每词单独合成再拼）虽清楚但太机械，不要用。
-- **整篇换音色**（学生偏好别的音色时，如练习2 选 `en-GB-RyanNeural`）：把同一个音色名再传给单词、短语两个参数，别让一篇里美音英音打架；语速仍按上表（句子 `-6%`，单词/短语 `-8%`），只换人声：
+- **换音色**（某篇想换人或换口音）：`build-tts`、`build-audio-assets` 的第 4 个参数（以及单词、短语两个音色参数）直接传音色名；语速仍按上表（句子 `-6%`，单词/短语 `-8%`），只换人声。换完在数据里加一句 `voices: { sent, word, phrase }`，页脚会显示本篇音色。
 
   ```powershell
-  node build-tts.cjs          $data $audio $voice "-6%" $voice
-  node build-audio-assets.cjs $data $web   $voice "-6%" $voice $voice
+  # 默认（全文/逐句、短语 = Ava；单词 = AndrewNeural）
+  node build-tts.cjs          $data $audio
+  node build-audio-assets.cjs $data $web
+  # 例：整篇换成英式 Ryan（单词、短语也一起换）
+  node build-tts.cjs          $data $audio en-GB-RyanNeural "-6%" en-GB-RyanNeural
+  node build-audio-assets.cjs $data $web   en-GB-RyanNeural "-6%" en-GB-RyanNeural en-GB-RyanNeural
   ```
 
   换完重跑 `build-html`：播放条上的时长是按 mp3 文件大小算的，会跟着变。
