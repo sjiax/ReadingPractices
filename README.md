@@ -21,14 +21,15 @@
 ```
 index.html            目录首页（脚本生成）
 404.html
+assets/               全站共享的 style.css、app.js（脚本生成）
 practiceNN/           每篇一个目录
   index.html
-  assets/  style.css  app.js  practice.json
+  assets/  practice.json
   assets/audio/        full.mp3、words.mp3、s/、w/、p/
 source/               原始 PDF 试卷
 tools/                生成脚本 + 模板 + 每篇的源数据
   build-tts.cjs  build-audio-assets.cjs  build-html.cjs  build-catalog.cjs  check-links.cjs
-  assets/   style.css、app.js 模板
+  assets/   style.css、app.js 模板（build-html 复制到站点根 assets/）
   data/     passageN.cjs（原文/译文/生词/短语/题目）
 .agents/skills/reading-pack/   生成技能（流程说明 + 脚本 + 数据规范）
 AGENTS.md             工作区与站点约定
@@ -54,7 +55,8 @@ git add -A; git commit -m "feat: practiceNN"; git push
 
 - **纯静态**：没有框架、没有构建步骤，Cloudflare Pages 直接发布仓库根目录（构建命令留空，输出目录 `/`）。
 - **音频**：Edge 朗读接口（`msedge-tts`），音色 `en-US-AndrewMultilingualNeural`；全文与逐句语速 −6%，生词 −18%（每个读两遍），短语 −8%。全部是本地 mp3，断网也能听。
-- **页面**：单个 `index.html` + `assets/style.css` + `assets/app.js`，无 CDN、无外部字体，中文用苹方、英文用 Georgia。
+- **页面**：每篇一个 `index.html`，样式与交互全站共用站点根 `assets/style.css`、`assets/app.js`（页面用 `../assets/…` 引用），无 CDN、无外部字体，中文用苹方、英文用 Georgia。
+- **交互**：点生词弹卡片（音标/构词/例句，卡片里的词本身可点读）；绿底短语点一下只读这条短语，释义、例句、用法在句子下面的浅绿注解里——绿底里恰好是生词的词（`confusing`、`opposite`）会嵌套成独立生词，点它弹生词卡。
 - **数据驱动**：`tools/data/passageN.cjs` 是唯一源，页面、目录、音频都从它生成；`build-html` 会校验逐句文本能拼回段落，`check-links` 会校验所有相对链接。
 - **答案**：原卷没给答案的篇目，答案由原文推断，页面导读里已注明“仅供参考”。
 

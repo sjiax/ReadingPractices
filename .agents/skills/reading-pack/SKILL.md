@@ -6,32 +6,35 @@ whenToUse: 用户给出英语阅读短文/练习卷，要求翻译成中文、�
 
 # 英语阅读学习包（reading-pack · 仅 HTML 版）
 
-一次输入一篇阅读材料，输出**一个文件夹**：`index.html` + `assets/`（样式、脚本、64 个左右的本地 mp3）。双击即用、断网可用、可直接拷到手机或 U 盘。
+一次输入一篇阅读材料，输出**一个文件夹**：`index.html` + `assets/`（数据与 64 个左右的本地 mp3）。双击即用、断网可用、可直接拷到手机或 U 盘。
 
 不做 md / docx / pdf：打印一律用用户自己提供的源 PDF。
 
 ## 交付物
 
-每篇产出一个自包含的静态目录，双击即用、断网可用：
+每篇产出一个自包含的静态目录；样式和交互**全站共用一份**，放在站点根，不跟着每篇复制：
 
 ```
-<站点根>/practiceNN/
-  index.html                  # 单页应用，交互全在这里
-  assets/style.css            # 版式（模板复制，勿逐篇改）
-  assets/app.js               # 交互（模板复制，勿逐篇改）
-  assets/practice.json        # 结构化元数据（标题/原文/题目/统计），目录首页据此生成
-  assets/audio/full.mp3       # 整篇朗读
-  assets/audio/words.mp3      # 生词连读（每个词读两遍）
-  assets/audio/s/01..NN.mp3   # 逐句音频
-  assets/audio/w/01-xxx.mp3   # 逐词音频
-  assets/audio/p/01-xxx.mp3   # 逐短语音频
+<站点根>/
+  assets/style.css            # 版式（build-html 从工具模板复制，勿手改）
+  assets/app.js               # 交互（同上）
+  practiceNN/
+    index.html                # 单页应用，交互全在这里；引用 ../assets/style.css、../assets/app.js
+    assets/practice.json      # 结构化元数据（标题/原文/题目/统计），目录首页据此生成
+    assets/audio/full.mp3     # 整篇朗读
+    assets/audio/words.mp3    # 生词连读（每个词读两遍）
+    assets/audio/s/01..NN.mp3 # 逐句音频
+    assets/audio/w/01-xxx.mp3 # 逐词音频
+    assets/audio/p/01-xxx.mp3 # 逐短语音频
 ```
+
+共享的好处：改一次版式/交互，三篇同时生效，站点里不再有三份 `app.js` 各自漂移。代价是页面必须正好在站点根下一层（`../assets/` 才成立），与"篇目必须是一层目录"的约定一致；**拷到 U 盘/手机时要连站点根一起拷**（或整站拷），只拷单篇目录会丢样式和交互。
 
 `practiceNN` 用两位 ASCII 序号；路径里不要有空格和中文，否则 URL 会变成一长串百分号编码。
 
 页面结构（固定顺序）：吸顶播放条 → 一 原文（整段、纯文本、不加标注）→ 二 阅读理解题 → 三 逐句对照（短语注解挂句下）→ 四 重点生词 → 五 建议学习顺序。
 
-**重点短语不单独成表**：每条短语用 `at` 绑到"出现在第几句"，页面把它放在那句译文下面的浅绿注解里（短语 + 释义 + 例句 + 译文 + 小 ▶）。句子只要用到短语就一定有注解，不受词形变化影响（`sweeping the floor` 也能挂 `sweep the floor`）。
+**重点短语不单独成表**：每条短语用 `at` 绑到"出现在第几句"，页面把它放在那句译文下面的浅绿注解里（短语 + 释义 + 例句 + 译文 + 小 ▶，有 `note` 时再加一行「用法：…」）。句子只要用到短语就一定有注解，不受词形变化影响（`sweeping the floor` 也能挂 `sweep the floor`）。
 
 **站点层面的约定不进技能**：目录放在哪、目录首页要展示什么、发布到哪个平台、仓库里哪些不提交——这些是项目私有的，写在**工作区的 `AGENTS.md`** 里（本项目：`Practices/` 站点根 + Cloudflare Pages）。做成品前后都先读一遍它。
 
@@ -90,7 +93,7 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 
 1. `build-tts` 出 `full.mp3` / `words.mp3`；
 2. `build-audio-assets` 出 `s/`、`w/`、`p/` 三组小音频（已存在则跳过，失败自动重试，可反复重跑续传）；
-3. `build-html` 生成 `index.html`，并把 `assets/style.css`、`assets/app.js` 从模板（`<工具目录>/assets/`）复制过去，最后校验所有资源引用；
+3. `build-html` 生成 `index.html`，并把 `style.css`、`app.js` 从模板（`<工具目录>/assets/`）复制到**站点根 `assets/`**（全站共用一份），最后校验所有资源引用；
 4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
@@ -115,11 +118,11 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 
 ## 步骤 4 · 自检
 
-1. `node --check <web>/assets/app.js` 通过。
+1. `node --check <站点根>/assets/app.js` 通过（共享一份，不在篇目录里）。
 2. `build-html` 输出 `缺失 0`，且逐句拼接校验没报错。
 3. 音频数量对得上：`s` = 句数，`w` = 生词数，`p` = 短语数，外加 `full.mp3`、`words.mp3`；每个 mp3 > 3 KB 且首字节 `0xFF`。
 4. 跑一次冒泡回归：`node <技能目录>\scripts\test-bubble.cjs <篇目录>`，生成的临时页用无头浏览器打开并把标题读出来，期望
-   `点注解文字 => p/xx.mp3`、`点短语▶ => p/xx.mp3`、`点句子英文 => s/xx.mp3`；测完删掉 `_test_bubble.html`。
+   `点句子英文 => s/xx.mp3`、`点注解文字 / 点短语▶ / 点绿底其余处 => p/xx.mp3`、`点绿底里的生词 => card=on`；测完删掉 `_test_bubble.html`。
 5. `build-catalog` 输出篇数要与目录实际篇数一致；点开首页卡片能进到对应篇目，篇目顶部 `← 所有篇目` 能回到首页（本地按 `file://` 与大屏都要试）。
 6. 无头 Chrome 截图看首屏、生词表与题目（注意事项见 `references/troubleshooting.md`）：
    ```powershell
@@ -138,6 +141,8 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 - 响应式三档：`≤1024px`（iPad）字号微降一档、去掉版心限制；`≤900px` 生词表从六列表格改成**卡片式**（单词+★+▶ / 音标右对齐 / 释义 + 词性小标签 / 分隔线 / 例句+译文）；`≤620px`（手机）再降一档、播放按钮缩到 30px。
 - 触屏细节：`touch-action: manipulation`、`-webkit-tap-highlight-color: transparent`、按钮 ≥ 34px，表格容器 `-webkit-overflow-scrolling: touch`。
 - **生词卡片（点击弹出，不是悬停）**要给全：音标、词性、释义、**构词拆解**（前缀/词根/后缀逐段解释）、记忆提示、例句＋译文。**发音就是点卡片里的单词本身**（词上有虚线，键盘 Enter/空格也行），底部不放"听发音"按钮；底部一行提示固定为"点单词听发音 · 点空白处关闭"。生词表的释义格下方也带一行紧凑构词，方便不开弹窗也能看。再点一次、点空白或 `Esc` 关闭，卡片跟随滚动重定位。
+- **弹卡只给生词**：点生词弹卡片；绿底短语点一下**只读这条短语、不弹卡**（释义在句下注解里，只出现一份）。绿底里正好是生词的词（`confusing`、`opposite`）在生成时嵌套成 `.ph > .w`，点击优先命中内层生词、弹出的是生词卡；视觉上绿底保留，生词只加黄色虚线下划线，不铺第二层黄底。
+- 键盘：`.w/.ph` 都有 `tabindex`，电脑端 Tab 到词上按 Enter/空格与点击等价。
 - 短语注解默认展开，右上"显示短语注解"可一键关掉（状态存 `localStorage` 的 `rp.showNotes`），关掉后只剩原文+译文，适合纯跟读。
 - 题目答案默认折叠，展开后才把正确项标绿。
 - 播放条：全文/生词两个按钮 + 0.8×·0.9×·1× 变速 + "点词自动发音"开关。

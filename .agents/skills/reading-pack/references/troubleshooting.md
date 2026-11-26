@@ -57,7 +57,7 @@ Stream closed before the synthesis completed (no turn.end received).
 
 实测孩子把鼠标划过文本就弹卡 + 自动发音，太吵。规则固定为：
 
-- 只有**点击**生词/短语才弹卡；再点、点空白、`Esc` 关闭；
+- 只有**点击生词**才弹卡；点绿底短语只读这条短语（释义在句下注解里，不要弹第二份）——绿底里若是生词（`confusing`、`opposite`）要嵌套切出来，否则生词被绿块挡住、点不出卡片；再点、点空白、`Esc` 关闭；
 - 顶部开关文案"点词自动发音"；
 - 卡片跟随滚动重定位（`scroll` → `placeCard`），不要设成滚动就关闭。
 
@@ -123,7 +123,7 @@ const TPL = [path.join(__dirname, 'assets'), path.join(__dirname, '..', 'assets'
 if (!TPL) console.warn('警告：找不到 assets/style.css 模板');
 ```
 
-**自检办法**：不要只在已有产物的目录里跑。新建一个空目录，只放 `data.cjs` 和 `assets/audio/`，用技能里的脚本跑一遍，确认输出 `缺失 0`、`assets/style.css` 与 `app.js` 被真的复制进去。
+**自检办法**：不要只在已有产物的目录里跑。新建一个空目录，只放 `data.cjs` 和 `assets/audio/`，用技能里的脚本跑一遍，确认输出 `缺失 0`、**站点根** `assets/style.css` 与 `assets/app.js` 被真的写出来（模板现在复制到站点根，不再复制进篇目录）。
 
 ## 10. 文件被占用（少见）
 

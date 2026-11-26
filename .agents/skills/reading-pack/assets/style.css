@@ -369,6 +369,10 @@ body.hide-notes .pnotes { display: none; }
 .w:hover, .w:focus, .w.on { background: #fbdf85; outline: none; }
 .ph:hover, .ph:focus, .ph.on { background: #b3e4cb; outline: none; }
 
+/* 绿底里嵌着的生词：仍按生词识别（黄色虚线），但不铺第二层黄底 */
+.ph .w { background: transparent; }
+.ph .w:hover, .ph .w:focus, .ph .w.on { background: #fbdf85; }
+
 .legend {
   display: flex;
   gap: 18px;
@@ -559,7 +563,6 @@ details[open] summary::before { content: "▾ "; }
 }
 
 #card.show { opacity: 1; transform: none; pointer-events: auto; }
-#card.ph-card { border-left-color: var(--green); }
 
 #card .cw { font-size: 27px; font-weight: 700; color: var(--navy); letter-spacing: -.01em; }
 

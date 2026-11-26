@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  var DOC = window.DOC || { words: [], phrases: [] };
+  var DOC = window.DOC || { words: [] };
   var audio = document.getElementById('main');
   var card = document.getElementById('card');
   var autoSound = document.getElementById('autoSound');
@@ -65,11 +65,19 @@
     });
   });
 
-  /* ---------- 点击：发音 / 播句子 ---------- */
+  /* ---------- 点击：生词弹卡，绿底短语只发音，句子读整句 ---------- */
   document.addEventListener('click', function (e) {
-    var chip = e.target.closest ? e.target.closest('.w, .ph') : null;
-    if (chip) {
-      toggleCard(chip);
+    // 绿底里嵌套的生词优先：closest 从最内层往上找，先命中 .w
+    var word = e.target.closest ? e.target.closest('.w') : null;
+    if (word) {
+      toggleCard(word);
+      return;
+    }
+    // 绿底短语本身：不弹卡（释义在句子下面的注解里），只读这条短语
+    var ph = e.target.closest ? e.target.closest('.ph') : null;
+    if (ph) {
+      hideCard();
+      play(ph.getAttribute('data-audio'), null);
       return;
     }
     // 短语注解：点这块只播"这一条短语"，绝不冒泡成整句
@@ -98,32 +106,25 @@
   }
 
   function itemOf(el) {
-    if (el.classList.contains('w')) {
-      return { kind: 'words', item: DOC.words[parseInt(el.getAttribute('data-w'), 10)] };
-    }
-    return { kind: 'phrases', item: DOC.phrases[parseInt(el.getAttribute('data-p'), 10)] };
+    return { item: DOC.words[parseInt(el.getAttribute('data-w'), 10)] };
   }
 
   function fillCard(el) {
-    var found = itemOf(el);
-    var it = found.item;
+    var it = itemOf(el).item;
     if (!it) return false;
-    var isWord = found.kind === 'words';
-    var head = isWord
-      ? '<span class="cw">' + esc(it.w) + '</span><span class="cipa">' + esc(it.ipa) + '</span>' +
-        '<span class="cpos">' + esc(it.pos) + '</span>'
-      : '<span class="cw">' + esc(it.p) + '</span>';
+    var head = '<span class="cw">' + esc(it.w) + '</span><span class="cipa">' + esc(it.ipa) + '</span>' +
+      '<span class="cpos">' + esc(it.pos) + '</span>';
 
     // 构词拆解 + 记忆提示
     var extra = '';
-    if (isWord && it.form && it.form.length) {
+    if (it.form && it.form.length) {
       extra += '<div class="cform"><span class="clabel">构词</span><span class="cparts">';
       extra += it.form.map(function (f) {
         return '<span class="cpart"><b>' + esc(f[0]) + '</b><i>' + esc(f[1]) + '</i></span>';
       }).join('<span class="cplus">+</span>');
       extra += '</span></div>';
     }
-    if (isWord && it.note) {
+    if (it.note) {
       extra += '<div class="cnote"><span class="clabel">记</span><span class="cnotetext">' + esc(it.note) + '</span></div>';
     }
 
@@ -134,7 +135,6 @@
       extra +
       '<div class="cex">' + esc(it.ex) + '<div class="cexz">' + esc(it.exZh) + '</div></div>' +
       '<div class="cfoot"><span class="tip">点单词听发音 · 点空白处关闭</span></div>';
-    card.classList.toggle('ph-card', !isWord);
 
     var closeBtn = card.querySelector('.cclose');
     if (closeBtn) {
@@ -231,6 +231,16 @@
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hideCard(); });
 
+  /* 键盘：Tab 到生词/短语上按 Enter 或空格，与鼠标点击一致 */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var el = e.target.closest ? e.target.closest('.w, .ph') : null;
+    if (!el) return;
+    e.preventDefault();
+    if (el.classList.contains('w')) toggleCard(el);
+    else play(el.getAttribute('data-audio'), null);
+  });
+
   /* ---------- 溢出诊断（?debug=overflow） ---------- */
   if (/[?&]debug=overflow/.test(location.search || '')) {
     var maxR = 0, who = '';
@@ -277,10 +287,9 @@
     }, 150);
   }
 
-  var demo = /[?&]demo=([wp])(\d+)/.exec(location.search || '');
+  var demo = /[?&]demo=w(\d+)/.exec(location.search || '');
   if (demo) {
-    var sel = demo[1] === 'w' ? '[data-w="' + demo[2] + '"]' : '[data-p="' + demo[2] + '"]';
-    var target = document.querySelector(sel);
+    var target = document.querySelector('[data-w="' + demo[1] + '"]');
     if (target) {
       setTimeout(function () {
         card.style.transition = 'none';

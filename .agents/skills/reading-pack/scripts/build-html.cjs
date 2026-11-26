@@ -40,36 +40,46 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function buildSurfaces() {
-  const list = [];
+  const words = [];
+  const phrases = [];
   d.vocab.forEach((v, i) => {
     const forms = (d.forms && d.forms[v.w]) || [v.w];
-    forms.forEach((f) => list.push({ surface: f, kind: 'w', idx: i }));
+    forms.forEach((f) => words.push({ surface: f, i }));
   });
   d.phrases.forEach((p, i) => {
     const forms = (d.phraseSurfaces && d.phraseSurfaces[p.p]) || [];
-    forms.forEach((f) => list.push({ surface: f, kind: 'p', idx: i }));
+    forms.forEach((f) => phrases.push({ surface: f, i }));
   });
-  list.sort((a, b) => b.surface.length - a.surface.length);
-  return list;
+  const byLen = (a, b) => b.surface.length - a.surface.length;
+  return { words: words.sort(byLen), phrases: phrases.sort(byLen) };
 }
 
 const SURFACES = buildSurfaces();
 
-function annotate(raw) {
-  let out = esc(raw);
+// 铺绿底时顺手把绿底里的生词再切一层：点生词弹生词卡，点绿底其余部分只播短语
+function wrapSurfaces(text, list, wordMode) {
+  let out = text;
   const toks = [];
-  SURFACES.forEach((s) => {
+  list.forEach((s) => {
     const re = new RegExp('\\b' + escRe(esc(s.surface)) + '\\b', 'gi');
     out = out.replace(re, (m) => {
       const id = toks.length;
-      const attr = s.kind === 'w' ? `data-w="${s.idx}"` : `data-p="${s.idx}"`;
-      const cls = s.kind === 'w' ? 'w' : 'ph';
-      const audioPath = s.kind === 'w' ? wordAudio(s.idx) : phraseAudio(s.idx);
-      toks.push(`<span class="${cls}" ${attr} data-audio="${audioPath}" tabindex="0">${m}</span>`);
+      toks.push({ m, s });
       return '\uE000' + id + '\uE001';
     });
   });
-  return out.replace(/\uE000(\d+)\uE001/g, (_, i) => toks[Number(i)]);
+  return out.replace(/\uE000(\d+)\uE001/g, (_, i) => {
+    const t = toks[Number(i)];
+    if (wordMode) {
+      return `<span class="w" data-w="${t.s.i}" data-audio="${wordAudio(t.s.i)}" tabindex="0">${t.m}</span>`;
+    }
+    const inner = wrapSurfaces(t.m, SURFACES.words, true);
+    return `<span class="ph" data-p="${t.s.i}" data-audio="${phraseAudio(t.s.i)}" tabindex="0">${inner}</span>`;
+  });
+}
+
+function annotate(raw) {
+  return wrapSurfaces(esc(raw), SURFACES.phrases);
 }
 
 // ---------- 组装 ----------
@@ -85,7 +95,7 @@ H.push('<head>');
 H.push('<meta charset="utf-8">');
 H.push('<meta name="viewport" content="width=device-width, initial-scale=1">');
 H.push(`<title>${esc(d.titleEn)} · 学习包</title>`);
-H.push('<link rel="stylesheet" href="assets/style.css">');
+H.push('<link rel="stylesheet" href="../assets/style.css">');
 H.push('</head>');
 H.push('<body>');
 H.push('<div class="wrap">');
@@ -191,6 +201,7 @@ d.paragraphs.forEach((p, pi) => {
         H.push('<span class="psep">·</span>');
         H.push(`<span class="px">${esc(ph.ex)}</span>`);
         H.push(`<span class="pz2">（${esc(ph.exZh)}）</span>`);
+        if (ph.note) H.push(`<span class="puse">用法：${esc(ph.note)}</span>`);
         H.push('</div>');
       });
       H.push('</div>');
@@ -251,18 +262,15 @@ H.push('</footer>');
 H.push('</div>');
 H.push('<div id="card" role="tooltip"></div>');
 
-// 数据
+// 数据（短语只在句子下面注解里出现，不再弹短语卡，所以只发 words）
 const DOC = {
   words: d.vocab.map((v, i) => ({
     w: v.w, ipa: v.ipa, pos: v.pos, zh: v.zh, ex: v.ex, exZh: v.exZh,
     form: v.form || null, note: v.note || '', audio: wordAudio(i)
-  })),
-  phrases: d.phrases.map((v, i) => ({
-    p: v.p, zh: v.zh, ex: v.ex, exZh: v.exZh, audio: phraseAudio(i)
   }))
 };
 H.push('<script>window.DOC = ' + JSON.stringify(DOC).replace(/</g, '\\u003c') + ';</script>');
-H.push('<script src="assets/app.js"></script>');
+H.push('<script src="../assets/app.js"></script>');
 H.push('</body>');
 H.push('</html>');
 
@@ -293,29 +301,30 @@ const meta = {
 fs.mkdirSync(path.join(webDir, 'assets'), { recursive: true });
 fs.writeFileSync(path.join(webDir, 'assets', 'practice.json'), JSON.stringify(meta, null, 1), 'utf8');
 
-// ---------- 刷新静态模板（style.css / app.js） ----------
-// 模板可能和脚本同目录（_工具/），也可能在上一级（技能包的 scripts/ 与 assets/）
+// ---------- 刷新共享静态模板（站点根 assets/，各篇共用一份，页面用 ../assets/ 引用） ----------
+// 模板可能和脚本同目录（tools/），也可能在上一级（技能包的 scripts/ 与 assets/）
 const TPL = [
   path.join(__dirname, 'assets'),
   path.join(__dirname, '..', 'assets')
 ].find((p) => fs.existsSync(path.join(p, 'style.css')));
 
+const SITE_ASSETS = path.join(path.resolve(webDir), '..', 'assets');
+
 if (!TPL) {
   console.warn('警告：找不到 assets/style.css 模板，页面将缺少样式');
 } else {
+  fs.mkdirSync(SITE_ASSETS, { recursive: true });
   ['style.css', 'app.js'].forEach((f) => {
     const src = path.join(TPL, f);
-    if (fs.existsSync(src)) {
-      fs.mkdirSync(path.join(webDir, 'assets'), { recursive: true });
-      fs.copyFileSync(src, path.join(webDir, 'assets', f));
-    }
+    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(SITE_ASSETS, f));
   });
+  console.log(`OK 共享静态资源 → ${path.relative(process.cwd(), SITE_ASSETS)}`);
 }
 
 // ---------- 引用文件存在性检查 ----------
 const html = H.join('\n');
-const refs = Array.from(new Set(html.match(/assets\/[a-z0-9./-]+\.(mp3|css|js)/g) || []));
-const missing = refs.filter((r) => !fs.existsSync(path.join(webDir, r.split('/').join(path.sep))));
+const refs = Array.from(new Set(html.match(/(?:\.\.\/)?assets\/[a-z0-9./-]+\.(mp3|css|js)/g) || []));
+const missing = refs.filter((r) => !fs.existsSync(path.resolve(webDir, r.split('/').join(path.sep))));
 console.log(`OK ${out} ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB | 引用资源 ${refs.length} 个 | 缺失 ${missing.length}`);
 if (missing.length) {
   console.error('缺失资源:\n' + missing.join('\n'));

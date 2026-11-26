@@ -13,13 +13,15 @@ Practices/                     # 仓库根 + 站点根
   index.html                   # 目录首页（脚本生成，勿手改）
   404.html
   README.md                    # 仓库说明（公开，页面不引用）
+  assets/                      # 全站共享静态资源（脚本生成，勿手改）
+    style.css  app.js          # 各篇页面统一用 ../assets/… 引用
   practiceNN/                  # 每篇一个目录，名字就是 URL
     index.html
-    assets/  style.css · app.js · practice.json · audio/{full,words,s,w,p}
+    assets/  practice.json · audio/{full,words,s,w,p}
   source/                      # 原始 PDF 素材（存档用；公开仓库，等于公开可下载）
   tools/                       # 生成脚本 + 模板 + 源数据（公开，但不会被页面引用）
     build-*.cjs  check-links.cjs  test-bubble.cjs  list-voices.cjs  sample-voices.cjs
-    assets/    style.css、app.js（模板，build-html 复制进每篇）
+    assets/    style.css、app.js（模板源，build-html 复制到站点根 assets/）
     data/      passageN.cjs（每篇的唯一源数据，含原文/译文/生词/短语/题目）
     node_modules/              # 本地依赖，.gitignore 排除，不进仓库
   .agents/skills/reading-pack/ # 生成技能本体（SKILL.md + scripts + assets + references）
@@ -30,6 +32,7 @@ Practices/                     # 仓库根 + 站点根
 - 新篇目一律 `Practices\practiceNN`（两位 ASCII 序号），**不要套 `网页版\`**，不要中文目录名，不要空格。
 - `tools/` 会被静态发布成 `/tools/…`。这是**有意为之**（开源仓库，没什么可藏的）。`.agents/` 以点开头，通常不会被发布。
 - `tools/node_modules`、`tools/shots`、`*.bak`、`_test_*.html` 不进仓库，也不会被发布。
+- **样式和交互全站只有一份**：`assets/style.css`、`assets/app.js` 在站点根，各篇页面用 `../assets/…` 引用；每篇的 `assets/` 只留本篇的 `practice.json` 和音频。改版式/交互只改 `tools/assets/`（同步技能 `assets/`），随便重建一篇就会把站点根那两份刷新，三篇同时生效。
 
 ## 2. 首页与单篇的结构
 
@@ -61,7 +64,7 @@ Practices/                     # 仓库根 + 站点根
 - **不需要 `*.js` 入口**：`index.html` 就是云端认的首页。JS 只在写 Workers 函数或 SPA 重写时才需要。
 - 链接全部相对路径（`./practiceNN/index.html`、`../index.html`）；不要 `/practiceNN/` 这种绝对路径。
 - 每篇页头的 `← 所有篇目` 指向 `../index.html`，所以篇目必须正好在站点根下一层。
-- 缓存：HTML 是 `max-age=0, must-revalidate`，改完刷新即生效；音频文件名固定，若发现“改了音频线上还是旧的”，在链接上加个 `?v=2` 或等缓存过期。
+- 缓存：HTML 与共享的 `assets/*.css|js` 都是 `max-age=0, must-revalidate`，改完刷新即生效；音频文件名固定，若发现“改了音频线上还是旧的”，在链接上加个 `?v=2` 或等缓存过期。
 
 ## 4. 新增一篇的标准动作
 
@@ -91,7 +94,8 @@ node check-links.cjs        ".."
 
 - 纯白底、苹方中文、Georgia 英文；正文 20px / 英文句 21px / 译文 19px；**英文原文加粗**。
 - 生词**点击**弹出（不是悬停）；卡片给音标、词性、释义、构词、记忆点、例句；**点单词本身发音，底部不放“听发音”按钮**。
-- 重点短语的释义与例句挂在它所在句子下面（浅绿注解），可一键收起。
+- **弹卡只服务生词，短语不做弹卡**：绿底短语点一下只读这条短语（释义在句下注解里，只有一份）；绿底里正好是生词的词（`confusing`、`opposite`）嵌套成独立生词，点它弹生词卡。之前绿底整块弹“短语卡”，跟注解内容重复，还把里头的生词挡住了。
+- 重点短语的释义与例句挂在它所在句子下面（浅绿注解），可一键收起；注解里可选一行「用法：…」，写易错点（数据 `phrases[].note`）。
 - 题目答案默认折叠，展开后才把正确项标绿。
 - 字号再调只做“整体加一档”，别单独放大某一块。
 - 打印用用户提供的源 PDF，网页不做“只打印某块”。
