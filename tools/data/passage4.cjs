@@ -9,6 +9,10 @@ module.exports = {
   student: 'anqi',
   studentZh: '安琪',
   source: '人教版八年级上册 Unit 6 Section B 1b',
+  unit: 6,
+  unitLabel: 'Unit 6',
+  part: 1,
+  sectionLabel: 'Section B 1b',
   voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
 
   leadZh:

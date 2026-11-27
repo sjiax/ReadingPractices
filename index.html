@@ -35,6 +35,16 @@
     font-family: var(--f-zh); font-size: 18px; line-height: 1.75; color: #2b3742;
   }
   .stats { margin: 18px 0 6px; font-family: var(--f-ui); font-size: 14.5px; color: var(--muted); }
+  .metaRow {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px 16px; flex-wrap: wrap; margin: 18px 0 6px;
+  }
+  .metaRow .stats { margin: 0; }
+  .sort { display: flex; align-items: center; gap: 6px; font-family: var(--f-ui); font-size: 13.5px; color: var(--muted); }
+  .sort select {
+    font-family: var(--f-ui); font-size: 13.5px; padding: 4px 8px;
+    border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink-2); cursor: pointer;
+  }
   .tabs {
     display: flex; gap: 4px; margin: 26px 0 20px;
     border-bottom: 2px solid var(--line);
@@ -82,6 +92,10 @@
     font-family: var(--f-ui); font-size: 12.5px; color: var(--ink-2);
     background: #f4f6fa; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px;
   }
+  .unit {
+    font-family: var(--f-ui); font-size: 12.5px; font-weight: 700; color: #7a4b00;
+    background: #fff8e8; border: 1px solid #e6cd9c; border-radius: 999px; padding: 2px 9px;
+  }
   .go { font-family: var(--f-ui); font-size: 14.5px; font-weight: 600; color: var(--navy); white-space: nowrap; }
   .card:hover .go { text-decoration: underline; }
   footer {
@@ -110,7 +124,15 @@
     <h1>Reading Practices</h1>
     <p class="sub">英语阅读精读学习包</p>
     <p class="lead">每篇进去先看到整段原文和 5 道选择题；再往下是逐句中英对照、点词看音标与构词、重点短语注解，以及全文和逐句朗读音频。所有音频都是本地文件，断网也能用。</p>
-    <p class="stats">共 5 篇 · 文文 3 篇 · 安琪 2 篇 · 约 1132 词原文 · 25 道题</p>
+    <div class="metaRow">
+      <p class="stats">共 5 篇 · 文文 3 篇 · 安琪 2 篇 · 约 1132 词原文 · 25 道题</p>
+      <label class="sort">排序
+        <select id="sortMode">
+          <option value="unit">按单元</option>
+          <option value="no">按编号</option>
+        </select>
+      </label>
+    </div>
   </header>
 
 
@@ -129,7 +151,8 @@
   <section class="panel" id="panel-wenwen" role="tabpanel" aria-labelledby="tab-wenwen">
     <div class="list">
 
-      <a class="card" href="./practice01/index.html">
+      <a class="card" href="./practice01/index.html"
+        data-no="1" data-unit="0" data-part="0">
         <span class="no">01</span>
         <span class="body">
           <span class="zh">劳动感谢日的一封感谢信</span>
@@ -139,7 +162,8 @@
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>
 
-      <a class="card" href="./practice02/index.html">
+      <a class="card" href="./practice02/index.html"
+        data-no="2" data-unit="0" data-part="0">
         <span class="no">02</span>
         <span class="body">
           <span class="zh">地铁换乘怎么少走路</span>
@@ -149,7 +173,8 @@
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>
 
-      <a class="card" href="./practice03/index.html">
+      <a class="card" href="./practice03/index.html"
+        data-no="3" data-unit="0" data-part="0">
         <span class="no">03</span>
         <span class="body">
           <span class="zh">让上学最后一程更安全</span>
@@ -164,22 +189,24 @@
   <section class="panel" id="panel-anqi" role="tabpanel" aria-labelledby="tab-anqi" hidden>
     <div class="list">
 
-      <a class="card" href="./practice04/index.html">
+      <a class="card" href="./practice04/index.html"
+        data-no="4" data-unit="6" data-part="1">
         <span class="no">04</span>
         <span class="body">
           <span class="zh">把决心坚持下去</span>
           <span class="en">Making Resolutions</span>
-          <span class="metas"><span class="tag">原文 247 词</span><span class="tag">4 段 · 25 句</span><span class="tag">31 个生词</span><span class="tag">17 个短语</span><span class="tag">5 道题</span></span>
+          <span class="metas"><span class="unit">Unit 6 · Section B 1b</span><span class="tag">原文 247 词</span><span class="tag">4 段 · 25 句</span><span class="tag">31 个生词</span><span class="tag">17 个短语</span><span class="tag">5 道题</span></span>
         </span>
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>
 
-      <a class="card" href="./practice05/index.html">
+      <a class="card" href="./practice05/index.html"
+        data-no="5" data-unit="6" data-part="3">
         <span class="no">05</span>
         <span class="body">
           <span class="zh">新年新我的三个决心</span>
           <span class="en">New Year, New Me</span>
-          <span class="metas"><span class="tag">原文 176 词</span><span class="tag">4 段 · 13 句</span><span class="tag">30 个生词</span><span class="tag">17 个短语</span><span class="tag">5 道题</span></span>
+          <span class="metas"><span class="unit">Unit 6 · Section B 3a</span><span class="tag">原文 176 词</span><span class="tag">4 段 · 13 句</span><span class="tag">30 个生词</span><span class="tag">17 个短语</span><span class="tag">5 道题</span></span>
         </span>
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>
@@ -220,6 +247,37 @@
   });
   var hash = (location.hash || '').replace('#', '');
   if (hash && tabs.some(function (t) { return t.getAttribute('data-key') === hash; })) show(hash);
+
+  // 排序：按单元（默认）或按编号；无单元的篇目排在后面，组内按编号
+  var sortSel = document.getElementById('sortMode');
+  function sortCards(mode) {
+    document.querySelectorAll('.panel .list').forEach(function (list) {
+      var cards = Array.prototype.slice.call(list.querySelectorAll('.card'));
+      cards.sort(function (a, b) {
+        if (mode === 'unit') {
+          var ua = Number(a.getAttribute('data-unit')) || 9999;
+          var ub = Number(b.getAttribute('data-unit')) || 9999;
+          if (ua !== ub) return ua - ub;
+          var pa = Number(a.getAttribute('data-part')) || 999;
+          var pb = Number(b.getAttribute('data-part')) || 999;
+          if (pa !== pb) return pa - pb;
+        }
+        return (Number(a.getAttribute('data-no')) || 0) - (Number(b.getAttribute('data-no')) || 0);
+      });
+      cards.forEach(function (c) { list.appendChild(c); });
+    });
+  }
+  if (sortSel) {
+    var savedSort = null;
+    try { savedSort = localStorage.getItem('rp.catalogSort'); } catch (err) { savedSort = null; }
+    var mode = savedSort === 'no' ? 'no' : 'unit';
+    sortSel.value = mode;
+    sortCards(mode);
+    sortSel.addEventListener('change', function () {
+      sortCards(sortSel.value);
+      try { localStorage.setItem('rp.catalogSort', sortSel.value); } catch (err) { /* ignore */ }
+    });
+  }
 })();
 </script>
 </body>

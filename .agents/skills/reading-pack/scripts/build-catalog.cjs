@@ -67,14 +67,18 @@ groups.sort((a, b) => (a.key === 'wenwen' ? -1 : b.key === 'wenwen' ? 1 : 0));
 
 function cardHtml(it) {
   const no = String(it.no || 0).padStart(2, '0');
+  const unit = it.unitLabel
+    ? `<span class="unit">${esc(it.unitLabel)}${it.sectionLabel ? ' · ' + esc(it.sectionLabel) : ''}</span>`
+    : '';
   const chips = (it.chips || []).map((c) => `<span class="tag">${esc(c)}</span>`).join('');
   return `
-      <a class="card" href="./${encodeURIComponent(it.dir)}/index.html">
+      <a class="card" href="./${encodeURIComponent(it.dir)}/index.html"
+        data-no="${Number(it.no) || 0}" data-unit="${Number(it.unit) || 0}" data-part="${Number(it.part) || 0}">
         <span class="no">${no}</span>
         <span class="body">
           <span class="zh">${esc(it.titleZh || it.titleEn)}</span>
           <span class="en">${esc(it.titleEn)}</span>
-          <span class="metas">${chips}</span>
+          <span class="metas">${unit}${chips}</span>
         </span>
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>`;
@@ -139,6 +143,16 @@ const page = `<!doctype html>
     font-family: var(--f-zh); font-size: 18px; line-height: 1.75; color: #2b3742;
   }
   .stats { margin: 18px 0 6px; font-family: var(--f-ui); font-size: 14.5px; color: var(--muted); }
+  .metaRow {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px 16px; flex-wrap: wrap; margin: 18px 0 6px;
+  }
+  .metaRow .stats { margin: 0; }
+  .sort { display: flex; align-items: center; gap: 6px; font-family: var(--f-ui); font-size: 13.5px; color: var(--muted); }
+  .sort select {
+    font-family: var(--f-ui); font-size: 13.5px; padding: 4px 8px;
+    border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink-2); cursor: pointer;
+  }
   .tabs {
     display: flex; gap: 4px; margin: 26px 0 20px;
     border-bottom: 2px solid var(--line);
@@ -186,6 +200,10 @@ const page = `<!doctype html>
     font-family: var(--f-ui); font-size: 12.5px; color: var(--ink-2);
     background: #f4f6fa; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px;
   }
+  .unit {
+    font-family: var(--f-ui); font-size: 12.5px; font-weight: 700; color: #7a4b00;
+    background: #fff8e8; border: 1px solid #e6cd9c; border-radius: 999px; padding: 2px 9px;
+  }
   .go { font-family: var(--f-ui); font-size: 14.5px; font-weight: 600; color: var(--navy); white-space: nowrap; }
   .card:hover .go { text-decoration: underline; }
   footer {
@@ -214,7 +232,15 @@ const page = `<!doctype html>
     <h1>Reading Practices</h1>
     <p class="sub">英语阅读精读学习包</p>
     <p class="lead">每篇进去先看到整段原文和 5 道选择题；再往下是逐句中英对照、点词看音标与构词、重点短语注解，以及全文和逐句朗读音频。所有音频都是本地文件，断网也能用。</p>
-    <p class="stats">共 ${items.length} 篇 · ${groups.map((g) => `${g.name} ${g.items.length} 篇`).join(' · ')} · 约 ${totalWords} 词原文 · ${totalQuestions} 道题</p>
+    <div class="metaRow">
+      <p class="stats">共 ${items.length} 篇 · ${groups.map((g) => `${g.name} ${g.items.length} 篇`).join(' · ')} · 约 ${totalWords} 词原文 · ${totalQuestions} 道题</p>
+      <label class="sort">排序
+        <select id="sortMode">
+          <option value="unit">按单元</option>
+          <option value="no">按编号</option>
+        </select>
+      </label>
+    </div>
   </header>
 
 ${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 practiceNN 文件夹放进站点根后重新生成目录。</p>'}
@@ -253,6 +279,37 @@ ${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 p
   });
   var hash = (location.hash || '').replace('#', '');
   if (hash && tabs.some(function (t) { return t.getAttribute('data-key') === hash; })) show(hash);
+
+  // 排序：按单元（默认）或按编号；无单元的篇目排在后面，组内按编号
+  var sortSel = document.getElementById('sortMode');
+  function sortCards(mode) {
+    document.querySelectorAll('.panel .list').forEach(function (list) {
+      var cards = Array.prototype.slice.call(list.querySelectorAll('.card'));
+      cards.sort(function (a, b) {
+        if (mode === 'unit') {
+          var ua = Number(a.getAttribute('data-unit')) || 9999;
+          var ub = Number(b.getAttribute('data-unit')) || 9999;
+          if (ua !== ub) return ua - ub;
+          var pa = Number(a.getAttribute('data-part')) || 999;
+          var pb = Number(b.getAttribute('data-part')) || 999;
+          if (pa !== pb) return pa - pb;
+        }
+        return (Number(a.getAttribute('data-no')) || 0) - (Number(b.getAttribute('data-no')) || 0);
+      });
+      cards.forEach(function (c) { list.appendChild(c); });
+    });
+  }
+  if (sortSel) {
+    var savedSort = null;
+    try { savedSort = localStorage.getItem('rp.catalogSort'); } catch (err) { savedSort = null; }
+    var mode = savedSort === 'no' ? 'no' : 'unit';
+    sortSel.value = mode;
+    sortCards(mode);
+    sortSel.addEventListener('change', function () {
+      sortCards(sortSel.value);
+      try { localStorage.setItem('rp.catalogSort', sortSel.value); } catch (err) { /* ignore */ }
+    });
+  }
 })();
 </script>
 </body>

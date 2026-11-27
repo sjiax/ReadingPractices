@@ -94,6 +94,14 @@ h1 {
   padding: 5px 12px;
 }
 
+/* 课本篇目的单元/板块标签（如 Unit 6 · Section B 1b） */
+.chip.unit {
+  color: #7a4b00;
+  background: #fff8e8;
+  border-color: #e6cd9c;
+  font-weight: 700;
+}
+
 .lead {
   font-family: var(--f-zh);
   font-size: 19.5px;

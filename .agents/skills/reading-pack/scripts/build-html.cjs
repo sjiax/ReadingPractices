@@ -100,6 +100,10 @@ const chipList = [
   `${d.phrases.length} 个短语`,
   `${d.questions.length} 道题`
 ];
+// 课本篇目先亮出单元/板块（列表页也用这两个字段）
+if (d.unitLabel) {
+  H.push(`<span class="chip unit">${esc(d.unitLabel)}${d.sectionLabel ? ' · ' + esc(d.sectionLabel) : ''}</span>`);
+}
 chipList.forEach((t) => H.push(`<span class="chip">${t}</span>`));
 H.push('</p>');
 H.push(`<p class="lead">${esc(d.leadZh)}</p>`);
@@ -278,6 +282,10 @@ const meta = {
   student: d.student || 'wenwen',
   studentZh: d.studentZh || '文文',
   gradeZh: d.gradeZh || '中职三年级',
+  unit: d.unit || 0,
+  unitLabel: d.unitLabel || '',
+  part: d.part || 0,
+  sectionLabel: d.sectionLabel || '',
   chips: chipList,
   stats: {
     words: wordCount,
