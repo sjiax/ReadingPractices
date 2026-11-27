@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --ink: #15191f;
   --ink-2: #26303b;
   --muted: #4f5b68;
@@ -365,8 +365,7 @@ h2 small {
 
 .pmini:hover { background: #daf0e4; border-color: #7fbba1; }
 
-/* 总开关：一次收起所有译文与注解；单行开关只收这一行 */
-body.hide-notes .s .zh, body.hide-notes .s .pnotes,
+/* 单行收起：总开关与每句的“译”都走这个 class */
 .s.row-hide .zh, .s.row-hide .pnotes { display: none; }
 
 .legend .switch { margin-left: auto; }

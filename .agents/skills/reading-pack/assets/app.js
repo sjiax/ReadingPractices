@@ -103,22 +103,31 @@
     }
   }
 
+  function allRowsShown() {
+    var rows = document.querySelectorAll('.s');
+    for (var i = 0; i < rows.length; i += 1) {
+      if (rows[i].classList.contains('row-hide')) return false;
+    }
+    return true;
+  }
+
+  function setAllRows(show) {
+    Array.prototype.forEach.call(document.querySelectorAll('.s'), function (row) {
+      setRowToggle(row, show);
+    });
+  }
+
   var showNotes = document.getElementById('showNotes');
   if (showNotes) {
     var savedNotes = null;
     try { savedNotes = localStorage.getItem('rp.showNotes'); } catch (err) { savedNotes = null; }
-    if (savedNotes === '0') showNotes.checked = false;
-    document.body.classList.toggle('hide-notes', !showNotes.checked);
+    // 首次打开（没有存过）默认全部收起；存过 '1' 才全开
+    var startShown = savedNotes === '1';
+    setAllRows(startShown);
+    showNotes.checked = startShown;
     showNotes.addEventListener('change', function () {
-      var on = showNotes.checked;
-      document.body.classList.toggle('hide-notes', !on);
-      // 一键全开时，把每句的单行隐藏也清掉
-      if (on) {
-        Array.prototype.forEach.call(document.querySelectorAll('.s.row-hide'), function (row) {
-          setRowToggle(row, true);
-        });
-      }
-      try { localStorage.setItem('rp.showNotes', on ? '1' : '0'); } catch (err) { /* ignore */ }
+      setAllRows(showNotes.checked);
+      try { localStorage.setItem('rp.showNotes', showNotes.checked ? '1' : '0'); } catch (err) { /* ignore */ }
     });
   }
 
@@ -132,11 +141,14 @@
 
   /* ---------- 点击：生词弹卡；句子只有点 ▶ 才朗读；短语只有点 ▶ 才播放 ---------- */
   document.addEventListener('click', function (e) {
-    // 每句右侧的单行开关：只收/放这一行的译文与注解
+    // 每句右侧的单行开关：只收/放这一行的译文与注解（总开关全开/全关时同样有效）
     var rowBtn = e.target.closest ? e.target.closest('.snote') : null;
     if (rowBtn) {
       var row = rowBtn.closest('.s');
-      if (row) setRowToggle(row, row.classList.contains('row-hide'));
+      if (row) {
+        setRowToggle(row, row.classList.contains('row-hide'));
+        if (showNotes) showNotes.checked = allRowsShown();
+      }
       return;
     }
 

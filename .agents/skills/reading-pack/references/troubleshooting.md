@@ -149,6 +149,8 @@ if (!TPL) console.warn('警告：找不到 assets/style.css 模板');
 
 ## 13. 译文与注解的两级开关
 
-- 总开关：`#showNotes` → `body.hide-notes`，CSS 一次收起 `.s .zh` 和 `.s .pnotes`；状态存 `localStorage` 的 `rp.showNotes`。
-- 单行开关：每句右侧 `.snote` → 给该 `.s` 加 `row-hide`，只收这一行；按钮加 `off` 类、`aria-pressed=false`。
-- 总开关重新打开时会清掉所有 `row-hide`（一键全开）。单行状态不持久化，刷新后回到全显示。
+- 没用 `body` 级 class：**全部靠每行的 `.s.row-hide`**，CSS 只写 `.s.row-hide .zh, .s.row-hide .pnotes { display:none }`。这样总开关和单行开关是同一套机制，不会出现"总关时点单行没反应"。
+- `build-html` 默认给每行渲染 `row-hide`、给「译」按钮渲染 `off`（首次打开就是全收起的英文视图，且不闪中文）。
+- `app.js` 启动时：`localStorage['rp.showNotes'] === '1'` 才全开，否则保持全收；总开关 `change` → `setAllRows(checked)` 并存值。
+- 单行「译」：flip 该行 `row-hide`，然后 `showNotes.checked = allRowsShown()`，让勾选状态跟真实状态一致；总关时点它同样生效。
+- 单行状态不持久化，刷新回到默认（首次全收；存过 `'1'` 则全开）。
