@@ -89,7 +89,7 @@ H.push('<a class="back" href="../index.html">← 所有篇目</a>');
 
 // 头部
 H.push('<header class="top">');
-H.push(`<p class="kicker">中职三年级 · 英语阅读精读 · 第 ${pad2(d.no)} 篇</p>`);
+H.push(`<p class="kicker">${esc(d.studentZh || '文文')} · ${esc(d.gradeZh || '中职三年级')} · 英语阅读精读 · 第 ${pad2(d.no)} 篇</p>`);
 H.push(`<h1>${esc(d.titleEn)}</h1>`);
 H.push(`<p class="sub">${esc(d.titleZh)}</p>`);
 H.push('<p class="chips">');
@@ -275,6 +275,9 @@ const meta = {
   titleEn: d.titleEn,
   titleZh: d.titleZh,
   lead: d.leadZh,
+  student: d.student || 'wenwen',
+  studentZh: d.studentZh || '文文',
+  gradeZh: d.gradeZh || '中职三年级',
   chips: chipList,
   stats: {
     words: wordCount,

@@ -50,8 +50,20 @@ const items = fs.readdirSync(root, { withFileTypes: true })
 const totalWords = items.reduce((n, it) => n + (it.stats && it.stats.words ? it.stats.words : 0), 0);
 const totalQuestions = items.reduce((n, it) => n + (it.stats && it.stats.questions ? it.stats.questions : 0), 0);
 
-const cards = items.map((it, i) => {
-  const no = String(i + 1).padStart(2, '0');
+// 按学生分组（数据里有 student / studentZh / gradeZh；老篇目默认归到文文）
+const groups = [];
+items.forEach((it) => {
+  const key = it.student || 'wenwen';
+  let g = groups.find((x) => x.key === key);
+  if (!g) {
+    g = { key, name: it.studentZh || '文文', grade: it.gradeZh || '中职三年级', items: [] };
+    groups.push(g);
+  }
+  g.items.push(it);
+});
+
+function cardHtml(it) {
+  const no = String(it.no || 0).padStart(2, '0');
   const chips = (it.chips || []).map((c) => `<span class="tag">${esc(c)}</span>`).join('');
   return `
       <a class="card" href="./${encodeURIComponent(it.dir)}/index.html">
@@ -63,7 +75,13 @@ const cards = items.map((it, i) => {
         </span>
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>`;
-}).join('\n');
+}
+
+const sections = groups.map((g) => `
+  <h2 class="section">${esc(g.name)} · ${esc(g.grade)}<small>共 ${g.items.length} 篇</small></h2>
+  <div class="list">
+${g.items.map(cardHtml).join('\n')}
+  </div>`).join('\n');
 
 const page = `<!doctype html>
 <html lang="zh-CN">
@@ -71,7 +89,7 @@ const page = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>英语阅读精读 · 学习包</title>
-<meta name="description" content="中职三年级英语阅读精读学习包：原文、选择题、逐句对照、生词构词拆解与朗读音频。">
+<meta name="description" content="两个人的英语阅读精读学习包：原文、选择题、逐句对照、生词构词拆解与朗读音频。">
 <style>
   :root {
     --ink: #15191f; --ink-2: #26303b; --muted: #4f5b68;
@@ -152,21 +170,18 @@ const page = `<!doctype html>
 <body>
 <div class="wrap">
   <header>
-    <p class="kicker">中职三年级 · 英语阅读精读</p>
+    <p class="kicker">两个人的英语阅读课</p>
     <h1>Reading Practices</h1>
     <p class="sub">英语阅读精读学习包</p>
     <p class="lead">每篇进去先看到整段原文和 5 道选择题；再往下是逐句中英对照、点词看音标与构词、重点短语注解，以及全文和逐句朗读音频。所有音频都是本地文件，断网也能用。</p>
-    <p class="stats">共 ${items.length} 篇 · 约 ${totalWords} 词原文 · ${totalQuestions} 道题</p>
+    <p class="stats">共 ${items.length} 篇 · ${groups.map((g) => `${g.name} ${g.items.length} 篇`).join(' · ')} · 约 ${totalWords} 词原文 · ${totalQuestions} 道题</p>
   </header>
 
-  <h2 class="section">全部篇目<small>按上传顺序排列</small></h2>
-  <div class="list">
-${items.length ? cards : '<p class="empty">还没有篇目：把生成的 practiceNN 文件夹放进站点根后重新生成目录。</p>'}
-  </div>
+${items.length ? sections : '<p class="empty">还没有篇目：把生成的 practiceNN 文件夹放进站点根后重新生成目录。</p>'}
 
   <footer>
     <span>共 ${items.length} 篇</span>
-    <span>朗读：句子 AndrewMultilingual · 单词 AndrewNeural</span>
+    <span>朗读：长句/短语 Ava Multilingual · 单词 AndrewNeural</span>
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>

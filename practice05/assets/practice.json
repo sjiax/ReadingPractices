@@ -1,0 +1,177 @@
+{
+ "no": 5,
+ "titleEn": "New Year, New Me",
+ "titleZh": "新年新我的三个决心",
+ "lead": "作者用三个新年决心（爱好、健身、英语）说明“新的一年要变成更好的自己”。全文 4 段 13 句，句句都是“打算做……”的将来时，适合练“找决心、找理由”。原卷未给答案，本页答案为依据原文推断，仅供参考。",
+ "student": "anqi",
+ "studentZh": "安琪",
+ "gradeZh": "八年级",
+ "chips": [
+  "原文 176 词",
+  "4 段 · 13 句",
+  "30 个生词",
+  "17 个短语",
+  "5 道题"
+ ],
+ "stats": {
+  "words": 176,
+  "paragraphs": 4,
+  "sentences": 13,
+  "vocab": 30,
+  "phrases": 17,
+  "questions": 5
+ },
+ "paragraphs": [
+  "As the year draws to a close, it is the perfect time to think about the changes we want to make in the coming new year. We can improve our lives by learning something new, forming good habits, working harder at something, or even improving our relationships with others. I hope to make next year better than this one, so I am going to make three resolutions.",
+  "The first one is about taking up a new hobby. I am going to join the school music club to improve my singing! I think singing is a great activity. And my friends and family all love my singing.",
+  "I am also going to get fitter. Besides jogging, I am going to do push-ups and sit-ups. I feel energetic after I exercise. I'm sure I'm going to be a healthier and happier person.",
+  "Last but not least, my English isn't good enough, so I am going to study for two more hours each weekend. It might be hard, but I am going to get a lot better at English!"
+ ],
+ "questions": [
+  {
+   "q": "How many resolutions is the writer going to make?",
+   "qZh": "作者打算定几个新年决心？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Two",
+     "tZh": "两个"
+    },
+    {
+     "k": "B",
+     "t": "Three",
+     "tZh": "三个"
+    },
+    {
+     "k": "C",
+     "t": "Four",
+     "tZh": "四个"
+    },
+    {
+     "k": "D",
+     "t": "Five",
+     "tZh": "五个"
+    }
+   ],
+   "answer": "B",
+   "evidence": "I hope to make next year better than this one, so I am going to make three resolutions.",
+   "evidenceZh": "细节题：第一段最后一句直接写 three resolutions，后面三段正好一一对应。"
+  },
+  {
+   "q": "Why is the writer going to join the school music club?",
+   "qZh": "作者为什么要加入学校音乐社团？",
+   "options": [
+    {
+     "k": "A",
+     "t": "To make more friends in the club",
+     "tZh": "为了在社团里交更多朋友"
+    },
+    {
+     "k": "B",
+     "t": "To improve his or her singing",
+     "tZh": "为了提高自己的唱歌水平"
+    },
+    {
+     "k": "C",
+     "t": "To learn to play the piano",
+     "tZh": "为了学弹钢琴"
+    },
+    {
+     "k": "D",
+     "t": "To become a music teacher",
+     "tZh": "为了成为音乐老师"
+    }
+   ],
+   "answer": "B",
+   "evidence": "I am going to join the school music club to improve my singing!",
+   "evidenceZh": "原因题（目的）：句末 to improve my singing 就是加入社团的目的；A、C、D 文中都没提。"
+  },
+  {
+   "q": "What does 'draws to a close' mean in Paragraph 1?",
+   "qZh": "第一段中 draws to a close 是什么意思？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Is getting longer",
+     "tZh": "变得越来越长"
+    },
+    {
+     "k": "B",
+     "t": "Is coming to an end",
+     "tZh": "就要结束了"
+    },
+    {
+     "k": "C",
+     "t": "Starts all over again",
+     "tZh": "又重新开始"
+    },
+    {
+     "k": "D",
+     "t": "Gets colder and colder",
+     "tZh": "越来越冷"
+    }
+   ],
+   "answer": "B",
+   "evidence": "As the year draws to a close, it is the perfect time to think about the changes we want to make in the coming new year.",
+   "evidenceZh": "猜词题：前半句说旧年“接近尾声”，后半句紧接着讲 the coming new year，一旧一新正好对上。"
+  },
+  {
+   "q": "What is the passage mainly about?",
+   "qZh": "这篇文章主要讲什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "The writer's three resolutions for the new year",
+     "tZh": "作者新年的三个决心"
+    },
+    {
+     "k": "B",
+     "t": "How to sing well in the school music club",
+     "tZh": "怎样在学校音乐社团唱好歌"
+    },
+    {
+     "k": "C",
+     "t": "Why students should do push-ups and sit-ups",
+     "tZh": "为什么学生要做俯卧撑和仰卧起坐"
+    },
+    {
+     "k": "D",
+     "t": "How to learn English in two hours",
+     "tZh": "怎样在两小时内学好英语"
+    }
+   ],
+   "answer": "A",
+   "evidence": "I hope to make next year better than this one, so I am going to make three resolutions. / It might be hard, but I am going to get a lot better at English!",
+   "evidenceZh": "主旨题：首段点出 three resolutions，二、三、四段各讲一个决心（爱好、健身、英语）；B、C、D 都只是某一段的局部细节。"
+  },
+  {
+   "q": "What can we infer about the writer from the last paragraph?",
+   "qZh": "从最后一段可以推断出作者是个怎样的人？",
+   "options": [
+    {
+     "k": "A",
+     "t": "He or she is already very good at English",
+     "tZh": "他／她的英语已经很好了"
+    },
+    {
+     "k": "B",
+     "t": "He or she will give up when it gets hard",
+     "tZh": "一遇到困难就会放弃"
+    },
+    {
+     "k": "C",
+     "t": "He or she is ready to work hard for a better self",
+     "tZh": "他／她愿意为更好的自己而努力"
+    },
+    {
+     "k": "D",
+     "t": "He or she does not like the school music club",
+     "tZh": "他／她不喜欢学校音乐社团"
+    }
+   ],
+   "answer": "C",
+   "evidence": "It might be hard, but I am going to get a lot better at English!",
+   "evidenceZh": "推断题：先承认 It might be hard，再用 but 说会好很多，第三段还有 I am sure 的表态，可见他愿意为目标努力。"
+  }
+ ]
+}

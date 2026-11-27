@@ -98,7 +98,7 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 1. `build-tts` 出 `full.mp3` / `words.mp3`；
 2. `build-audio-assets` 出 `s/`、`w/`、`p/` 三组小音频（已存在则跳过，失败自动重试，可反复重跑续传）；
 3. `build-html` 生成 `index.html`，并把 `style.css`、`app.js` 从模板（`<工具目录>/assets/`）复制到**站点根 `assets/`**（全站共用一份），最后校验所有资源引用；
-4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；
+4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；如果站点是多个学生共用，它会按数据里的 `student` / `studentZh` / `gradeZh` 分组（站点约定，见工作区 AGENTS）；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
 **语音参数**（2026-11 定稿：长句/短语用女声 Ava，单词仍用纯美式 Andrew）：

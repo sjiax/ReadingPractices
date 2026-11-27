@@ -1,6 +1,6 @@
 # ReadingPractices
 
-中职三年级英语阅读精读学习包。每篇一个独立网页：**原文 + 选择题 + 逐句中英对照 + 生词构词拆解 + 重点短语注解 + 朗读音频**，纯静态、离线可用。
+两个人的英语阅读精读学习包（文文 · 中职三年级 / 安琪 · 八年级）。每篇一个独立网页：**原文 + 选择题 + 逐句中英对照 + 生词构词拆解 + 重点短语注解 + 朗读音频**，纯静态、离线可用；首页按学生分组列出各自篇目。
 
 在线浏览：<https://wenwen.sjiax.ccwu.cc/>
 
@@ -19,10 +19,10 @@
 ## 目录
 
 ```
-index.html            目录首页（脚本生成）
+index.html            目录首页（脚本生成，按学生分组）
 404.html
 assets/               全站共享的 style.css、app.js（脚本生成）
-practiceNN/           每篇一个目录
+practiceNN/           每篇一个目录（编号连续，学生归属写在数据里：student / gradeZh）
   index.html
   assets/  practice.json
   assets/audio/        full.mp3、words.mp3、s/、w/、p/

@@ -96,6 +96,7 @@ module.exports = {
 | `phrases[].note` | 注解里的第二行「用法：…」（可选，只写用法/易错点） | 否 |
 | `questions` | 题目区 | 是 |
 | `level` | 仅供人看，页面不显示 | 否 |
+| `student` / `studentZh` / `gradeZh` | 目录首页按学生分组、篇目页头 kicker（站点约定，默认 `wenwen` / 文文 / 中职三年级） | 否 |
 | `voices` | 页脚「朗读：…」的音色说明，`{ sent, word, phrase }`（只影响文案，音频靠命令行参数） | 否 |
 | `translation` | 作者自检 | 否 |
 
