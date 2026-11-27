@@ -163,7 +163,7 @@ H.push('<section id="read">');
 H.push('<h2><span class="no">三</span>逐句对照<small>点左边的 ▶ 朗读，点生词看释义</small></h2>');
 H.push('<div class="legend">');
 H.push('<span class="k-w"><i></i>生词 · 点一下看音标与例句</span>');
-H.push('<label class="switch inline"><input type="checkbox" id="showNotes" checked> 显示短语注解</label>');
+H.push('<label class="switch inline"><input type="checkbox" id="showNotes" checked> 显示译文与注解</label>');
 H.push('</div>');
 
 d.paragraphs.forEach((p, pi) => {
@@ -173,6 +173,7 @@ d.paragraphs.forEach((p, pi) => {
     if (l.p !== pi + 1) return;
     H.push('<div class="s">');
     H.push(`<button class="play" type="button" data-play="${sentAudio(li)}" aria-label="播放这句">▶</button>`);
+    H.push('<button class="snote" type="button" aria-pressed="true" aria-label="显示或隐藏这句的译文与注解" title="显示 / 隐藏这句的译文与注解">译</button>');
     H.push(`<div class="en">${annotate(l.en)}</div>`);
     H.push(`<div class="zh">${esc(l.zh)}</div>`);
     const notes = phByLine.get(li);
@@ -230,7 +231,7 @@ H.push('<ol class="steps">');
   '先听全文音频 1—2 遍，不看书，抓大意（谁、做了什么、为什么）。',
   '切到“逐句对照”，点每句左边的 ▶ 一句一句跟读；橙黄色的是生词，点一下看音标和例句，再点一下关掉。',
   '句子下方的浅绿注解是重点短语：释义、例句、译文都在里面，点小 ▶ 可以单独听。',
-  '只想练跟读时，把“显示短语注解”关掉，页面就只剩原文和译文。',
+  '只想练跟读时，把“显示译文与注解”关掉，页面就只剩原文和逐句英文；也可以点每句右边的“译”单独收一行。',
   '只看中文译文，尝试口头把每一段“译回”英文，再与原文比对。',
   '做题，用“依据句”核对答案出处；错题标出是细节题、猜词题还是主旨题。',
   '睡前再听一遍全文，不看文字，检验理解是否顺。'

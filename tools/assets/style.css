@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --ink: #15191f;
   --ink-2: #26303b;
   --muted: #4f5b68;
@@ -34,7 +34,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.s, .w, .btn, .play, .mini, .pmini, summary { touch-action: manipulation; }
+.s, .w, .btn, .play, .snote, .mini, .pmini, summary { touch-action: manipulation; }
 
 .wrap { max-width: 940px; margin: 0 auto; }
 
@@ -250,8 +250,8 @@ h2 small {
 
 .s {
   display: grid;
-  grid-template-columns: 36px 1fr;
-  grid-template-areas: "btn en" "btn zh" "btn nt";
+  grid-template-columns: 36px 1fr auto;
+  grid-template-areas: "btn en tg" "btn zh tg" "btn nt tg";
   column-gap: 13px;
   padding: 12px 12px 12px 6px;
   border-radius: 10px;
@@ -280,6 +280,28 @@ h2 small {
 
 .s .play:hover, .s .play:focus-visible, .s.playing .play { opacity: 1; }
 .s .play:hover { background: #eef4fa; }
+
+/* 每句右侧的单行开关：只收这一行的译文与注解 */
+.s .snote {
+  grid-area: tg;
+  align-self: start;
+  margin-top: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ccd6e2;
+  background: #fff;
+  color: #5a6773;
+  font-family: var(--f-zh);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: .8;
+  transition: background .15s, color .15s, border-color .15s, opacity .15s;
+}
+
+.s .snote:hover, .s .snote:focus-visible { opacity: 1; background: #eef4fa; }
+.s .snote.off { background: #eef2f7; color: #9aa5b1; border-color: #d8e0e8; text-decoration: line-through; }
 .s.playing .play { background: #b98600; border-color: #b98600; color: #fff; }
 
 .s .en {
@@ -343,7 +365,9 @@ h2 small {
 
 .pmini:hover { background: #daf0e4; border-color: #7fbba1; }
 
-body.hide-notes .pnotes { display: none; }
+/* 总开关：一次收起所有译文与注解；单行开关只收这一行 */
+body.hide-notes .s .zh, body.hide-notes .s .pnotes,
+.s.row-hide .zh, .s.row-hide .pnotes { display: none; }
 
 .legend .switch { margin-left: auto; }
 
@@ -742,7 +766,7 @@ footer {
 @media (max-width: 620px) {
   body { padding: 0 14px 60px; font-size: 19px; }
   header.top { padding: 30px 0 18px; }
-  .s { grid-template-columns: 30px 1fr; column-gap: 8px; padding-right: 4px; }
+  .s { grid-template-columns: 30px 1fr auto; column-gap: 8px; padding-right: 4px; }
   .s .play { width: 30px; height: 30px; }
   .s .en { font-size: 19.5px; }
   .s .zh { font-size: 18px; }
@@ -758,7 +782,7 @@ footer {
 
 @media print {
   body { background: #fff; padding: 0; font-size: 11pt; color: #000; }
-  .bar, .play, .mini, .pmini, .legend, #card, .hint small, .btn { display: none !important; }
+  .bar, .play, .snote, .mini, .pmini, .legend, #card, .hint small, .btn { display: none !important; }
   h2 small { display: none !important; }
   .s { break-inside: avoid; border-left-color: transparent; padding: 4px 0; }
   .s .zh { color: #333; }
@@ -774,3 +798,4 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+

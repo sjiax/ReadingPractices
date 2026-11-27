@@ -143,6 +143,12 @@ if (!TPL) console.warn('警告：找不到 assets/style.css 模板');
 
 区分：**句子/短语是点击播**，**生词卡是打开就自动播**（受「点词自动发音」开关控制）——两者都要等下载，但触发方式不同，别把它们改成同一种。
 
-## 12. 句子只有 ▶ 能播
+## 12. 句子和短语都只有 ▶ 能播
 
-逐句对照里整句不再可点：`.s` 上没有 `data-play`，只有 `<button class="play" data-play="...">` 有；`app.js` 只对 `[data-play]` 元素播放，点击句子正文不触发任何音频（只关掉生词卡）。改版时别把 `data-play` 又挂回 `.s` 上——那会让“点句子任意处朗读”复活。
+逐句对照里整句不再可点：`.s` 上没有 `data-play`，只有 `<button class="play" data-play="...">` 有；短语注解也一样，点注解文字不播，只有 `<button class="pmini" data-play="...">` 播。`app.js` 只对 `[data-play]` 元素播放，且只有 `.play` 才给整句加 `.playing` 高亮。改版时别把 `data-play` 又挂回 `.s` 或 `.pnotes` 上——那会让“点句子/点注解任意处朗读”复活。
+
+## 13. 译文与注解的两级开关
+
+- 总开关：`#showNotes` → `body.hide-notes`，CSS 一次收起 `.s .zh` 和 `.s .pnotes`；状态存 `localStorage` 的 `rp.showNotes`。
+- 单行开关：每句右侧 `.snote` → 给该 `.s` 加 `row-hide`，只收这一行；按钮加 `off` 类、`aria-pressed=false`。
+- 总开关重新打开时会清掉所有 `row-hide`（一键全开）。单行状态不持久化，刷新后回到全显示。

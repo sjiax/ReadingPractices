@@ -1,4 +1,4 @@
-﻿/* 阅读学习包 · 交互脚本（无依赖） */
+/* 阅读学习包 · 交互脚本（无依赖） */
 (function () {
   'use strict';
 
@@ -92,7 +92,17 @@
     });
   });
 
-  /* ---------- 短语注解开关 ---------- */
+  /* ---------- 译文与注解开关（总开关 + 每句的单行开关） ---------- */
+  function setRowToggle(row, show) {
+    if (!row) return;
+    row.classList.toggle('row-hide', !show);
+    var b = row.querySelector('.snote');
+    if (b) {
+      b.classList.toggle('off', !show);
+      b.setAttribute('aria-pressed', show ? 'true' : 'false');
+    }
+  }
+
   var showNotes = document.getElementById('showNotes');
   if (showNotes) {
     var savedNotes = null;
@@ -100,8 +110,15 @@
     if (savedNotes === '0') showNotes.checked = false;
     document.body.classList.toggle('hide-notes', !showNotes.checked);
     showNotes.addEventListener('change', function () {
-      document.body.classList.toggle('hide-notes', !showNotes.checked);
-      try { localStorage.setItem('rp.showNotes', showNotes.checked ? '1' : '0'); } catch (err) { /* ignore */ }
+      var on = showNotes.checked;
+      document.body.classList.toggle('hide-notes', !on);
+      // 一键全开时，把每句的单行隐藏也清掉
+      if (on) {
+        Array.prototype.forEach.call(document.querySelectorAll('.s.row-hide'), function (row) {
+          setRowToggle(row, true);
+        });
+      }
+      try { localStorage.setItem('rp.showNotes', on ? '1' : '0'); } catch (err) { /* ignore */ }
     });
   }
 
@@ -113,26 +130,28 @@
     });
   });
 
-  /* ---------- 点击：生词弹卡；句子只有点 ▶ 才朗读 ---------- */
+  /* ---------- 点击：生词弹卡；句子只有点 ▶ 才朗读；短语只有点 ▶ 才播放 ---------- */
   document.addEventListener('click', function (e) {
+    // 每句右侧的单行开关：只收/放这一行的译文与注解
+    var rowBtn = e.target.closest ? e.target.closest('.snote') : null;
+    if (rowBtn) {
+      var row = rowBtn.closest('.s');
+      if (row) setRowToggle(row, row.classList.contains('row-hide'));
+      return;
+    }
+
     var word = e.target.closest ? e.target.closest('.w') : null;
     if (word) {
       toggleCard(word);
       return;
     }
-    // 短语注解：点这块只播"这一条短语"，绝不冒泡成整句
-    var note = e.target.closest ? e.target.closest('.pnotes') : null;
-    if (note) {
-      var one = e.target.closest('.pnote');
-      var pmini = one ? one.querySelector('.pmini') : null;
-      if (pmini) play(pmini.getAttribute('data-play'), null);
-      return;
-    }
+
     if (!(e.target.closest && e.target.closest('#card'))) hideCard();
-    // 只有带 data-play 的按钮（句子的 ▶、生词表的 ▶、播放条按钮）才播放
+    // 只有带 data-play 的按钮（句子的 ▶、短语的 ▶、生词表的 ▶、播放条按钮）才播放
     var btn = e.target.closest ? e.target.closest('[data-play]') : null;
     if (btn) {
-      play(btn.getAttribute('data-play'), btn.closest('.s'));
+      // 只有句子的播放键才给整句高亮，短语/单词按钮不点亮句子
+      play(btn.getAttribute('data-play'), btn.classList.contains('play') ? btn.closest('.s') : null);
     }
   });
 
