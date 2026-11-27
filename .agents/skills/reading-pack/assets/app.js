@@ -16,16 +16,52 @@
   var lastFocus = null;
 
   /* ---------- 播放 ---------- */
+  // 网慢时第一次点播放只响前半段：等 canplaythrough（整段可连续播放）再开声，
+  // 4 秒还没等到就先播（极慢网络下不至于点了没反应）。
+  var playSeq = 0;
+
   function play(src, row) {
     if (!src) return;
-    audio.src = src;
-    audio.playbackRate = rate;
-    audio.currentTime = 0;
-    var p = audio.play();
-    if (p && p.catch) p.catch(function () {});
+    var seq = ++playSeq;
+
     if (currentRow && currentRow !== row) currentRow.classList.remove('playing');
     currentRow = row || null;
     if (currentRow) currentRow.classList.add('playing');
+
+    function start() {
+      if (seq !== playSeq) return;
+      audio.playbackRate = rate;
+      try { audio.currentTime = 0; } catch (err) { /* 还没元数据时忽略 */ }
+      var p = audio.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+
+    if (audio.getAttribute('src') === src && audio.readyState >= 4) {
+      start();
+      return;
+    }
+
+    audio.pause();
+    audio.src = src;
+    audio.load();
+
+    if (audio.readyState >= 4) {
+      start();
+      return;
+    }
+
+    var done = false;
+    var timer = null;
+    function go() {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      audio.removeEventListener('canplaythrough', go);
+      if (seq !== playSeq) return;
+      start();
+    }
+    audio.addEventListener('canplaythrough', go);
+    timer = setTimeout(go, 4000);
   }
 
   audio.addEventListener('ended', function () {
@@ -65,7 +101,7 @@
     });
   });
 
-  /* ---------- 点击：句子里的生词弹卡，句子其余地方读整句 ---------- */
+  /* ---------- 点击：生词弹卡；句子只有点 ▶ 才朗读 ---------- */
   document.addEventListener('click', function (e) {
     var word = e.target.closest ? e.target.closest('.w') : null;
     if (word) {
@@ -81,13 +117,11 @@
       return;
     }
     if (!(e.target.closest && e.target.closest('#card'))) hideCard();
-    var s = e.target.closest ? e.target.closest('.s') : null;
-    if (s) {
-      play(s.getAttribute('data-play'), s);
-      return;
-    }
+    // 只有带 data-play 的按钮（句子的 ▶、生词表的 ▶、播放条按钮）才播放
     var btn = e.target.closest ? e.target.closest('[data-play]') : null;
-    if (btn) play(btn.getAttribute('data-play'), null);
+    if (btn) {
+      play(btn.getAttribute('data-play'), btn.closest('.s'));
+    }
   });
 
   /* ---------- 悬停卡片 ---------- */

@@ -1,4 +1,4 @@
-// 冒泡回归测试：点句子朗读 / 点句下注解播短语 / 点句子里的生词弹卡
+// 冒泡回归测试：句子只有点 ▶ 才播放；注解/短语▶ 播短语；点生词弹卡
 // 用法: node test-bubble.cjs <篇目目录>
 // 生成 _test_bubble.html，用无头浏览器打开读标题即可看到结果
 const fs = require('fs');
@@ -19,7 +19,8 @@ const probe = `
   var log = [];
   function cur() {
     var a = document.getElementById('main');
-    return a ? (a.getAttribute('src') || 'none').split('/').slice(-2).join('/') : 'no-audio-el';
+    var s = a ? (a.getAttribute('src') || 'none') : 'no-audio-el';
+    return s === 'none' ? 'none' : s.split('/').slice(-2).join('/');
   }
   function cardOn() {
     var c = document.getElementById('card');
@@ -30,7 +31,8 @@ const probe = `
     el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
   }
   var steps = [
-    ['点句子英文', function () { return document.querySelector('.s .en'); }],
+    ['点句子正文', function () { return document.querySelector('.s .en'); }],
+    ['点句子的▶', function () { return document.querySelector('.s .play'); }],
     ['点注解文字', function () { return document.querySelector('.pnote'); }],
     ['点短语▶', function () { return document.querySelector('.pnote .pmini'); }],
     ['点句子里的生词', function () { return document.querySelector('.s .w'); }]
@@ -55,4 +57,4 @@ const probe = `
 
 fs.writeFileSync(out, fs.readFileSync(src, 'utf8').replace('</body>', probe + '</body>'), 'utf8');
 console.log(out);
-console.log('期望：句子 -> s/xx；注解文字、短语▶ -> p/xx；句子里的生词 -> card=on（主播放器不动）');
+console.log('期望：点句子正文 -> none；点句子的▶ -> s/xx；注解/短语▶ -> p/xx；点生词 -> card=on');

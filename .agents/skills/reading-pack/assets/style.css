@@ -256,11 +256,9 @@ h2 small {
   padding: 12px 12px 12px 6px;
   border-radius: 10px;
   border-left: 3px solid transparent;
-  cursor: pointer;
   transition: background .15s, border-color .15s;
 }
 
-.s:hover { background: #f5f8fc; border-left-color: #c3d2e2; }
 .s.playing { background: #fff8e0; border-left-color: #b98600; }
 
 .s .play {
@@ -280,7 +278,8 @@ h2 small {
   transition: opacity .15s, background .15s, border-color .15s;
 }
 
-.s:hover .play, .s.playing .play { opacity: 1; }
+.s .play:hover, .s .play:focus-visible, .s.playing .play { opacity: 1; }
+.s .play:hover { background: #eef4fa; }
 .s.playing .play { background: #b98600; border-color: #b98600; color: #fff; }
 
 .s .en {
