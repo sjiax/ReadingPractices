@@ -30,14 +30,14 @@ Practices/                     # 仓库根 + 站点根
 ```
 
 - 新篇目一律 `Practices\practiceNN`（两位 ASCII 序号），**不要套 `网页版\`**，不要中文目录名，不要空格。
-- **两个人共用一套站点**：`practiceNN` 编号不区分学生，谁的文章由数据里的 `student`（`wenwen` / `anqi`）、`studentZh`、`gradeZh` 决定。首页按学生分组（文文 · 中职三年级 / 安琪 · 八年级），篇目页头 kicker 显示「学生 · 年级 · 第 NN 篇」。安琪的篇目从 `practice04` 往后排。
+- **两个人共用一套站点**：`practiceNN` 编号不区分学生，谁的文章由数据里的 `student`（`wenwen` / `anqi`）、`studentZh`、`gradeZh` 决定。首页用两个 Tab 分开（文文 · 中职三年级 / 安琪 · 八年级，默认文文），篇目页头 kicker 显示「学生 · 年级 · 第 NN 篇」。安琪的篇目从 `practice04` 往后排。
 - `tools/` 会被静态发布成 `/tools/…`。这是**有意为之**（开源仓库，没什么可藏的）。`.agents/` 以点开头，通常不会被发布。
 - `tools/node_modules`、`tools/shots`、`*.bak`、`_test_*.html` 不进仓库，也不会被发布。
 - **样式和交互全站只有一份**：`assets/style.css`、`assets/app.js` 在站点根，各篇页面用 `../assets/…` 引用；每篇的 `assets/` 只留本篇的 `practice.json` 和音频。改版式/交互只改 `tools/assets/`（同步技能 `assets/`），随便重建一篇就会把站点根那两份刷新，三篇同时生效。
 
 ## 2. 首页与单篇的结构
 
-**目录首页**（`Practices/index.html`）只做导航：**按学生分组**，每组一行标题（「文文 · 中职三年级」「安琪 · 八年级」，右侧写共 N 篇），组内一行一张卡片，含序号、中文名、英文标题、统计标签、「开始学习 →」。首页**不放**原文和题目。
+**目录首页**（`Practices/index.html`）只做导航：**两个 Tab**——「文文 · 中职三年级」「安琪 · 八年级」，**默认显示文文**；每个 Tab 里是一行一张卡片（序号、中文名、英文标题、统计标签、「开始学习 →」），Tab 上标本篇数，切换用内联 JS（支持 `#wenwen` / `#anqi` 深链）。首页**不放**原文和题目。
 
 **每篇页面**（`practiceNN/index.html`）固定顺序：
 

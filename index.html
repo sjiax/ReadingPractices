@@ -35,6 +35,27 @@
     font-family: var(--f-zh); font-size: 18px; line-height: 1.75; color: #2b3742;
   }
   .stats { margin: 18px 0 6px; font-family: var(--f-ui); font-size: 14.5px; color: var(--muted); }
+  .tabs {
+    display: flex; gap: 4px; margin: 26px 0 20px;
+    border-bottom: 2px solid var(--line);
+  }
+  .tab {
+    appearance: none; -webkit-appearance: none; background: none; border: 0;
+    border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 10px 14px 12px;
+    display: flex; align-items: baseline; gap: 9px; cursor: pointer;
+    font-family: var(--f-ui); font-size: 19px; font-weight: 700; color: var(--muted);
+    border-radius: 8px 8px 0 0;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .tab small { font-size: 12.5px; font-weight: 400; color: var(--muted); }
+  .tab:hover { color: var(--navy); background: #f6f9fc; }
+  .tab.on { color: var(--navy); border-bottom-color: var(--navy); }
+  .tab:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+  .panel[hidden] { display: none; }
+  @media (max-width: 720px) {
+    .tabs { gap: 0; }
+    .tab { font-size: 17px; padding: 9px 10px 11px; gap: 6px; }
+  }
   h2.section {
     margin: 34px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--line);
     font-family: var(--f-ui); font-size: 22px; font-weight: 700; color: #0d1219;
@@ -93,8 +114,20 @@
   </header>
 
 
-  <h2 class="section">文文 · 中职三年级<small>共 3 篇</small></h2>
-  <div class="list">
+  <div class="tabs" role="tablist" aria-label="选择学生">
+
+    <button class="tab on" type="button" role="tab" id="tab-wenwen"
+      aria-selected="true" aria-controls="panel-wenwen" data-key="wenwen">
+      文文<small>中职三年级 · 3 篇</small>
+    </button>
+    <button class="tab" type="button" role="tab" id="tab-anqi"
+      aria-selected="false" aria-controls="panel-anqi" data-key="anqi">
+      安琪<small>八年级 · 2 篇</small>
+    </button>
+  </div>
+
+  <section class="panel" id="panel-wenwen" role="tabpanel" aria-labelledby="tab-wenwen">
+    <div class="list">
 
       <a class="card" href="./practice01/index.html">
         <span class="no">01</span>
@@ -125,10 +158,11 @@
         </span>
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>
-  </div>
+    </div>
+  </section>
 
-  <h2 class="section">安琪 · 八年级<small>共 2 篇</small></h2>
-  <div class="list">
+  <section class="panel" id="panel-anqi" role="tabpanel" aria-labelledby="tab-anqi" hidden>
+    <div class="list">
 
       <a class="card" href="./practice04/index.html">
         <span class="no">04</span>
@@ -149,7 +183,8 @@
         </span>
         <span class="go" aria-hidden="true">开始学习 →</span>
       </a>
-  </div>
+    </div>
+  </section>
 
   <footer>
     <span>共 5 篇</span>
@@ -157,5 +192,35 @@
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  function show(key) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-key') === key;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panels.forEach(function (p) {
+      p.hidden = p.id !== 'panel-' + key;
+    });
+    if (history.replaceState) history.replaceState(null, '', '#' + key);
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { show(t.getAttribute('data-key')); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var i = tabs.indexOf(t);
+      var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      show(next.getAttribute('data-key'));
+    });
+  });
+  var hash = (location.hash || '').replace('#', '');
+  if (hash && tabs.some(function (t) { return t.getAttribute('data-key') === hash; })) show(hash);
+})();
+</script>
 </body>
 </html>

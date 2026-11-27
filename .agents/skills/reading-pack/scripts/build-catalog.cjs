@@ -62,6 +62,9 @@ items.forEach((it) => {
   g.items.push(it);
 });
 
+// 默认 Tab 固定是文文（即使以后有别的目录排序）
+groups.sort((a, b) => (a.key === 'wenwen' ? -1 : b.key === 'wenwen' ? 1 : 0));
+
 function cardHtml(it) {
   const no = String(it.no || 0).padStart(2, '0');
   const chips = (it.chips || []).map((c) => `<span class="tag">${esc(c)}</span>`).join('');
@@ -77,11 +80,27 @@ function cardHtml(it) {
       </a>`;
 }
 
-const sections = groups.map((g) => `
-  <h2 class="section">${esc(g.name)} · ${esc(g.grade)}<small>共 ${g.items.length} 篇</small></h2>
-  <div class="list">
+const tabId = (g) => 'tab-' + g.key;
+const panelId = (g) => 'panel-' + g.key;
+
+const tabsHtml = groups.map((g, i) => `
+    <button class="tab${i === 0 ? ' on' : ''}" type="button" role="tab" id="${tabId(g)}"
+      aria-selected="${i === 0 ? 'true' : 'false'}" aria-controls="${panelId(g)}" data-key="${esc(g.key)}">
+      ${esc(g.name)}<small>${esc(g.grade)} · ${g.items.length} 篇</small>
+    </button>`).join('');
+
+const panelsHtml = groups.map((g, i) => `
+  <section class="panel" id="${panelId(g)}" role="tabpanel" aria-labelledby="${tabId(g)}"${i === 0 ? '' : ' hidden'}>
+    <div class="list">
 ${g.items.map(cardHtml).join('\n')}
-  </div>`).join('\n');
+    </div>
+  </section>`).join('\n');
+
+const tabsMarkup = `
+  <div class="tabs" role="tablist" aria-label="选择学生">
+${tabsHtml}
+  </div>
+${panelsHtml}`;
 
 const page = `<!doctype html>
 <html lang="zh-CN">
@@ -120,6 +139,27 @@ const page = `<!doctype html>
     font-family: var(--f-zh); font-size: 18px; line-height: 1.75; color: #2b3742;
   }
   .stats { margin: 18px 0 6px; font-family: var(--f-ui); font-size: 14.5px; color: var(--muted); }
+  .tabs {
+    display: flex; gap: 4px; margin: 26px 0 20px;
+    border-bottom: 2px solid var(--line);
+  }
+  .tab {
+    appearance: none; -webkit-appearance: none; background: none; border: 0;
+    border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 10px 14px 12px;
+    display: flex; align-items: baseline; gap: 9px; cursor: pointer;
+    font-family: var(--f-ui); font-size: 19px; font-weight: 700; color: var(--muted);
+    border-radius: 8px 8px 0 0;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .tab small { font-size: 12.5px; font-weight: 400; color: var(--muted); }
+  .tab:hover { color: var(--navy); background: #f6f9fc; }
+  .tab.on { color: var(--navy); border-bottom-color: var(--navy); }
+  .tab:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+  .panel[hidden] { display: none; }
+  @media (max-width: 720px) {
+    .tabs { gap: 0; }
+    .tab { font-size: 17px; padding: 9px 10px 11px; gap: 6px; }
+  }
   h2.section {
     margin: 34px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--line);
     font-family: var(--f-ui); font-size: 22px; font-weight: 700; color: #0d1219;
@@ -177,7 +217,7 @@ const page = `<!doctype html>
     <p class="stats">共 ${items.length} 篇 · ${groups.map((g) => `${g.name} ${g.items.length} 篇`).join(' · ')} · 约 ${totalWords} 词原文 · ${totalQuestions} 道题</p>
   </header>
 
-${items.length ? sections : '<p class="empty">还没有篇目：把生成的 practiceNN 文件夹放进站点根后重新生成目录。</p>'}
+${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 practiceNN 文件夹放进站点根后重新生成目录。</p>'}
 
   <footer>
     <span>共 ${items.length} 篇</span>
@@ -185,6 +225,36 @@ ${items.length ? sections : '<p class="empty">还没有篇目：把生成的 pra
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  function show(key) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-key') === key;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panels.forEach(function (p) {
+      p.hidden = p.id !== 'panel-' + key;
+    });
+    if (history.replaceState) history.replaceState(null, '', '#' + key);
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { show(t.getAttribute('data-key')); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var i = tabs.indexOf(t);
+      var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      show(next.getAttribute('data-key'));
+    });
+  });
+  var hash = (location.hash || '').replace('#', '');
+  if (hash && tabs.some(function (t) { return t.getAttribute('data-key') === hash; })) show(hash);
+})();
+</script>
 </body>
 </html>
 `;
