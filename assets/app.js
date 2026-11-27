@@ -1,4 +1,4 @@
-/* 阅读学习包 · 交互脚本（无依赖） */
+﻿/* 阅读学习包 · 交互脚本（无依赖） */
 (function () {
   'use strict';
 
@@ -16,36 +16,29 @@
   var lastFocus = null;
 
   /* ---------- 播放 ---------- */
-  // 网慢时第一次点播放只响前半段：等 canplaythrough（整段可连续播放）再开声，
-  // 4 秒还没等到就先播（极慢网络下不至于点了没反应）。
+  // 网慢时直接 play() 只响前半段：统一等 canplaythrough（整段能连续播）再开声，
+  // 超时兜底先播，避免点了没反应。句子/短语走 #main（点击播），生词卡走 fx（自动播）。
   var playSeq = 0;
+  var wordSeq = 0;
 
-  function play(src, row) {
-    if (!src) return;
-    var seq = ++playSeq;
-
-    if (currentRow && currentRow !== row) currentRow.classList.remove('playing');
-    currentRow = row || null;
-    if (currentRow) currentRow.classList.add('playing');
-
+  function playWhenReady(el, src, isCurrent, timeoutMs, prep) {
     function start() {
-      if (seq !== playSeq) return;
-      audio.playbackRate = rate;
-      try { audio.currentTime = 0; } catch (err) { /* 还没元数据时忽略 */ }
-      var p = audio.play();
+      if (prep) prep();
+      try { el.currentTime = 0; } catch (err) { /* 还没元数据时忽略 */ }
+      var p = el.play();
       if (p && p.catch) p.catch(function () {});
     }
 
-    if (audio.getAttribute('src') === src && audio.readyState >= 4) {
+    if (el.getAttribute('src') === src && el.readyState >= 4) {
       start();
       return;
     }
 
-    audio.pause();
-    audio.src = src;
-    audio.load();
+    el.pause();
+    el.src = src;
+    el.load();
 
-    if (audio.readyState >= 4) {
+    if (el.readyState >= 4) {
       start();
       return;
     }
@@ -56,12 +49,31 @@
       if (done) return;
       done = true;
       clearTimeout(timer);
-      audio.removeEventListener('canplaythrough', go);
-      if (seq !== playSeq) return;
+      el.removeEventListener('canplaythrough', go);
+      if (!isCurrent()) return;
       start();
     }
-    audio.addEventListener('canplaythrough', go);
-    timer = setTimeout(go, 4000);
+    el.addEventListener('canplaythrough', go);
+    timer = setTimeout(go, timeoutMs || 4000);
+  }
+
+  function play(src, row) {
+    if (!src) return;
+    var seq = ++playSeq;
+
+    if (currentRow && currentRow !== row) currentRow.classList.remove('playing');
+    currentRow = row || null;
+    if (currentRow) currentRow.classList.add('playing');
+
+    playWhenReady(audio, src, function () { return seq === playSeq; }, 4000, function () {
+      audio.playbackRate = rate;
+    });
+  }
+
+  function playWord(src) {
+    if (!src) return;
+    var seq = ++wordSeq;
+    playWhenReady(fx, src, function () { return seq === wordSeq; }, 3000);
   }
 
   audio.addEventListener('ended', function () {
@@ -193,14 +205,6 @@
       });
     }
     return true;
-  }
-
-  function playWord(src) {
-    if (!src) return;
-    fx.src = src;
-    fx.currentTime = 0;
-    var p = fx.play();
-    if (p && p.catch) p.catch(function () {});
   }
 
   function placeCard(el) {
