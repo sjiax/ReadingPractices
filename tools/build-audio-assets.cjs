@@ -73,13 +73,14 @@ async function synthOnce(voice, text, file, rate) {
 async function synth(voice, text, file, rate) {
   if (fs.existsSync(file) && fs.statSync(file).size > 2000) return 0; // 续跑
   let lastErr;
-  for (let attempt = 1; attempt <= 4; attempt++) {
+  // Edge 接口偶尔连续断流（2026-11 实测单次失败率可达 60%+），多试几次再放弃；失败的文件下次重跑会补上
+  for (let attempt = 1; attempt <= 10; attempt++) {
     try {
       return await synthOnce(voice, text, file, rate);
     } catch (e) {
       lastErr = e;
       try { fs.unlinkSync(file); } catch (e2) { /* ignore */ }
-      await sleep(400 * attempt);
+      await sleep(250 * attempt);
     }
   }
   throw lastErr;
@@ -131,6 +132,8 @@ async function synth(voice, text, file, rate) {
   }
   console.log(`\n短语音频 ${pdone}/${d.phrases.length}`);
   console.log(`新增 ${(total / 1024).toFixed(0)} KB`);
+  // msedge-tts 有时留下没关的 socket，事件循环不退出、外层脚本会一直等；这里显式收工
+  process.exit(0);
 })().catch((e) => {
   console.error('FAIL', e && e.message ? e.message : e);
   process.exit(1);

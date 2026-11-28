@@ -66,6 +66,8 @@ function duration(file) {
     const size = await speak(j.text, j.file, j.rate, j.voice);
     console.log(`OK ${path.basename(j.file)} ${size} bytes ~${duration(j.file)}s [${j.voice || VOICE} ${j.rate}]`);
   }
+  // 同上：确保进程退出，别让残留 socket 把外层脚本卡住
+  process.exit(0);
 })().catch((e) => {
   console.error('FAIL', e && e.message ? e.message : e);
   process.exit(1);

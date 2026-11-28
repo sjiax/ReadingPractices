@@ -152,6 +152,16 @@ H.push('</p>');
 H.push(`<p class="lead">${esc(d.leadZh)}</p>`);
 H.push('</header>');
 
+// 右侧悬浮站内导航（默认收起成一个小胶囊，展开五个区块；滚动时高亮当前区块）
+H.push('<nav class="pagenav" id="pagenav" aria-label="本页导航">');
+H.push('<button class="pn-toggle" type="button" aria-expanded="false" aria-controls="pn-list">'
+  + '<span class="pn-bars" aria-hidden="true">≡</span>目录</button>');
+H.push('<ul class="pn-list" id="pn-list">');
+[['text', '原文'], ['quiz', '阅读理解题'], ['read', '逐句对照'], ['words', '重点生词'], ['how', '学习顺序']]
+  .forEach(([id, label]) => H.push(`<li><a href="#${id}" data-sec="${id}">${label}</a></li>`));
+H.push('</ul>');
+H.push('</nav>');
+
 // 播放条
 H.push('<div class="bar">');
 H.push('<div class="bar-row">');

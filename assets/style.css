@@ -194,6 +194,71 @@ h1 {
 footer .build { color: #7d8794; }
 footer .build::before { content: "· "; }
 
+/* ---------- 右侧悬浮站内导航 ---------- */
+.pagenav {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 70;
+  font-family: var(--f-ui);
+}
+
+.pn-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 9px 12px 11px;
+  border: 1px solid var(--line);
+  border-right: 0;
+  border-radius: 11px 0 0 11px;
+  background: rgba(255, 255, 255, .96);
+  color: var(--navy);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: -3px 2px 12px rgba(20, 38, 58, .1);
+  touch-action: manipulation;
+}
+
+.pn-toggle:hover { background: var(--navy-soft); }
+
+.pn-bars { font-size: 16px; line-height: 1; letter-spacing: -.06em; }
+
+.pn-list {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 7px 0;
+  list-style: none;
+  min-width: 138px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px 0 0 12px;
+  box-shadow: -6px 6px 20px rgba(20, 38, 58, .13);
+  display: none;
+}
+
+.pagenav.open .pn-list { display: block; }
+
+.pn-list a {
+  display: block;
+  padding: 9px 15px;
+  color: var(--ink-2);
+  text-decoration: none;
+  font-size: 14.5px;
+  white-space: nowrap;
+}
+
+.pn-list a:hover { background: var(--navy-soft); color: var(--navy); }
+.pn-list a.on { background: var(--navy-soft); color: var(--navy); font-weight: 700; }
+
+/* 锚点跳转时给吸顶播放条留位置（宽屏 zoom 下同比例放大，配合 scrollIntoView 用） */
+section { scroll-margin-top: 112px; }
+
 /* 音色选择器（同一篇有多套人声时才出现） */
 .vsel {
   display: flex;
@@ -804,6 +869,10 @@ footer {
 @media (max-width: 620px) {
   body { padding: 0 14px 60px; font-size: 19px; }
   header.top { padding: 30px 0 18px; }
+  .pn-toggle { padding: 10px 7px 10px 9px; font-size: 13px; }
+  .pn-list { min-width: 124px; }
+  .pn-list a { padding: 8px 12px; font-size: 14px; }
+  section { scroll-margin-top: 96px; }
   .s { grid-template-columns: 30px 1fr auto; column-gap: 8px; padding-right: 4px; }
   .s .play { width: 30px; height: 30px; }
   .s .en { font-size: 19.5px; }
@@ -829,7 +898,7 @@ footer {
 
 @media print {
   body { background: #fff; padding: 0; font-size: 11pt; color: #000; }
-  .bar, .play, .snote, .mini, .pmini, .legend, #card, .hint small, .btn { display: none !important; }
+  .bar, .play, .snote, .mini, .pmini, .legend, #card, .hint small, .btn, .pagenav { display: none !important; }
   h2 small { display: none !important; }
   .s { break-inside: avoid; border-left-color: transparent; padding: 4px 0; }
   .s .zh { color: #333; }

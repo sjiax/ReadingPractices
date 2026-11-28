@@ -15,7 +15,63 @@
   var hideTimer = null;
   var lastFocus = null;
 
-  /* ---------- 音色切换（同一篇有多套人声时） ---------- */
+  /* ---------- 右侧悬浮站内导航 ---------- */
+  (function () {
+    var nav = document.getElementById('pagenav');
+    if (!nav) return;
+    var toggle = nav.querySelector('.pn-toggle');
+    var links = Array.prototype.slice.call(nav.querySelectorAll('.pn-list a'));
+    var secs = links.map(function (a) { return document.getElementById(a.getAttribute('data-sec')); }).filter(Boolean);
+
+    function setOpen(open) {
+      nav.classList.toggle('open', open);
+      if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    if (toggle) {
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setOpen(!nav.classList.contains('open'));
+      });
+    }
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var t = document.getElementById(a.getAttribute('data-sec'));
+        // 用 scrollIntoView + CSS scroll-margin-top，宽屏放大（zoom）下也准
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setOpen(false);
+        setTimeout(spy, 650); // 平滑滚动结束后补一拍，高亮不用等下一个 scroll 事件
+        try { history.replaceState(null, '', a.getAttribute('href')); } catch (err) { /* ignore */ }
+      });
+    });
+
+    // 滚动时高亮“当前所在区块”
+    function spy() {
+      var thr = 130 * pageZoom;
+      var idx = 0;
+      secs.forEach(function (s, i) {
+        if (s.getBoundingClientRect().top <= thr) idx = i;
+      });
+      links.forEach(function (a, i) { a.classList.toggle('on', i === idx); });
+    }
+    var lastSpy = 0;
+    window.addEventListener('scroll', function () {
+      var now = Date.now();
+      if (now - lastSpy < 90) return;
+      lastSpy = now;
+      spy();
+    }, { passive: true });
+    window.addEventListener('resize', spy);
+    spy();
+  })();
   // 每套音频在 assets/audio/<key>/ 下，结构与默认套一致：
   //   full.mp3、words.mp3、s/NN.mp3、w/NN-word.mp3、p/NN-phrase.mp3
   // 切换时把页面上所有 [data-play] 和生词卡的音频路径换成新套的前缀，并更新按钮时长与页脚。
@@ -295,8 +351,8 @@
     return true;
   }
 
-  // 宽屏时样式里用 zoom 把整页放大（--rp-zoom），getBoundingClientRect 返回的是放大后的坐标，
-  // 而卡片的 left/top 和 offsetWidth 用的是未放大的布局坐标，所以这里统一除以缩放比。
+  // 宽屏时样式里用 zoom 把整页放大（--rp-zoom）。getBoundingClientRect 返回的是放大后的坐标，
+  // 而 fixed 元素的 left/top、offsetWidth 用的是未放大的布局坐标，需要按这个比例换算。
   var pageZoom = 1;
   (function () {
     var v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--rp-zoom'));
