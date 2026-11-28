@@ -252,7 +252,7 @@ ${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 w
 
   <footer>
     <span>共 ${items.length} 篇</span>
-    <span>朗读：默认长句/短语 Ava Multilingual、单词 AndrewNeural；wenwen04/05 全篇男声 AndrewNeural（每篇页脚为准）</span>
+    <span>朗读：全篇男声 AndrewNeural（句子 −6%，单词/短语 −8%；个别篇目换过音色的以篇目页脚为准）</span>
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>

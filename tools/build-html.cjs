@@ -246,7 +246,7 @@ H.push('</section>');
 // 页脚音色说明：数据里写了 voices 就按篇目显示，没写就按默认音色
 const voiceLine = d.voices
   ? `全文/逐句 ${d.voices.sent} · 单词 ${d.voices.word} · 短语 ${d.voices.phrase}`
-  : '句子 AndrewMultilingual · 单词 AndrewNeural';
+  : '全文/逐句/短语/单词 全部 AndrewNeural（男声）';
 
 H.push('<footer>');
 H.push(`<span>原文来源：${esc(d.source)}</span>`);

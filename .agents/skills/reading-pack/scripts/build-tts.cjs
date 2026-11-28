@@ -7,10 +7,10 @@ const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
 
 const dataPath = process.argv[2];
 const outDir = process.argv[3];
-const VOICE = process.argv[4] || 'en-US-AvaMultilingualNeural';
+const VOICE = process.argv[4] || 'en-US-AndrewNeural';
 const RATE = process.argv[5] || '-6%';
-// 生词连读默认用纯美式音色（与逐词音频一致；Multilingual 读孤立单词会走音）；
-// 整篇换音色（如练习2 用英式 Ryan）时把同一个音色名作为第 6 个参数传进来。
+// 全篇统一男声 en-US-AndrewNeural（2026-11 用户试听后定稿：句子、短语、单词不再分音色）。
+// 想换人声/口音时，把同一个音色名作为第 4 和第 6 个参数一起传进来即可。
 const WORD_VOICE = process.argv[6] || 'en-US-AndrewNeural';
 if (!dataPath || !outDir) {
   console.error('usage: node build-tts.cjs <data.cjs> <audioDir> [voice] [rate] [wordVoice]');

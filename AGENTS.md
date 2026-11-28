@@ -75,8 +75,8 @@ Practices/                     # 仓库根 + 站点根
 Set-Location "D:\_文文安琪\文文\Practices\tools"
 $data = ".\data\wenwenNN.cjs"          # 安琪的篇目换成 .\data\anqiNN.cjs
 $web  = "..\wenwenNN"                  # 安琪的篇目换成 ..\anqiNN
-node build-tts.cjs          $data "$web\assets\audio"      # 默认：全文/逐句 Ava（女声），生词 AndrewNeural
-node build-audio-assets.cjs $data $web                      # 默认：句子/短语 Ava，单词 AndrewNeural
+node build-tts.cjs          $data "$web\assets\audio"      # 默认：全篇男声 AndrewNeural
+node build-audio-assets.cjs $data $web                      # 默认：句子/短语/单词全 AndrewNeural
 node build-html.cjs         $data $web
 node build-catalog.cjs      ".."
 node check-links.cjs        ".."
@@ -87,16 +87,10 @@ node check-links.cjs        ".."
 
 数据里要写 `student` / `studentZh` / `gradeZh`（首页分组和页头 kicker 用）和 `no`（该学生自己的序号）；目录名前缀必须和数据里的 `student` 一致。
 
-音频约定：**全文/逐句/短语用女声 Ava Multilingual，单词用纯美式 AndrewNeural**；短语整条连读，不逐词断开。某篇要换音色就按 skill 的参数传，并在数据里写 `voices: { sent, word, phrase }`（页脚会显示）。
-2026-11 用户试听中的变体：**`wenwen04`、`wenwen05` 两篇所有音（全文/逐句/短语/单词）都用男声 `en-US-AndrewNeural`**，不再按句子/词组分音色。生成命令：
+音频约定（2026-11 试听后定稿）：**全文、逐句、短语、单词全部用男声 `en-US-AndrewNeural`**，不再按句子/词组区分音色；语速仍是句子 `-6%`、单词与短语 `-8%`，短语整条连读、不逐词断开。某篇要换音色就按 skill 的参数传（第 4 个参数句子音色，第 6、7 个分别是单词、短语音色，三个要一起传），并在数据里写 `voices: { sent, word, phrase }`（页脚会显示）。
 
-```powershell
-$v = 'en-US-AndrewNeural'
-node build-tts.cjs          $data "$web\assets\audio" $v "-6%" $v
-node build-audio-assets.cjs $data $web $v "-6%" $v $v
-```
-
-等用户试听完再决定是否改成全站默认；在那之前，默认音色仍是 Ava（句子/短语）+ AndrewNeural（单词）。
+- `wenwen04`、`wenwen05` 是这次试听的两篇，本来就是全篇 AndrewNeural，不用重生成。
+- 其余五篇（wenwen01–03、anqi01–02）是定稿前生成的：句子/短语还是 Ava 女声（wenwen02 的单词、短语是英式 Ryan），只有单词是 AndrewNeural。它们的 `voices` 字段如实写着旧音色，页脚显示正确；要统一成全篇男声就重跑一遍 `build-tts` + `build-audio-assets` 再把 `voices` 改掉。
 
 ## 5. 内容约定
 

@@ -11,7 +11,7 @@ module.exports = {
   titleZh: '劳动感谢日的一封感谢信',        // 8–12 字，别硬译
   level: '中职三年级 · 词汇难度按初中一年级筛选',
   source: '阅读练习1(答案ABCDD)',           // 原文件名
-  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' }, // 可选：页脚音色文案
+  voices: { sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' }, // 可选：页脚音色文案
   leadZh: '导读一句话：谁、做了什么、为什么；再补字数、段数、适用读法。',
 
   paragraphs: [                           // 原文，按段落，保持原标点
@@ -98,7 +98,7 @@ module.exports = {
 | `level` | 仅供人看，页面不显示 | 否 |
 | `student` / `studentZh` / `gradeZh` | 目录首页按学生分组、篇目页头 kicker（站点约定，默认 `wenwen` / 文文 / 中职三年级） | 否 |
 | `unit` / `unitLabel` / `part` / `sectionLabel` | 课本篇目的单元与板块，页头亮出「Unit 6 · Section B 1b」，列表页显示同款标签并按 `unit`+`part` 排序 | 否 |
-| `voices` | 页脚「朗读：…」的音色说明，`{ sent, word, phrase }`（只影响文案，音频靠命令行参数） | 否 |
+| `voices` | 页脚「朗读：…」的音色说明，`{ sent, word, phrase }`（只影响文案，音频靠命令行参数）；默认全篇 AndrewNeural，篇目用了别的音色才需要写 | 否 |
 | `translation` | 作者自检 | 否 |
 
 ## 硬性规则

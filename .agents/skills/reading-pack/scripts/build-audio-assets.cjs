@@ -1,10 +1,11 @@
-﻿// 生成逐句、逐词、逐短语音频（每个请求独立连接 + 重试 + 断点续跑）
+// 生成逐句、逐词、逐短语音频（每个请求独立连接 + 重试 + 断点续跑）
 // 用法: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate] [wordVoice] [phraseVoice]
 //
-// 音色分工（按篇目用参数指定，默认值如下）：
-//   全文/逐句：en-US-AvaMultilingualNeural（-6%，女声，整句语气自然）
-//   单词     ：en-US-AndrewNeural（-8%，纯美式，孤立单词不会走音）
-//   短语     ：en-US-AvaMultilingualNeural（-8%，与全文同音色）
+// 音色分工（2026-11 用户试听后定稿：全篇统一男声，不再按句子/词组分音色）：
+//   全文/逐句：en-US-AndrewNeural（-6%，男声，整句语气自然）
+//   单词     ：en-US-AndrewNeural（-8%，孤立单词也不会走音）
+//   短语     ：en-US-AndrewNeural（-8%，与全文同音色）
+// 想换人声/口音时用参数覆盖（见文件末尾的用法），并在数据里写 voices 让页脚如实显示。
 // 短语按“整条连读”合成：只把 sb/sth 等占位符口语化，不再逐词插逗号（2026-11 用户选定）。
 const path = require('path');
 const fs = require('fs');
@@ -12,11 +13,11 @@ const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
 
 const dataPath = process.argv[2];
 const webDir = process.argv[3];
-const SENT_VOICE = process.argv[4] || 'en-US-AvaMultilingualNeural';
+const SENT_VOICE = process.argv[4] || 'en-US-AndrewNeural';
 const SENT_RATE = process.argv[5] || '-6%';
 
-const WORD_VOICE = process.argv[6] || 'en-US-AndrewNeural';       // 孤立单词默认用纯美式
-const PHRASE_VOICE = process.argv[7] || 'en-US-AvaMultilingualNeural';
+const WORD_VOICE = process.argv[6] || 'en-US-AndrewNeural';
+const PHRASE_VOICE = process.argv[7] || 'en-US-AndrewNeural';
 const WORD_RATE = '-8%';
 const PHRASE_RATE = '-8%';
 

@@ -8,6 +8,7 @@ module.exports = {
   student: 'wenwen',
   studentZh: '文文',
   source: '阅读练习1(答案ABCDD)',
+  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
 
   leadZh:
     '本文讲日本 11 月 23 日的“劳动感谢日”：孩子如何看待身边的劳动者，以及怎样用一封手绘感谢信表达谢意。全文 225 词，共 4 段，句子结构简单，适合先听读、再逐段精读。',

@@ -1,6 +1,6 @@
 ---
 name: reading-pack
-description: 把英文阅读材料（.doc/.docx/.pdf 练习卷、短文）做成学生能直接用的交互网页学习包：逐句中英对照、可点句子播放、点生词弹卡片（音标/词性/释义/例句/试听）、重点短语、题目翻译＋答案依据，全部用本地 mp3 朗读（默认男声 en-US-AndrewMultilingualNeural）。交付物只有 HTML 版。
+description: 把英文阅读材料（.doc/.docx/.pdf 练习卷、短文）做成学生能直接用的交互网页学习包：逐句中英对照、可点句子播放、点生词弹卡片（音标/词性/释义/例句/试听）、重点短语、题目翻译＋答案依据，全部用本地 mp3 朗读（全篇统一男声 en-US-AndrewNeural）。交付物只有 HTML 版。
 whenToUse: 用户给出英语阅读短文/练习卷，要求翻译成中文、摘生词注音标、列重点短语、生成朗读音频，或要一个可交互的网页版学习材料时。
 ---
 
@@ -88,8 +88,8 @@ Set-Location $tool; npm install msedge-tts --no-audit --no-fund
 Set-Location "<工具目录>"
 $data = ".\data\passageN.cjs"
 $web  = "<站点根>\practiceNN"     # 站点根下的一层目录
-node build-tts.cjs          $data "$web\assets\audio"      # 默认全文/逐句 Ava，生词 AndrewNeural
-node build-audio-assets.cjs $data $web                      # 默认 句子/短语 Ava，单词 AndrewNeural
+node build-tts.cjs          $data "$web\assets\audio"      # 默认全篇男声 AndrewNeural（-6%）
+node build-audio-assets.cjs $data $web                      # 默认句子/短语/单词全 AndrewNeural
 node build-html.cjs         $data $web
 node build-catalog.cjs      "<站点根>"      # 重新生成目录首页
 node check-links.cjs        "<站点根>"      # 链接完整性
@@ -101,23 +101,24 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；如果站点是多个学生共用，它会按数据里的 `student` / `studentZh` / `gradeZh` 分组（站点约定，见工作区 AGENTS）；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
-**语音参数**（2026-11 定稿：长句/短语用女声 Ava，单词仍用纯美式 Andrew）：
+**语音参数**（2026-11 试听后定稿：**全篇统一男声 AndrewNeural**，不再按句子/词组区分音色）：
 
 | 用途 | 音色 | 语速 | 说明 |
 |---|---|---|---|
-| 全文、逐句 | `en-US-AvaMultilingualNeural`（Ava，女声） | `-6%` | 整句语气自然；默认音色，脚本默认值也是它 |
-| 单个单词、生词连读 | `en-US-AndrewNeural`（纯美式） | `-8%` | **Multilingual 读孤立单词会走音**（实例：navigation 读错），纯美式正常 |
-| 短语 | `en-US-AvaMultilingualNeural` | `-8%` | **整条连读**，不逐词断开（旧方案「逗号分隔」已废弃） |
+| 全文、逐句 | `en-US-AndrewNeural`（男声，纯美式） | `-6%` | 整句语气自然；脚本默认值就是它 |
+| 单个单词、生词连读 | `en-US-AndrewNeural` | `-8%` | 孤立单词也不会走音（Multilingual 音色读单词会走音，这也是全篇改用纯美式的原因） |
+| 短语 | `en-US-AndrewNeural` | `-8%` | **整条连读**，不逐词断开（旧方案「逗号分隔」已废弃） |
 
 - 短语文本在 `build-audio-assets.cjs` 的 `phraseSpeech()` 里处理：只把 `sb/sth/adj./n./…` 换成 somebody/something/adjective/noun，`+` 直接去掉不读；**整条从左到右连读**，不要插逗号（插逗号会把短语读成机器人逐词念，学生听不出语调）。
+- **短语写法**：`…` 用省略号字符（会被念成停顿），不要写三个英文句点；占位符只写单个 `sb` 或 `sth`，不要写 `sb/sth`（斜杠会被念成 slash）。
 - 试听对比过的结论：`-18%` 与 `0%` 对错读没有影响（是模型问题不是语速问题）；逐词拼接（每词单独合成再拼）虽清楚但太机械，不要用。
 - **换音色**（某篇想换人或换口音）：`build-tts`、`build-audio-assets` 的第 4 个参数（以及单词、短语两个音色参数）直接传音色名；语速仍按上表（句子 `-6%`，单词/短语 `-8%`），只换人声。换完在数据里加一句 `voices: { sent, word, phrase }`，页脚会显示本篇音色。
 
   ```powershell
-  # 默认（全文/逐句、短语 = Ava；单词 = AndrewNeural）
+  # 默认（全篇 AndrewNeural，不用传参数）
   node build-tts.cjs          $data $audio
   node build-audio-assets.cjs $data $web
-  # 例：整篇换成英式 Ryan（单词、短语也一起换）
+  # 例：整篇换成英式 Ryan（句子、单词、短语一起换，三个音色参数都要传）
   node build-tts.cjs          $data $audio en-GB-RyanNeural "-6%" en-GB-RyanNeural
   node build-audio-assets.cjs $data $web   en-GB-RyanNeural "-6%" en-GB-RyanNeural en-GB-RyanNeural
   ```
@@ -147,6 +148,7 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 - 字号：正文 20px、英文句子 21px、中文译文 19px、短语注解 17px、表格 17px、行高 1.7。整体再调只做"统一加一档"，别单独放大某一块。
 - **逐句对照里的英文原文加粗**（Georgia bold），与译文、短语注解形成三层视觉层次。
 - 响应式三档：`≤1024px`（iPad）字号微降一档、去掉版心限制；`≤900px` 生词表从六列表格改成**卡片式**（单词+★+▶ / 音标右对齐 / 释义 + 词性小标签 / 分隔线 / 例句+译文）；`≤620px`（手机）再降一档、播放按钮缩到 30px。
+- **宽屏（≥1500px）整页放大 1.75 倍**：`@media (min-width: 1500px) { :root { --rp-zoom: 1.75 } body { zoom: 1.75 } }`，等于把用户「浏览器缩放 175%」的观感固化（阅读栏≈1645px、正文≈35px）；≤1500px 的窗口和 iPad 保持原尺寸。用 `getBoundingClientRect` 定位的浮层必须除以 `--rp-zoom`（`app.js` 的 `placeCard` 就是这么做的），否则放大后弹卡会偏到一边。
 - 触屏细节：`touch-action: manipulation`、`-webkit-tap-highlight-color: transparent`、按钮 ≥ 34px，表格容器 `-webkit-overflow-scrolling: touch`。
 - **生词卡片（点击弹出，不是悬停）**要给全：音标、词性、释义、**构词拆解**（前缀/词根/后缀逐段解释）、**变形**（形容词比较级/最高级、动词时态）、记忆提示、例句＋译文。**发音就是点卡片里的单词本身**（词上有虚线，键盘 Enter/空格也行），底部不放"听发音"按钮；底部一行提示固定为"点单词听发音 · 点空白处关闭"。生词表的释义格下方也带紧凑的构词与变形两行，方便不开弹窗也能看。再点一次、点空白或 `Esc` 关闭，卡片跟随滚动重定位。
 - **弹卡只给生词**：句子里只标生词（黄底、可点），点开是生词卡；**短语不涂色、不发音、不弹卡**，短语的释义、例句、用法和朗读全在句子下面的浅绿注解里（一条短语只出现一次）。

@@ -247,7 +247,7 @@ ${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 p
 
   <footer>
     <span>共 ${items.length} 篇</span>
-    <span>朗读：长句/短语 Ava Multilingual · 单词 AndrewNeural</span>
+    <span>朗读：全篇男声 AndrewNeural（句子 −6%，单词/短语 −8%）</span>
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>
