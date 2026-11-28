@@ -238,13 +238,23 @@
     return true;
   }
 
+  // 宽屏时样式里用 zoom 把整页放大（--rp-zoom），getBoundingClientRect 返回的是放大后的坐标，
+  // 而卡片的 left/top 和 offsetWidth 用的是未放大的布局坐标，所以这里统一除以缩放比。
+  var pageZoom = 1;
+  (function () {
+    var v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--rp-zoom'));
+    if (isFinite(v) && v > 0) pageZoom = v;
+  })();
+
   function placeCard(el) {
     var r = el.getBoundingClientRect();
     var cw = card.offsetWidth;
     var ch = card.offsetHeight;
-    var left = Math.min(Math.max(12, r.left + r.width / 2 - cw / 2), window.innerWidth - cw - 12);
-    var top = r.bottom + 10;
-    if (top + ch > window.innerHeight - 14) top = Math.max(12, r.top - ch - 10);
+    var vw = window.innerWidth / pageZoom;
+    var vh = window.innerHeight / pageZoom;
+    var left = Math.min(Math.max(12, r.left / pageZoom + r.width / pageZoom / 2 - cw / 2), vw - cw - 12);
+    var top = r.bottom / pageZoom + 10;
+    if (top + ch > vh - 14) top = Math.max(12, r.top / pageZoom - ch - 10);
     card.style.left = Math.round(left) + 'px';
     card.style.top = Math.round(top) + 'px';
   }
