@@ -16,6 +16,8 @@
 
 重点短语不单独成表，直接挂在它所在句子的下面（释义 + 例句 + 译文 + 发音），句子里不再给短语涂色或发音。
 
+**音色可切换**：一篇里存了几套朗读，播放条上就有一个「音色」下拉（女声 Ava / 男声 Andrew），一键换；选择记在浏览器里，翻到别的篇目也跟着生效。每篇页脚最后一项「更新于 …」是这一版的构建时间，用来确认线上是不是最新的。
+
 ## 目录
 
 ```
@@ -26,7 +28,7 @@ assets/               全站共享的 style.css、app.js（脚本生成）
 wenwenNN/ · anqiNN/   每篇一个目录（学生前缀 + 两位序号，每个学生各自从 01 数起）
   index.html
   assets/  practice.json
-  assets/audio/        full.mp3、words.mp3、s/、w/、p/
+  assets/audio/<音色>/  one folder per voice set（andrew/、ava/）：full.mp3、words.mp3、s/、w/、p/
 source/               原始 PDF 试卷
 tools/                生成脚本 + 模板 + 每篇的源数据
   build-tts.cjs  build-audio-assets.cjs  build-html.cjs  build-catalog.cjs  check-links.cjs
@@ -55,7 +57,7 @@ git add -A; git commit -m "feat: wenwenNN"; git push
 ## 实现说明
 
 - **纯静态**：没有框架、没有构建步骤，Cloudflare Pages 直接发布仓库根目录（构建命令留空，输出目录 `/`）。
-- **音频**：Edge 朗读接口（`msedge-tts`）。**全篇统一男声 `en-US-AndrewNeural`**：全文/逐句 −6%，单词与生词连读 −8%（每个词读两遍），短语 −8% 且整条连读。`wenwen04`、`wenwen05` 起统一成这一套；更早的 `wenwen01–03`、`anqi01–02` 还是旧音色（句子 Ava 女声），篇目页脚会如实标出。全部是本地 mp3，断网也能听。
+- **音频**：Edge 朗读接口（`msedge-tts`）。一篇可以有多套音色，各存一份（`assets/audio/<音色>/`），播放条上下拉切换：`andrew` 为全篇男声 `en-US-AndrewNeural`；`ava` 为句子/短语 `en-US-AvaMultilingualNeural` + 单词 `en-US-AndrewNeural`（Multilingual 读孤立单词会走音）。语速固定：句子 −6%，单词与短语 −8%（每个词读两遍），短语整条连读。全部是本地 mp3，断网也能听。
 - **页面**：每篇一个 `index.html`，样式与交互全站共用站点根 `assets/style.css`、`assets/app.js`（页面用 `../assets/…` 引用），无 CDN、无外部字体，中文用苹方、英文用 Georgia。
 - **宽屏放大**：窗口 ≥1500px 时整页等比放大 1.75 倍（`zoom`），阅读栏约 1645px、正文约 35px，等于把浏览器「缩放 175%」的观感固化；窄窗口和平板保持原尺寸。
 - **交互**：句子正文里只标生词（黄底），点一下弹卡片（音标/构词/变形/例句，卡片里的词本身可点读，**打开卡片就自动读**）；**整句朗读只走句首的 ▶**，点句子正文不发声。短语不涂色、不发音，释义、例句、用法和朗读都在句子下面的浅绿注解里（点注解文字或 ▶）。句子/短语和生词卡都会等音频下载得能连续播再开声，网慢时不会只响前半段。

@@ -21,12 +21,15 @@ whenToUse: 用户给出英语阅读短文/练习卷，要求翻译成中文、�
   practiceNN/
     index.html                # 单页应用，交互全在这里；引用 ../assets/style.css、../assets/app.js
     assets/practice.json      # 结构化元数据（标题/原文/题目/统计），目录首页据此生成
-    assets/audio/full.mp3     # 整篇朗读
-    assets/audio/words.mp3    # 生词连读（每个词读两遍）
-    assets/audio/s/01..NN.mp3 # 逐句音频
-    assets/audio/w/01-xxx.mp3 # 逐词音频
-    assets/audio/p/01-xxx.mp3 # 逐短语音频
+    assets/audio/<音色>/       # 一套音色一个子目录（如 ava/、andrew/）
+      full.mp3                #   整篇朗读
+      words.mp3               #   生词连读（每个词读两遍）
+      s/01..NN.mp3            #   逐句音频
+      w/01-xxx.mp3            #   逐词音频
+      p/01-xxx.mp3            #   逐短语音频
 ```
+
+**多套音色**：同一篇可以放多套朗读（例如女声 Ava 和男声 Andrew），页面播放条上会出现「音色」下拉，一键切换（选择存 `localStorage`，全站通用；某篇缺这套音频时自动退回第一套）。数据里用 `audios: [{ key, label, sent, word, phrase }]` 声明，`key` 就是 `assets/audio/` 下的子目录名；不写 `audios` 的老数据仍按单套处理（音频直接放 `assets/audio/` 下，不显示下拉）。
 
 共享的好处：改一次版式/交互，三篇同时生效，站点里不再有三份 `app.js` 各自漂移。代价是页面必须正好在站点根下一层（`../assets/` 才成立），与"篇目必须是一层目录"的约定一致；**拷到 U 盘/手机时要连站点根一起拷**（或整站拷），只拷单篇目录会丢样式和交互。
 
@@ -88,16 +91,23 @@ Set-Location $tool; npm install msedge-tts --no-audit --no-fund
 Set-Location "<工具目录>"
 $data = ".\data\passageN.cjs"
 $web  = "<站点根>\practiceNN"     # 站点根下的一层目录
-node build-tts.cjs          $data "$web\assets\audio"      # 默认全篇男声 AndrewNeural（-6%）
-node build-audio-assets.cjs $data $web                      # 默认句子/短语/单词全 AndrewNeural
+
+# 一套音色一组命令；最后一个参数是 assets/audio/ 下的子目录名，必须等于数据里 audios[].key
+node build-tts.cjs          $data "$web\assets\audio\andrew"
+node build-audio-assets.cjs $data $web en-US-AndrewNeural "-6%" en-US-AndrewNeural en-US-AndrewNeural andrew
+
+# 想同时保留女声，再加一套 ava（页面会自动出现「音色」下拉）
+node build-tts.cjs          $data "$web\assets\audio\ava" en-US-AvaMultilingualNeural "-6%" en-US-AndrewNeural
+node build-audio-assets.cjs $data $web en-US-AvaMultilingualNeural "-6%" en-US-AndrewNeural en-US-AvaMultilingualNeural ava
+
 node build-html.cjs         $data $web
 node build-catalog.cjs      "<站点根>"      # 重新生成目录首页
 node check-links.cjs        "<站点根>"      # 链接完整性
 ```
 
-1. `build-tts` 出 `full.mp3` / `words.mp3`；
-2. `build-audio-assets` 出 `s/`、`w/`、`p/` 三组小音频（已存在则跳过，失败自动重试，可反复重跑续传）；
-3. `build-html` 生成 `index.html`，并把 `style.css`、`app.js` 从模板（`<工具目录>/assets/`）复制到**站点根 `assets/`**（全站共用一份），最后校验所有资源引用；
+1. `build-tts` 出这一套的 `full.mp3` / `words.mp3`；
+2. `build-audio-assets` 出这一套的 `s/`、`w/`、`p/` 三组小音频（已存在则跳过，失败自动重试，可反复重跑续传）；
+3. `build-html` 生成 `index.html`，并把 `style.css`、`app.js` 从模板（`<工具目录>/assets/`）复制到**站点根 `assets/`**（全站共用一份），最后校验所有资源引用；**只有 `full.mp3` 和 `words.mp3` 都齐的音色套才会出现在下拉里**，没生成完的套会被跳过（会打印警告）；
 4. `build-catalog` 扫描 `<站点根>/*/index.html`，抽取标题、中文名与统计，重写 `<站点根>/index.html`——**加新篇后一定要重跑**；如果站点是多个学生共用，它会按数据里的 `student` / `studentZh` / `gradeZh` 分组（站点约定，见工作区 AGENTS）；
 5. `check-links` 逐个 html 校验相对链接，输出 `缺失 0` 才算完。
 
@@ -112,24 +122,27 @@ node check-links.cjs        "<站点根>"      # 链接完整性
 - 短语文本在 `build-audio-assets.cjs` 的 `phraseSpeech()` 里处理：只把 `sb/sth/adj./n./…` 换成 somebody/something/adjective/noun，`+` 直接去掉不读；**整条从左到右连读**，不要插逗号（插逗号会把短语读成机器人逐词念，学生听不出语调）。
 - **短语写法**：`…` 用省略号字符（会被念成停顿），不要写三个英文句点；占位符只写单个 `sb` 或 `sth`，不要写 `sb/sth`（斜杠会被念成 slash）。
 - 试听对比过的结论：`-18%` 与 `0%` 对错读没有影响（是模型问题不是语速问题）；逐词拼接（每词单独合成再拼）虽清楚但太机械，不要用。
-- **换音色**（某篇想换人或换口音）：`build-tts`、`build-audio-assets` 的第 4 个参数（以及单词、短语两个音色参数）直接传音色名；语速仍按上表（句子 `-6%`，单词/短语 `-8%`），只换人声。换完在数据里加一句 `voices: { sent, word, phrase }`，页脚会显示本篇音色。
+- **多套音色各用各的音色参数**：同一篇既有女声又有男声时，两套分开生成、互不影响；每套在数据里登记 `audios[].{sent, word, phrase}`，页脚和下拉都按当前选中的那套显示。女声套可以沿用「句子 Ava + 单词 Andrew」，因为 Multilingual 读孤立单词会走音。
 
   ```powershell
-  # 默认（全篇 AndrewNeural，不用传参数）
-  node build-tts.cjs          $data $audio
-  node build-audio-assets.cjs $data $web
-  # 例：整篇换成英式 Ryan（句子、单词、短语一起换，三个音色参数都要传）
-  node build-tts.cjs          $data $audio en-GB-RyanNeural "-6%" en-GB-RyanNeural
-  node build-audio-assets.cjs $data $web   en-GB-RyanNeural "-6%" en-GB-RyanNeural en-GB-RyanNeural
+  # 男声整套（默认）
+  node build-tts.cjs          $data "$web\assets\audio\andrew"
+  node build-audio-assets.cjs $data $web en-US-AndrewNeural "-6%" en-US-AndrewNeural en-US-AndrewNeural andrew
+  # 女声套（句子/短语 Ava，单词仍用 Andrew）
+  node build-tts.cjs          $data "$web\assets\audio\ava" en-US-AvaMultilingualNeural "-6%" en-US-AndrewNeural
+  node build-audio-assets.cjs $data $web en-US-AvaMultilingualNeural "-6%" en-US-AndrewNeural en-US-AvaMultilingualNeural ava
+  # 再换人（例：英式 Ryan 整套）
+  node build-tts.cjs          $data "$web\assets\audio\ryan" en-GB-RyanNeural "-6%" en-GB-RyanNeural
+  node build-audio-assets.cjs $data $web en-GB-RyanNeural "-6%" en-GB-RyanNeural en-GB-RyanNeural ryan
   ```
 
-  换完重跑 `build-html`：播放条上的时长是按 mp3 文件大小算的，会跟着变。
+  生成完重跑 `build-html`：播放条上的时长是按 mp3 文件大小算的，会跟着变；下拉里的选项也由它按实际存在的套生成。
 
 ## 步骤 4 · 自检
 
 1. `node --check <站点根>/assets/app.js` 通过（共享一份，不在篇目录里）。
 2. `build-html` 输出 `缺失 0`，且逐句拼接校验没报错。
-3. 音频数量对得上：`s` = 句数，`w` = 生词数，`p` = 短语数，外加 `full.mp3`、`words.mp3`；每个 mp3 > 3 KB 且首字节 `0xFF`。
+3. 音频数量对得上：**每一套** `s` = 句数，`w` = 生词数，`p` = 短语数，外加 `full.mp3`、`words.mp3`；每个 mp3 > 3 KB 且首字节 `0xFF`。
 4. 跑一次冒泡回归：`node <技能目录>\scripts\test-bubble.cjs <篇目录>`，生成的临时页用无头浏览器打开并把标题读出来，期望
    `点句子正文 => none`、`点句子的▶ => s/xx.mp3`、`点注解文字 => 不变`、`点短语▶ => p/xx.mp3`、`点句子里的生词 => card=on`、`点单行开关 => row=hide`、`关总开关 => body=hide`、`开总开关 => row/body 都 show`；测完删掉 `_test_bubble.html`。
 5. `build-catalog` 输出篇数要与目录实际篇数一致；点开首页卡片能进到对应篇目，篇目顶部 `← 所有篇目` 能回到首页（本地按 `file://` 与大屏都要试）。

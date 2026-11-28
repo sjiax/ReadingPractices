@@ -17,7 +17,8 @@ Practices/                     # 仓库根 + 站点根
     style.css  app.js          # 各篇页面统一用 ../assets/… 引用
   wenwenNN/ · anqiNN/          # 每篇一个目录，名字就是 URL（学生前缀 + 两位序号）
     index.html
-    assets/  practice.json · audio/{full,words,s,w,p}
+    assets/  practice.json · audio/<音色>/{full,words,s,w,p}
+                             # 一套音色一个子目录（andrew/、ava/），页面上可切换
   source/                      # 原始 PDF 素材（存档用；公开仓库，等于公开可下载）
   tools/                       # 生成脚本 + 模板 + 源数据（公开，但不会被页面引用）
     build-*.cjs  check-links.cjs  test-bubble.cjs  list-voices.cjs  sample-voices.cjs
@@ -43,7 +44,7 @@ Practices/                     # 仓库根 + 站点根
 **每篇页面**（`wenwenNN/index.html` · `anqiNN/index.html`）固定顺序：
 
 1. 「← 所有篇目」+ 标题区（中文名、英文标题、统计、导读）；
-2. 吸顶播放条（全文 / 生词连读 / 变速 / 点词自动发音）；
+2. 吸顶播放条（全文 / 生词连读 / 变速 / **音色**（多套时出现）/ 点词自动发音）；
 3. **一 原文**：整段英文，纯文本，不加标注；
 4. **二 阅读理解题**：题干 + 题干中文 + A–D（含选项中文），答案与依据默认折叠；
 5. 三 逐句对照（点句子的 ▶ 朗读、点生词弹卡、短语注解挂句下）；
@@ -75,8 +76,12 @@ Practices/                     # 仓库根 + 站点根
 Set-Location "D:\_文文安琪\文文\Practices\tools"
 $data = ".\data\wenwenNN.cjs"          # 安琪的篇目换成 .\data\anqiNN.cjs
 $web  = "..\wenwenNN"                  # 安琪的篇目换成 ..\anqiNN
-node build-tts.cjs          $data "$web\assets\audio"      # 默认：全篇男声 AndrewNeural
-node build-audio-assets.cjs $data $web                      # 默认：句子/短语/单词全 AndrewNeural
+# 一套音色一组命令；最后一个参数 = assets/audio/ 下的子目录名，必须等于数据里 audios[].key
+node build-tts.cjs          $data "$web\assets\audio\andrew"
+node build-audio-assets.cjs $data $web en-US-AndrewNeural "-6%" en-US-AndrewNeural en-US-AndrewNeural andrew
+# 想再加女声一套（页面自动出现「音色」下拉）
+node build-tts.cjs          $data "$web\assets\audio\ava" en-US-AvaMultilingualNeural "-6%" en-US-AndrewNeural
+node build-audio-assets.cjs $data $web en-US-AvaMultilingualNeural "-6%" en-US-AndrewNeural en-US-AvaMultilingualNeural ava
 node build-html.cjs         $data $web
 node build-catalog.cjs      ".."
 node check-links.cjs        ".."
@@ -87,10 +92,11 @@ node check-links.cjs        ".."
 
 数据里要写 `student` / `studentZh` / `gradeZh`（首页分组和页头 kicker 用）和 `no`（该学生自己的序号）；目录名前缀必须和数据里的 `student` 一致。
 
-音频约定（2026-11 试听后定稿）：**全文、逐句、短语、单词全部用男声 `en-US-AndrewNeural`**，不再按句子/词组区分音色；语速仍是句子 `-6%`、单词与短语 `-8%`，短语整条连读、不逐词断开。某篇要换音色就按 skill 的参数传（第 4 个参数句子音色，第 6、7 个分别是单词、短语音色，三个要一起传），并在数据里写 `voices: { sent, word, phrase }`（页脚会显示）。
+音频约定（2026-11 定稿）：**一篇可以有多套音色**，一套一个目录 `assets/audio/<key>/`（`key` = 数据里 `audios[].key`），页面播放条上出现「音色」下拉，选择存 `localStorage`（全站通用，某篇缺这套时自动退回第一套）。**只有整组齐（full/words + 全部 s/w/p）的套才会出现在下拉里**，半套会被 `build-html` 跳过并打印警告。
 
-- `wenwen04`、`wenwen05` 是这次试听的两篇，本来就是全篇 AndrewNeural，不用重生成。
-- 其余五篇（wenwen01–03、anqi01–02）是定稿前生成的：句子/短语还是 Ava 女声（wenwen02 的单词、短语是英式 Ryan），只有单词是 AndrewNeural。它们的 `voices` 字段如实写着旧音色，页脚显示正确；要统一成全篇男声就重跑一遍 `build-tts` + `build-audio-assets` 再把 `voices` 改掉。
+- 默认两套：`andrew`（全篇 `en-US-AndrewNeural`，句子 −6%，单词/短语 −8%）与 `ava`（句子/短语 `en-US-AvaMultilingualNeural`，单词仍用 `en-US-AndrewNeural`，因为 Multilingual 读孤立单词会走音）。
+- 语速固定：句子 `-6%`，单词与短语 `-8%`；短语整条连读、不逐词断开。
+- **2026-11 的状态**：`wenwen04` 两套齐全；其余篇目正在补第二套，补完用 `build-html` 重建该篇即可（下拉选项由脚本按实际文件生成，不用手改 HTML）。
 
 ## 5. 内容约定
 
@@ -112,6 +118,7 @@ node check-links.cjs        ".."
 - 字号再调只做“整体加一档”，别单独放大某一块。
 - **宽屏（≥1500px）整页放大 1.75 倍**：`@media (min-width: 1500px) { :root { --rp-zoom: 1.75 } body { zoom: 1.75 } }`（目录首页的样式里也有同样一条）。这是家长在 Edge 里把页面缩放到 175% 时的观感固化——阅读栏约 1645px、正文约 35px；**≤1500px 的窗口和 iPad 保持原尺寸**。改版式时别删这条；以后再加用 `getBoundingClientRect` 定位的浮层，要像 `placeCard` 那样除以 `--rp-zoom`，否则放大后会偏到一边。
 - 打印用用户提供的源 PDF，网页不做“只打印某块”。
+- **页脚最后一项「更新于 YYYY-MM-DD HH:mm」是构建时间戳**（`build-html` / `build-catalog` 用北京时间生成），用来判断线上是不是最新一版：打开页面看这个时间对不对就知道部署有没有生效。不要手改，也不要删。
 
 ## 7. 技能位置与分工
 

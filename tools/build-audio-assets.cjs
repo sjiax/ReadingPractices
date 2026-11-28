@@ -22,11 +22,14 @@ const WORD_RATE = '-8%';
 const PHRASE_RATE = '-8%';
 
 if (!dataPath || !webDir) {
-  console.error('usage: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate] [wordVoice] [phraseVoice]');
+  console.error('usage: node build-audio-assets.cjs <data.cjs> <webDir> [voice] [rate] [wordVoice] [phraseVoice] [audioSet]');
+  console.error('  audioSet: 音色套目录名，写到 <webDir>/assets/audio/<audioSet>/{s,w,p}；不传则写到 assets/audio/');
   process.exit(1);
 }
 const d = require(path.resolve(dataPath));
-const A = path.join(webDir, 'assets', 'audio');
+// 多套音色：第 8 个参数是音色套目录（如 andrew / ava），与数据里的 audios[].key 对应
+const AUDIO_SET = process.argv[8] || '';
+const A = path.join(webDir, 'assets', 'audio', AUDIO_SET);
 const S = path.join(A, 's');
 const W = path.join(A, 'w');
 const P = path.join(A, 'p');

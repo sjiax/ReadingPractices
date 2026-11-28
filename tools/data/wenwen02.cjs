@@ -9,7 +9,10 @@ module.exports = {
   student: 'wenwen',
   studentZh: '文文',
   source: '阅读练习2（答案暂无）',
-  voices: { sent: 'Ava Multilingual', word: 'Ryan', phrase: 'Ava Multilingual' },
+  audios: [
+    { key: 'ava', label: '女声 Ava', sent: 'Ava Multilingual', word: 'Ryan', phrase: 'Ava Multilingual' },
+    { key: 'andrew', label: '男声 Andrew', sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' }
+  ],
 
   leadZh:
     '讲大城市地铁换乘靠颜色、标识、箭头和电梯的“智能设计”让人少走冤枉路、坐对方向。全文 23 句、5 段，实用说明文，句间逻辑靠 first / next / during / before 串起来，适合练“按顺序找信息”。原卷未给答案，本页答案为依据原文推断，仅供参考。',

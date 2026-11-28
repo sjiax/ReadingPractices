@@ -13,7 +13,10 @@ module.exports = {
   unitLabel: 'Unit 6',
   part: 1,
   sectionLabel: 'Section B 1b',
-  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
+  audios: [
+    { key: 'ava', label: '女声 Ava', sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
+    { key: 'andrew', label: '男声 Andrew', sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' }
+  ],
 
   leadZh:
     '讲“决心”是什么、常见哪几类，以及大多数人为什么坚持不下来，最后给出守住决心的办法：定可实现的目标、拆成小目标、写下来、让家人朋友提醒你。全文 25 句、4 段，适合练“找原因 + 找建议”。原卷只有“选句填空”，本页 5 道理解题为依据原文自拟，仅供参考。',

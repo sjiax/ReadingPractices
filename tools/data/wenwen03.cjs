@@ -7,7 +7,10 @@ module.exports = {
   gradeZh: '中职三年级',
   student: 'wenwen',
   studentZh: '文文',
-  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
+  audios: [
+    { key: 'ava', label: '女声 Ava', sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
+    { key: 'andrew', label: '男声 Andrew', sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' }
+  ],
   source: '阅读练习3',
 
   leadZh:

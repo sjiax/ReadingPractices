@@ -190,6 +190,37 @@ h1 {
 
 .switch input { width: 18px; height: 18px; }
 
+/* 构建时间戳：页脚最后一项，标出这一版是什么时候生成的 */
+footer .build { color: #7d8794; }
+footer .build::before { content: "· "; }
+
+/* 音色选择器（同一篇有多套人声时才出现） */
+.vsel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--f-ui);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.vsel select {
+  font-family: var(--f-ui);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--navy);
+  background: #fff;
+  border: 1px solid #b9c6d6;
+  border-radius: 9px;
+  padding: 7px 8px;
+  cursor: pointer;
+  min-height: 34px;
+}
+
+.vsel select:hover { background: var(--navy-soft); }
+.vsel select:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
 audio { width: 100%; height: 40px; margin-top: 8px; display: block; }
 
 /* ---------- 区块 ---------- */

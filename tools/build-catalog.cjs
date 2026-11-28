@@ -16,6 +16,13 @@ const esc = (s) => String(s == null ? '' : s)
 
 const strip = (s) => String(s).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 
+// 构建时间戳（固定按北京时间），写在页脚，方便判断线上是不是最新一版
+function stamp() {
+  const t = new Date(Date.now() + 8 * 3600 * 1000);
+  const p = (n) => String(n).padStart(2, '0');
+  return `${t.getUTCFullYear()}-${p(t.getUTCMonth() + 1)}-${p(t.getUTCDate())} ${p(t.getUTCHours())}:${p(t.getUTCMinutes())}`;
+}
+
 function loadPractice(dir) {
   const index = path.join(dir, 'index.html');
   if (!fs.existsSync(index)) return null;
@@ -252,8 +259,9 @@ ${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 w
 
   <footer>
     <span>共 ${items.length} 篇</span>
-    <span>朗读：全篇男声 AndrewNeural（句子 −6%，单词/短语 −8%；个别篇目换过音色的以篇目页脚为准）</span>
+    <span>朗读：每篇页顶可切换女声 Ava / 男声 Andrew（句子 −6%，单词/短语 −8%）</span>
     <span>纯静态页面，无外部依赖</span>
+    <span style="color:#7d8794">更新于 ${stamp()}</span>
   </footer>
 </div>
 <script>

@@ -15,6 +15,63 @@
   var hideTimer = null;
   var lastFocus = null;
 
+  /* ---------- 音色切换（同一篇有多套人声时） ---------- */
+  // 每套音频在 assets/audio/<key>/ 下，结构与默认套一致：
+  //   full.mp3、words.mp3、s/NN.mp3、w/NN-word.mp3、p/NN-phrase.mp3
+  // 切换时把页面上所有 [data-play] 和生词卡的音频路径换成新套的前缀，并更新按钮时长与页脚。
+  var voiceSets = (DOC && DOC.sets && DOC.sets.length) ? DOC.sets : [];
+  var voiceSel = document.getElementById('voiceSel');
+  var voiceLineEl = document.getElementById('voiceLine');
+
+  function relAudio(path) {
+    var m = String(path || '').match(/^assets\/audio\/[^/]+\/(.+)$/);
+    return m ? m[1] : path;
+  }
+
+  function applyVoice(key, persist) {
+    var set = null;
+    for (var i = 0; i < voiceSets.length; i += 1) {
+      if (voiceSets[i].key === key) { set = voiceSets[i]; break; }
+    }
+    if (!set) return;
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-play]'), function (el) {
+      var rel = el.getAttribute('data-rel') || relAudio(el.getAttribute('data-play'));
+      el.setAttribute('data-rel', rel);
+      el.setAttribute('data-play', set.base + rel);
+    });
+    (DOC.words || []).forEach(function (w) {
+      w.rel = w.rel || relAudio(w.audio);
+      w.audio = set.base + w.rel;
+    });
+
+    var durFull = document.querySelector('[data-dur="full"] small');
+    if (durFull) durFull.textContent = set.durFull + 's';
+    var durWords = document.querySelector('[data-dur="words"] small');
+    if (durWords) durWords.textContent = set.durWords + 's';
+    if (voiceLineEl) voiceLineEl.textContent = '朗读：' + set.voiceLine;
+    if (voiceSel) voiceSel.value = set.key;
+
+    if (persist) {
+      try { localStorage.setItem('rp.voice', set.key); } catch (err) { /* ignore */ }
+      // 正在播的是上一套的音色，切完就停，避免声音和选择对不上
+      try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch (err) { /* ignore */ }
+      try { fx.pause(); fx.removeAttribute('src'); } catch (err) { /* ignore */ }
+    }
+  }
+
+  if (voiceSets.length > 1) {
+    var savedVoice = null;
+    try { savedVoice = localStorage.getItem('rp.voice'); } catch (err) { savedVoice = null; }
+    var initVoice = voiceSets[0].key;
+    voiceSets.forEach(function (s) { if (s.key === savedVoice) initVoice = s.key; });
+    if (voiceSel) {
+      voiceSel.value = initVoice;
+      voiceSel.addEventListener('change', function () { applyVoice(voiceSel.value, true); });
+    }
+    applyVoice(initVoice, false);
+  }
+
   /* ---------- 播放 ---------- */
   // 网慢时直接 play() 只响前半段：统一等 canplaythrough（整段能连续播）再开声，
   // 超时兜底先播，避免点了没反应。句子/短语走 #main（点击播），生词卡走 fx（自动播）。

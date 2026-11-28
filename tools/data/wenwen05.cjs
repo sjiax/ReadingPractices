@@ -9,7 +9,10 @@ module.exports = {
   student: 'wenwen',
   studentZh: '文文',
   source: '阅读练习5',
-  voices: { sent: 'AndrewNeural（男声）', word: 'AndrewNeural（男声）', phrase: 'AndrewNeural（男声）' },
+  audios: [
+    { key: 'andrew', label: '男声 Andrew', sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' },
+    { key: 'ava', label: '女声 Ava', sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' }
+  ],
 
   leadZh:
     '讲绿中学的一节手工课：把旧日历纸折成礼盒，从挑纸、折痕，到不用胶水的卡扣设计，最后落到“重复使用、少用一次性包装”。全文 18 句、5 段，说明文，按 first → next → finally 推进，适合练“按步骤找信息”。原文里的中文夹注（折叠、丝带、重复使用）已移到生词卡。原卷未给答案，本页答案为依据原文推断，仅供参考。',

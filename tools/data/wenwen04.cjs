@@ -9,7 +9,10 @@ module.exports = {
   student: 'wenwen',
   studentZh: '文文',
   source: '阅读练习4',
-  voices: { sent: 'AndrewNeural（男声）', word: 'AndrewNeural（男声）', phrase: 'AndrewNeural（男声）' },
+  audios: [
+    { key: 'andrew', label: '男声 Andrew', sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' },
+    { key: 'ava', label: '女声 Ava', sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' }
+  ],
 
   leadZh:
     '讲科学家怎么研究野火鸡的羽毛：颜色从哪里来（天然色素，还是微小结构把光反射回来）、雄鸟雌鸟为什么不一样，以及“保护色”怎么帮它活下来。全文 25 句、4 段，说明文，适合练“抓细节 + 猜词”。原文里的中文夹注（火鸡、森林、羽毛、躲藏）已移到生词卡；两处印上去的标点笔误（However 后缺逗号、nature,remember 缺空格）已修正。原卷未给答案，本页答案为依据原文推断，仅供参考。',

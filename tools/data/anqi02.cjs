@@ -13,7 +13,10 @@ module.exports = {
   unitLabel: 'Unit 6',
   part: 3,
   sectionLabel: 'Section B 3a',
-  voices: { sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
+  audios: [
+    { key: 'ava', label: '女声 Ava', sent: 'Ava Multilingual', word: 'AndrewNeural', phrase: 'Ava Multilingual' },
+    { key: 'andrew', label: '男声 Andrew', sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' }
+  ],
 
   leadZh:
     '作者用三个新年决心（爱好、健身、英语）说明“新的一年要变成更好的自己”。全文 4 段 13 句，句句都是“打算做……”的将来时，适合练“找决心、找理由”。原卷未给答案，本页答案为依据原文推断，仅供参考。',

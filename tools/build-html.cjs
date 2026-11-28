@@ -11,12 +11,39 @@ if (!dataPath || !webDir) {
 }
 const d = require(path.resolve(dataPath));
 
-const AUD = path.join(webDir, 'assets', 'audio');
+// ---------- 音色套 ----------
+// audios: [{ key, label, sent, word, phrase }]，每套音频放 assets/audio/<key>/{full,words,s,w,p}。
+// 没写 audios 的旧数据按单套处理（音频直接放 assets/audio/ 下，页面不显示切换器）。
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const pad2 = (n) => String(n).padStart(2, '0');
-const wordAudio = (i) => `assets/audio/w/${pad2(i + 1)}-${slug(d.vocab[i].w)}.mp3`;
-const phraseAudio = (i) => `assets/audio/p/${pad2(i + 1)}-${slug(d.phrases[i].p)}.mp3`;
-const sentAudio = (i) => `assets/audio/s/${pad2(i + 1)}.mp3`;
+const FALLBACK_VOICES = { sent: 'AndrewNeural', word: 'AndrewNeural', phrase: 'AndrewNeural' };
+const declaredSets = (Array.isArray(d.audios) && d.audios.length)
+  ? d.audios
+  : [Object.assign({ key: '', label: '' }, d.voices || FALLBACK_VOICES)];
+const baseOf = (s) => 'assets/audio/' + (s.key ? s.key + '/' : '');
+// 一套音频算“齐”的标准：full/words + 全部 s/w/p。半套（正在生成）不进下拉，免得切过去没声音。
+const expectedFiles = () => [
+  'full.mp3',
+  'words.mp3',
+  ...d.lines.map((_, i) => `s/${pad2(i + 1)}.mp3`),
+  ...d.vocab.map((v, i) => `w/${pad2(i + 1)}-${slug(v.w)}.mp3`),
+  ...d.phrases.map((p, i) => `p/${pad2(i + 1)}-${slug(p.p)}.mp3`)
+];
+const allExpected = expectedFiles();
+const setReady = (s) => allExpected.every((f) => fs.existsSync(path.join(webDir, baseOf(s), f)));
+const sets = declaredSets.filter(setReady);
+if (!sets.length) {
+  console.error('没有可用的音色套（缺 full.mp3 / words.mp3）：' + declaredSets.map((s) => baseOf(s)).join('、'));
+  process.exit(4);
+}
+const skipped = declaredSets.filter((s) => !setReady(s));
+if (skipped.length) console.warn('警告：以下音色套音频不全，已跳过：' + skipped.map((s) => s.key || '(默认)').join('、'));
+
+const cur = sets[0];
+const AUD = path.join(webDir, baseOf(cur));
+const wordAudio = (i) => `${baseOf(cur)}w/${pad2(i + 1)}-${slug(d.vocab[i].w)}.mp3`;
+const phraseAudio = (i) => `${baseOf(cur)}p/${pad2(i + 1)}-${slug(d.phrases[i].p)}.mp3`;
+const sentAudio = (i) => `${baseOf(cur)}s/${pad2(i + 1)}.mp3`;
 
 function dur(file) {
   if (!fs.existsSync(file)) return 0;
@@ -24,6 +51,22 @@ function dur(file) {
   // （别按帧长度算：这个格式每帧 144 字节 / 24ms，按 288 字节会算成一半）
   return Math.round((fs.statSync(file).size * 8) / 48000);
 }
+
+// 构建时间戳（固定按北京时间，与机器时区无关），写在页脚，方便判断线上是不是最新一版
+function stamp() {
+  const t = new Date(Date.now() + 8 * 3600 * 1000);
+  const p = (n) => String(n).padStart(2, '0');
+  return `${t.getUTCFullYear()}-${p(t.getUTCMonth() + 1)}-${p(t.getUTCDate())} ${p(t.getUTCHours())}:${p(t.getUTCMinutes())}`;
+}
+
+const setMeta = sets.map((s) => ({
+  key: s.key,
+  label: s.label || s.sent || '默认',
+  base: baseOf(s),
+  durFull: dur(path.join(webDir, baseOf(s), 'full.mp3')),
+  durWords: dur(path.join(webDir, baseOf(s), 'words.mp3')),
+  voiceLine: `全文/逐句 ${s.sent} · 单词 ${s.word} · 短语 ${s.phrase}`
+}));
 
 // ---------- 一致性校验：逐句拼接应还原段落 ----------
 const norm = (s) => String(s).replace(/\s+/g, ' ').trim();
@@ -70,8 +113,8 @@ function annotate(raw) {
 
 // ---------- 组装 ----------
 const H = [];
-const fullDur = dur(path.join(AUD, 'full.mp3'));
-const wordsDur = dur(path.join(AUD, 'words.mp3'));
+const fullDur = setMeta[0].durFull;
+const wordsDur = setMeta[0].durWords;
 const totalSent = d.lines.length;
 const wordCount = d.paragraphs.join(' ').split(/\s+/).filter(Boolean).length;
 
@@ -112,13 +155,18 @@ H.push('</header>');
 // 播放条
 H.push('<div class="bar">');
 H.push('<div class="bar-row">');
-H.push(`<button class="btn" data-play="assets/audio/full.mp3">▶ 全文朗读<small>${fullDur}s</small></button>`);
-H.push(`<button class="btn ghost" data-play="assets/audio/words.mp3">▶ 生词连读<small>${wordsDur}s</small></button>`);
+H.push(`<button class="btn" data-play="${baseOf(cur)}full.mp3" data-dur="full">▶ 全文朗读<small>${fullDur}s</small></button>`);
+H.push(`<button class="btn ghost" data-play="${baseOf(cur)}words.mp3" data-dur="words">▶ 生词连读<small>${wordsDur}s</small></button>`);
 H.push('<div class="rate"><span>语速</span>');
 H.push('<button type="button" data-rate="0.8">0.8×</button>');
 H.push('<button type="button" data-rate="0.9">0.9×</button>');
 H.push('<button type="button" data-rate="1" class="on">1×</button>');
 H.push('</div>');
+if (setMeta.length > 1) {
+  H.push('<label class="vsel"><span>音色</span><select id="voiceSel" aria-label="选择朗读音色">');
+  setMeta.forEach((s) => H.push(`<option value="${esc(s.key)}">${esc(s.label)}</option>`));
+  H.push('</select></label>');
+}
 H.push('<label class="switch"><input type="checkbox" id="autoSound" checked> 点词自动发音</label>');
 H.push('</div>');
 H.push('<audio id="main" controls preload="none"></audio>');
@@ -243,27 +291,27 @@ H.push('<ol class="steps">');
 H.push('</ol>');
 H.push('</section>');
 
-// 页脚音色说明：数据里写了 voices 就按篇目显示，没写就按默认音色
-const voiceLine = d.voices
-  ? `全文/逐句 ${d.voices.sent} · 单词 ${d.voices.word} · 短语 ${d.voices.phrase}`
-  : '全文/逐句/短语/单词 全部 AndrewNeural（男声）';
-
+// 页脚音色说明：跟着顶部「音色」选择器走（切换时 app.js 改这一行的文字）
 H.push('<footer>');
 H.push(`<span>原文来源：${esc(d.source)}</span>`);
 H.push('<span>词汇标准：初中一年级</span>');
-H.push(`<span>朗读：${voiceLine}</span>`);
+H.push(`<span id="voiceLine">朗读：${esc(setMeta[0].voiceLine)}</span>`);
 H.push('<span>本页可直接打印 / 存为 PDF</span>');
+H.push(`<span class="build" title="生成这一版网页的时间">更新于 ${stamp()}</span>`);
 H.push('</footer>');
 
 H.push('</div>');
 H.push('<div id="card" role="tooltip"></div>');
 
 // 数据（短语只在句子下面注解里出现，不再弹短语卡，所以只发 words）
+// sets：可切换的音色套（含每套的音频前缀与时长），app.js 据此换路径
 const DOC = {
   words: d.vocab.map((v, i) => ({
     w: v.w, ipa: v.ipa, pos: v.pos, zh: v.zh, ex: v.ex, exZh: v.exZh,
     form: v.form || null, infl: v.infl || '', note: v.note || '', audio: wordAudio(i)
-  }))
+  })),
+  sets: setMeta,
+  voiceDefault: setMeta[0].key
 };
 H.push('<script>window.DOC = ' + JSON.stringify(DOC).replace(/</g, '\\u003c') + ';</script>');
 H.push('<script src="../assets/app.js"></script>');
