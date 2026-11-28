@@ -6,7 +6,7 @@
 
 ## 一篇里有什么
 
-点开任意 `practiceNN/`：
+点开任意 `wenwenNN/`（文文）或 `anqiNN/`（安琪）：
 
 1. **原文**——整段英文，先通读；
 2. **阅读理解题**——5 题，题干与选项都有中文，答案与依据默认折叠；
@@ -21,8 +21,9 @@
 ```
 index.html            目录首页（脚本生成，按学生分组）
 404.html
+_redirects            旧地址（practice01–05）301 到新目录
 assets/               全站共享的 style.css、app.js（脚本生成）
-practiceNN/           每篇一个目录（编号连续，学生归属写在数据里：student / gradeZh）
+wenwenNN/ · anqiNN/   每篇一个目录（学生前缀 + 两位序号，每个学生各自从 01 数起）
   index.html
   assets/  practice.json
   assets/audio/        full.mp3、words.mp3、s/、w/、p/
@@ -30,7 +31,7 @@ source/               原始 PDF 试卷
 tools/                生成脚本 + 模板 + 每篇的源数据
   build-tts.cjs  build-audio-assets.cjs  build-html.cjs  build-catalog.cjs  check-links.cjs
   assets/   style.css、app.js 模板（build-html 复制到站点根 assets/）
-  data/     passageN.cjs（原文/译文/生词/短语/题目）
+  data/     wenwenNN.cjs · anqiNN.cjs（原文/译文/生词/短语/题目）
 .agents/skills/reading-pack/   生成技能（流程说明 + 脚本 + 数据规范）
 AGENTS.md             工作区与站点约定
 ```
@@ -40,25 +41,25 @@ AGENTS.md             工作区与站点约定
 ```powershell
 cd tools
 npm install                                   # 只需 msedge-tts
-# 1. 写 tools/data/passageN.cjs（格式见 .agents/skills/reading-pack/references/data-schema.md）
+# 1. 写 tools/data/wenwenNN.cjs 或 anqiNN.cjs（格式见 .agents/skills/reading-pack/references/data-schema.md）
 # 2. 生成
-node build-tts.cjs          .\data\passageN.cjs "..\practiceNN\assets\audio" -6%
-node build-audio-assets.cjs .\data\passageN.cjs "..\practiceNN"
-node build-html.cjs         .\data\passageN.cjs "..\practiceNN"
+node build-tts.cjs          .\data\wenwenNN.cjs "..\wenwenNN\assets\audio" -6%
+node build-audio-assets.cjs .\data\wenwenNN.cjs "..\wenwenNN"
+node build-html.cjs         .\data\wenwenNN.cjs "..\wenwenNN"
 node build-catalog.cjs      ".."
 node check-links.cjs        ".."
 # 3. 提交，Cloudflare 自动部署
-git add -A; git commit -m "feat: practiceNN"; git push
+git add -A; git commit -m "feat: wenwenNN"; git push
 ```
 
 ## 实现说明
 
 - **纯静态**：没有框架、没有构建步骤，Cloudflare Pages 直接发布仓库根目录（构建命令留空，输出目录 `/`）。
-- **音频**：Edge 朗读接口（`msedge-tts`）。全文、逐句、短语用女声 `en-US-AvaMultilingualNeural`（−6% / −8%），短语整条连读；单词与生词连读用纯美式 `en-US-AndrewNeural`（−8%，每个词读两遍）。全部是本地 mp3，断网也能听。
+- **音频**：Edge 朗读接口（`msedge-tts`）。默认全文、逐句、短语用女声 `en-US-AvaMultilingualNeural`（−6% / −8%），短语整条连读；单词与生词连读用纯美式 `en-US-AndrewNeural`（−8%，每个词读两遍）。`wenwen04`、`wenwen05` 两篇是试听变体：**全部音色统一为男声 `en-US-AndrewNeural`**（数据里 `voices` 字段会在页脚注明）。全部是本地 mp3，断网也能听。
 - **页面**：每篇一个 `index.html`，样式与交互全站共用站点根 `assets/style.css`、`assets/app.js`（页面用 `../assets/…` 引用），无 CDN、无外部字体，中文用苹方、英文用 Georgia。
 - **交互**：句子正文里只标生词（黄底），点一下弹卡片（音标/构词/变形/例句，卡片里的词本身可点读，**打开卡片就自动读**）；**整句朗读只走句首的 ▶**，点句子正文不发声。短语不涂色、不发音，释义、例句、用法和朗读都在句子下面的浅绿注解里（点注解文字或 ▶）。句子/短语和生词卡都会等音频下载得能连续播再开声，网慢时不会只响前半段。
 - **词汇**：按初中一年级水平筛选，一般 35–45 个；形容词给比较级/最高级、动词给时态变化，页面显示成「变形」一行。
-- **数据驱动**：`tools/data/passageN.cjs` 是唯一源，页面、目录、音频都从它生成；`build-html` 会校验逐句文本能拼回段落，`check-links` 会校验所有相对链接。
+- **数据驱动**：`tools/data/wenwenNN.cjs`（或 `anqiNN.cjs`）是唯一源，页面、目录、音频都从它生成；`build-html` 会校验逐句文本能拼回段落，`check-links` 会校验所有相对链接。
 - **答案**：原卷没给答案的篇目，答案由原文推断，页面导读里已注明“仅供参考”。
 
 ## 许可

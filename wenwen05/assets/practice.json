@@ -1,0 +1,182 @@
+{
+ "no": 5,
+ "titleEn": "Folding Old Paper into New Joy",
+ "titleZh": "把旧日历折成新礼盒",
+ "lead": "讲绿中学的一节手工课：把旧日历纸折成礼盒，从挑纸、折痕，到不用胶水的卡扣设计，最后落到“重复使用、少用一次性包装”。全文 18 句、5 段，说明文，按 first → next → finally 推进，适合练“按步骤找信息”。原文里的中文夹注（折叠、丝带、重复使用）已移到生词卡。原卷未给答案，本页答案为依据原文推断，仅供参考。",
+ "student": "wenwen",
+ "studentZh": "文文",
+ "gradeZh": "中职三年级",
+ "unit": 0,
+ "unitLabel": "",
+ "part": 0,
+ "sectionLabel": "",
+ "chips": [
+  "原文 199 词",
+  "5 段 · 18 句",
+  "43 个生词",
+  "16 个短语",
+  "5 道题"
+ ],
+ "stats": {
+  "words": 199,
+  "paragraphs": 5,
+  "sentences": 18,
+  "vocab": 43,
+  "phrases": 16,
+  "questions": 5
+ },
+ "paragraphs": [
+  "Last week, students at Green Middle School joined a special craft class. They learned to turn an old calendar paper into a beautiful gift box. This activity showed how traditional skills can help our planet today.",
+  "The teacher first asked students to choose the right paper. She explained that thickness matters when you fold it. Thick pages hold their shape better than thin ones. Students used colorful pages from last year's wall calendars.",
+  "Next, they followed clear lines to fold the flat sheets into boxes. Each crease had to be sharp and exact for a stable result. The most exciting part was closing the lid without any glue. Instead of sticky tape, they used a smart locking design. The edges simply tucked into each other to stay tight.",
+  "A short piece of cotton ribbon tied around the box added a festive touch. Many wondered if this style feels more traditional than plastic bows. Most students agreed the handmade look carried deeper cultural warmth.",
+  "Finally, the teacher reminded everyone to reuse these boxes after the holidays. When we reuse materials, we cut down the need for single-use wrapping. This simple craft connects us to past wisdom while protecting our future."
+ ],
+ "questions": [
+  {
+   "q": "Why did the students use thick paper for the gift boxes?",
+   "qZh": "学生们为什么用厚纸来做礼盒？",
+   "options": [
+    {
+     "k": "A",
+     "t": "To make the box heavier.",
+     "tZh": "为了让盒子更重。"
+    },
+    {
+     "k": "B",
+     "t": "To keep the box in a good shape.",
+     "tZh": "为了让盒子保持好看的形状。"
+    },
+    {
+     "k": "C",
+     "t": "To make the box easier to open.",
+     "tZh": "为了让盒子更容易打开。"
+    },
+    {
+     "k": "D",
+     "t": "To give the box a better color.",
+     "tZh": "为了让盒子的颜色更好看。"
+    }
+   ],
+   "answer": "B",
+   "evidence": "Thick pages hold their shape better than thin ones.",
+   "evidenceZh": "细节题：第二段用 Thick pages hold their shape better than thin ones 直接说明厚纸更能保持形状；A、C、D 原文都没提。"
+  },
+  {
+   "q": "What does the word \"crease\" mean in the third paragraph?",
+   "qZh": "第三段里 crease 这个词是什么意思？",
+   "options": [
+    {
+     "k": "A",
+     "t": "A pair of scissors.",
+     "tZh": "一把剪刀。"
+    },
+    {
+     "k": "B",
+     "t": "A fold line on the paper.",
+     "tZh": "纸上折出来的那条线。"
+    },
+    {
+     "k": "C",
+     "t": "A piece of ribbon.",
+     "tZh": "一段丝带。"
+    },
+    {
+     "k": "D",
+     "t": "A bottle of glue.",
+     "tZh": "一瓶胶水。"
+    }
+   ],
+   "answer": "B",
+   "evidence": "Next, they followed clear lines to fold the flat sheets into boxes. Each crease had to be sharp and exact for a stable result.",
+   "evidenceZh": "猜词题：前一句说“沿着清楚的线折叠”，后一句说这条线要 sharp and exact（清楚、准确），可见 crease 就是折出来的那条线。"
+  },
+  {
+   "q": "What can we infer about the locking design of the box?",
+   "qZh": "关于盒子的卡扣设计，我们可以推断出什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "It is very hard for students to learn.",
+     "tZh": "学生们很难学会。"
+    },
+    {
+     "k": "B",
+     "t": "It needs plastic parts to work well.",
+     "tZh": "它需要塑料零件才好用。"
+    },
+    {
+     "k": "C",
+     "t": "It needs no glue or tape to close the box.",
+     "tZh": "合上盒子既不需要胶水也不需要胶带。"
+    },
+    {
+     "k": "D",
+     "t": "It only works for very big boxes.",
+     "tZh": "它只适用于很大的盒子。"
+    }
+   ],
+   "answer": "C",
+   "evidence": "The most exciting part was closing the lid without any glue. Instead of sticky tape, they used a smart locking design.",
+   "evidenceZh": "推断题：原文说“不用任何胶水合上盖子”“不用胶带，而用巧妙的卡扣设计”，可见它靠纸边自己卡住；A、B、D 原文都没有依据。"
+  },
+  {
+   "q": "What is the main idea of the passage?",
+   "qZh": "这篇文章的主旨是什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Students bought old calendars at school.",
+     "tZh": "学生们在学校买了旧日历。"
+    },
+    {
+     "k": "B",
+     "t": "Cotton ribbons are better than plastic bows",
+     "tZh": "棉丝带比塑料蝴蝶结好"
+    },
+    {
+     "k": "C",
+     "t": "Students learned a traditional craft to make gift boxes and help the earth.",
+     "tZh": "学生们学了一门传统手艺，做礼盒，也帮助了地球。"
+    },
+    {
+     "k": "D",
+     "t": "Teachers made new rules about wrapping paper.",
+     "tZh": "老师们制定了关于包装纸的新规定。"
+    }
+   ],
+   "answer": "C",
+   "evidence": "They learned to turn an old calendar paper into a beautiful gift box. This activity showed how traditional skills can help our planet today.",
+   "evidenceZh": "主旨题：首段点出“学传统手艺做礼盒、还帮助地球”，末段再用 craft + protecting our future 收尾；A 原文没说买日历，B 只是第四段一个比较，D 原文没有规定。"
+  },
+  {
+   "q": "Which steps did the students follow to finish their craft project?",
+   "qZh": "学生们完成这个手工项目走了哪几步？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Draw lines, cut the paper, and use sticky tape",
+     "tZh": "画线、剪纸、用胶带"
+    },
+    {
+     "k": "B",
+     "t": "Choose paper, fold it, close the lid without glue, and tie a ribbon.",
+     "tZh": "选纸、折叠、不用胶水合上盖子，再系上丝带。"
+    },
+    {
+     "k": "C",
+     "t": "Buy new paper, paint the box, and add plastic bows.",
+     "tZh": "买新纸、给盒子上色、加塑料蝴蝶结。"
+    },
+    {
+     "k": "D",
+     "t": "Fold the paper, put glue on the edges, and reuse it.",
+     "tZh": "折纸、在边上涂胶水、再重复使用。"
+    }
+   ],
+   "answer": "B",
+   "evidence": "The teacher first asked students to choose the right paper. / Next, they followed clear lines to fold the flat sheets into boxes. / The most exciting part was closing the lid without any glue. / A short piece of cotton ribbon tied around the box added a festive touch.",
+   "evidenceZh": "细节题（顺序题）：全文按 first → next → finally 推进，依次是选纸、折叠、不用胶水合盖、系丝带；A、C、D 里的“画线”“剪纸”“给盒子上色”“边缘涂胶水”原文都没写。"
+  }
+ ]
+}

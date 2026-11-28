@@ -1,4 +1,5 @@
-// 生成站点目录首页（卡片列表）：扫描 practiceNN/index.html + assets/practice.json
+// 生成站点目录首页（卡片列表）：扫描站点根下每篇目录的 index.html + assets/practice.json
+// 篇目目录名形如 wenwenNN / anqiNN；卡片序号用数据里的 no（每个学生各自从 01 数）。
 // 用法: node build-catalog.cjs <站点根>
 const fs = require('fs');
 const path = require('path');
@@ -243,11 +244,11 @@ const page = `<!doctype html>
     </div>
   </header>
 
-${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 practiceNN 文件夹放进站点根后重新生成目录。</p>'}
+${items.length ? tabsMarkup : '<p class="empty">还没有篇目：把生成的 wenwenNN / anqiNN 文件夹放进站点根后重新生成目录。</p>'}
 
   <footer>
     <span>共 ${items.length} 篇</span>
-    <span>朗读：长句/短语 Ava Multilingual · 单词 AndrewNeural</span>
+    <span>朗读：默认长句/短语 Ava Multilingual、单词 AndrewNeural；wenwen04/05 全篇男声 AndrewNeural（每篇页脚为准）</span>
     <span>纯静态页面，无外部依赖</span>
   </footer>
 </div>

@@ -1,0 +1,18 @@
+# 旧目录名（全站流水号）→ 新目录名（按学生分别编号）301
+# 2026-11 起目录改用 <student><NN>，每个学生各自从 01 数起。
+# 新加篇目不需要改这里。
+
+/practice01/*  /wenwen01/:splat  301
+/practice01    /wenwen01/        301
+
+/practice02/*  /wenwen02/:splat  301
+/practice02    /wenwen02/        301
+
+/practice03/*  /wenwen03/:splat  301
+/practice03    /wenwen03/        301
+
+/practice04/*  /anqi01/:splat    301
+/practice04    /anqi01/          301
+
+/practice05/*  /anqi02/:splat    301
+/practice05    /anqi02/          301

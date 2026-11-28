@@ -1,0 +1,181 @@
+{
+ "no": 4,
+ "titleEn": "The Secret Colors of Wild Turkey Feathers",
+ "titleZh": "野火鸡羽毛的颜色秘密",
+ "lead": "讲科学家怎么研究野火鸡的羽毛：颜色从哪里来（天然色素，还是微小结构把光反射回来）、雄鸟雌鸟为什么不一样，以及“保护色”怎么帮它活下来。全文 25 句、4 段，说明文，适合练“抓细节 + 猜词”。原文里的中文夹注（火鸡、森林、羽毛、躲藏）已移到生词卡；两处印上去的标点笔误（However 后缺逗号、nature,remember 缺空格）已修正。原卷未给答案，本页答案为依据原文推断，仅供参考。",
+ "student": "wenwen",
+ "studentZh": "文文",
+ "gradeZh": "中职三年级",
+ "unit": 0,
+ "unitLabel": "",
+ "part": 0,
+ "sectionLabel": "",
+ "chips": [
+  "原文 279 词",
+  "4 段 · 25 句",
+  "45 个生词",
+  "17 个短语",
+  "5 道题"
+ ],
+ "stats": {
+  "words": 279,
+  "paragraphs": 4,
+  "sentences": 25,
+  "vocab": 45,
+  "phrases": 17,
+  "questions": 5
+ },
+ "paragraphs": [
+  "In recent months, scientists have paid more attention to wild birds in North America. One popular bird is the wild turkey. If you walk near a forest edge in autumn, you might see one. These large birds often walk on the ground among fallen leaves. Let us look closely at their beautiful feathers.",
+  "A wild turkey has many different feathers on its body. Each feather helps protect the bird from cold weather and rain. Most feathers are brown, but they also show black, white, and copper patterns. How many colors can we actually find? Scientists say that every color on a feather has a special job. Some colors come from natural pigments inside the feather. However, some shiny colors do not come from paint or pigment at all. They come from tiny structures inside the feather that bounce light back to our eyes. This means the shine is real, but it is made by shape, not just color.",
+  "Male and female birds look quite different. Adult males usually have brighter feathers with more shiny parts. Females have duller brown feathers so they can hide better while sitting on eggs.",
+  "Now, let us observe their living space. Wild turkeys live near forests where trees drop many leaves in fall. The ground is full of mixed brown, yellow, and dark spots. When a turkey stands still, its brown and spotted feathers match the ground perfectly. This matching pattern is called protective coloration. It helps the bird hide from hungry animals like foxes and eagles. So, the next time you learn about nature, remember the clever wild turkey. Its feathers are not just for flying; they are a wonderful tool for survival."
+ ],
+ "questions": [
+  {
+   "q": "Why do female wild turkeys have duller brown feathers?",
+   "qZh": "雌性野火鸡为什么羽毛是更暗淡的棕色？",
+   "options": [
+    {
+     "k": "A",
+     "t": "To fly faster in the forest",
+     "tZh": "为了在森林里飞得更快"
+    },
+    {
+     "k": "B",
+     "t": "To hide better when they sit on eggs",
+     "tZh": "为了孵蛋时能更好地躲藏"
+    },
+    {
+     "k": "C",
+     "t": "To look more beautiful than males",
+     "tZh": "为了比雄鸟更好看"
+    },
+    {
+     "k": "D",
+     "t": "To keep warm in very cold weather",
+     "tZh": "为了在严寒中保暖"
+    }
+   ],
+   "answer": "B",
+   "evidence": "Females have duller brown feathers so they can hide better while sitting on eggs.",
+   "evidenceZh": "细节题：第三段最后一句用 so 直接给出目的——羽毛暗淡是为了孵蛋时藏得更好。"
+  },
+  {
+   "q": "What can we guess about a wild turkey standing still on the forest floor in autumn?",
+   "qZh": "秋天，一只野火鸡一动不动地站在林地上，我们可以推测什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "It will fly away quickly",
+     "tZh": "它会很快飞走"
+    },
+    {
+     "k": "B",
+     "t": "It is hard for other animals to see it.",
+     "tZh": "别的动物很难看见它。"
+    },
+    {
+     "k": "C",
+     "t": "It is looking for fallen leaves to eat",
+     "tZh": "它在找落叶吃"
+    },
+    {
+     "k": "D",
+     "t": "Its feathers will change color to match the ground.",
+     "tZh": "它的羽毛会变色来配合地面。"
+    }
+   ],
+   "answer": "B",
+   "evidence": "When a turkey stands still, its brown and spotted feathers match the ground perfectly. This matching pattern is called protective coloration.",
+   "evidenceZh": "推理题：羽毛与地面完全相配，这叫保护色 → 别的动物不容易发现它。D 是“会变色”，原文只说颜色与地面相配，没说羽毛会变色。"
+  },
+  {
+   "q": "How are the shiny colors on a wild turkey's feathers made?",
+   "qZh": "野火鸡羽毛上那些闪亮的颜色是怎么产生的？",
+   "options": [
+    {
+     "k": "A",
+     "t": "By natural pigments inside the feather",
+     "tZh": "靠羽毛里的天然色素"
+    },
+    {
+     "k": "B",
+     "t": "By mixing brown and black paint",
+     "tZh": "靠调和棕色和黑色的油漆"
+    },
+    {
+     "k": "C",
+     "t": "By the fallen leaves on the ground",
+     "tZh": "靠地上的落叶"
+    },
+    {
+     "k": "D",
+     "t": "By tiny structures that bounce light back",
+     "tZh": "靠把光反射回来的微小结构"
+    }
+   ],
+   "answer": "D",
+   "evidence": "However, some shiny colors do not come from paint or pigment at all. They come from tiny structures inside the feather that bounce light back to our eyes.",
+   "evidenceZh": "细节题：第二段先说闪亮的颜色“不来自油漆或色素”，再说它们来自羽毛内部把光反射回来的微小结构。A 是“有些颜色”的成因，不是闪亮颜色的成因。"
+  },
+  {
+   "q": "What is the main idea of this passage?",
+   "qZh": "这篇文章的主旨是什么？",
+   "options": [
+    {
+     "k": "A",
+     "t": "Scientists study wild birds in North America.",
+     "tZh": "科学家研究北美的野生鸟类。"
+    },
+    {
+     "k": "B",
+     "t": "Male turkeys are much bigger than female turkeys.",
+     "tZh": "雄火鸡比雌火鸡大得多。"
+    },
+    {
+     "k": "C",
+     "t": "Wild turkey feathers help the birds survive in nature.",
+     "tZh": "野火鸡的羽毛帮助它们在自然界生存。"
+    },
+    {
+     "k": "D",
+     "t": "Autumn is the best time to walk near forests",
+     "tZh": "秋天是在森林附近散步的最佳时间"
+    }
+   ],
+   "answer": "C",
+   "evidence": "Its feathers are not just for flying; they are a wonderful tool for survival.",
+   "evidenceZh": "主旨题：全文先讲羽毛的颜色和构造，再讲颜色怎样帮它躲藏，末句用 a wonderful tool for survival 收束。A 只是第一段的一句话，B 原文没说“更大”，D 只是开头提秋天。"
+  },
+  {
+   "q": "What does the term 'protective coloration' mean in the passage?",
+   "qZh": "文中 protective coloration（保护色）这个说法是什么意思？",
+   "options": [
+    {
+     "k": "A",
+     "t": "A special kind of dark brown paint",
+     "tZh": "一种特殊的深棕色油漆"
+    },
+    {
+     "k": "B",
+     "t": "A loud sound made by hungry animals",
+     "tZh": "饥饿的动物发出的响亮声音"
+    },
+    {
+     "k": "C",
+     "t": "A way for birds to fly higher in the sky",
+     "tZh": "鸟飞得更高的方法"
+    },
+    {
+     "k": "D",
+     "t": "A pattern that matches the area around the bird",
+     "tZh": "与鸟周围环境相配的花纹"
+    }
+   ],
+   "answer": "D",
+   "evidence": "When a turkey stands still, its brown and spotted feathers match the ground perfectly. This matching pattern is called protective coloration.",
+   "evidenceZh": "猜词题：前一句已经把意思说明白——羽毛与地面相配（match），这种“相配的花纹”就叫 protective coloration；protective 保护的 + coloration 色彩（名词后缀 -ation）。"
+  }
+ ]
+}
